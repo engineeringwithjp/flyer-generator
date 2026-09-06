@@ -1,0 +1,47 @@
+{
+  "proven_hooks": [
+    {
+      "service": "roofing",
+      "hook": "YOUR ROOF DESERVES BETTER.",
+      "subhead": "Precision Roof Replacement Built for New Jersey Weather",
+      "archetype": "hero_image"
+    },
+    {
+      "service": "siding",
+      "hook": "ENGINEERED COMFORT. TIMELESS BEAUTY.",
+      "subhead": "Composite Siding with Built-In High Density Thermal Insulation",
+      "archetype": "product_education"
+    },
+    {
+      "service": "gutters",
+      "hook": "PROTECT YOUR FOUNDATION.",
+      "subhead": "Seamless Heavy-Gauge Gutters and Clog-Free Shield Systems",
+      "archetype": "architectural_detail"
+    },
+    {
+      "service": "storm",
+      "hook": "STORM DAMAGE RESTORATION.",
+      "subhead": "Comprehensive Property Inspection and Direct Insurance Claims Support",
+      "archetype": "storm_emergency"
+    },
+    {
+      "service": "before_after",
+      "hook": "TRANSFORM YOUR CURB APPEAL.",
+      "subhead": "Complete Exterior Modernization by All Elite Construction",
+      "archetype": "split_image"
+    }
+  ],
+  "proven_cta_formulations": [
+    "SCHEDULE FREE ESTIMATE",
+    "REQUEST COMPREHENSIVE INSPECTION",
+    "CLAIM YOUR PROJECT ESTIMATE",
+    "SPEAK WITH AN EXTERIOR SPECIALIST"
+  ],
+  "archetype_weights": {
+    "hero_image": 35,
+    "product_education": 20,
+    "editorial_overlay": 15,
+    "split_image": 15,
+    "architectural_detail": 15
+  }
+}

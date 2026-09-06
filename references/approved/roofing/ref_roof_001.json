@@ -1,0 +1,25 @@
+{
+  "id": "ref_roof_001",
+  "name": "Architectural Shingle Hero",
+  "category": "roofing",
+  "style": "premium-editorial",
+  "layout": "hero-image",
+  "archetype": "hero_image",
+  "headline_position": "upper-left",
+  "cta_position": "bottom-bar",
+  "image_treatment": "natural-daylight-vignette",
+  "text_density": "low",
+  "visual_weight": "image-dominant",
+  "score": 95,
+  "recommended_for": [
+    "roof replacement",
+    "architectural roofing",
+    "storm restoration"
+  ],
+  "design_principles": {
+    "composition": "Dominant property facade with open sky header for primary hook",
+    "typography": "Bold sans headline with wide letterspacing, high-contrast white text",
+    "color": "Brand accent #80272B utilized exclusively on CTA button and top tag pill",
+    "negative_space": "Sky preserved for typography, house unmarred by cards"
+  }
+}

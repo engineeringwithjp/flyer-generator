@@ -1,0 +1,102 @@
+name: Daily Construction Flyer Automation
+
+on:
+  schedule:
+    # Runs Monday through Friday at 10:07 AM Eastern Time (14:07 UTC)
+    - cron: '7 14 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      client:
+        description: 'Client identifier (e.g. all-elite, client-002)'
+        required: true
+        default: 'all-elite'
+      count:
+        description: 'Number of flyers to generate'
+        required: true
+        default: '2'
+      campaign:
+        description: 'Campaign topic override (optional)'
+        required: false
+        default: ''
+      focus:
+        description: 'Campaign focus angle (optional)'
+        required: false
+        default: ''
+      upload_drive:
+        description: 'Upload generated flyers to Google Drive'
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  generate-and-deliver:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ensure Starter Assets
+        run: |
+          python scripts/generate_sample_assets.py
+
+      - name: Run Master System Audit
+        run: |
+          python scripts/audit_system.py
+
+      - name: Execute Daily Flyer Generation
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
+          GDRIVE_ROOT_FOLDER_ID: ${{ secrets.GDRIVE_ROOT_FOLDER_ID || '12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT' }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          CANVA_API_KEY: ${{ secrets.CANVA_API_KEY }}
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+          MOBBIN_API_KEY: ${{ secrets.MOBBIN_API_KEY }}
+        run: |
+          CLIENT_ID="${{ github.event.inputs.client || 'all-elite' }}"
+          FLYER_COUNT="${{ github.event.inputs.count || '2' }}"
+          CAMPAIGN="${{ github.event.inputs.campaign || '' }}"
+          FOCUS="${{ github.event.inputs.focus || '' }}"
+          UPLOAD="${{ github.event.inputs.upload_drive != 'false' }}"
+
+          CMD="python scripts/generate_flyers.py --client $CLIENT_ID --count $FLYER_COUNT"
+          if [ -n "$CAMPAIGN" ]; then
+            CMD="$CMD --campaign \"$CAMPAIGN\""
+          fi
+          if [ -n "$FOCUS" ]; then
+            CMD="$CMD --focus \"$FOCUS\""
+          fi
+          if [ "$UPLOAD" = "false" ]; then
+            CMD="$CMD --no-upload"
+          fi
+
+          echo "Executing: $CMD"
+          eval $CMD
+
+      - name: Upload Generated Flyers as Workflow Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-flyers
+          path: output/202*/**/*.png
+          if-no-files-found: warn
+
+      - name: Commit Generation History & Learning Updates
+        run: |
+          git config --global user.name "Flyer Generator Bot"
+          git config --global user.email "bot@allelitenj.com"
+          git add output/history.json data/design-system/preferences.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(history): update daily flyer generation log [skip ci]" && git push)

@@ -1,0 +1,24 @@
+{
+  "id": "ref_gutters_001",
+  "name": "Architectural Detail & Water Management",
+  "category": "gutters",
+  "style": "architectural-detail",
+  "layout": "detail-focus",
+  "archetype": "architectural_detail",
+  "headline_position": "upper-left",
+  "cta_position": "bottom-bar",
+  "image_treatment": "high-clarity-natural",
+  "text_density": "low",
+  "visual_weight": "craftsmanship-detail",
+  "score": 90,
+  "recommended_for": [
+    "seamless gutters",
+    "gutter protection",
+    "foundation protection"
+  ],
+  "design_principles": {
+    "composition": "Focus on fascia, heavy-gauge aluminum miter joints, and leaf protection integration",
+    "typography": "Direct warning/prevention hook targeting foundation preservation",
+    "color": "Monochromatic neutral backdrop with crimson callout accent"
+  }
+}

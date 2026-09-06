@@ -1,0 +1,24 @@
+{
+  "id": "ref_roofing_modern_roofing_reference",
+  "name": "Modern_Roofing_Reference",
+  "category": "roofing",
+  "style": "premium-editorial",
+  "layout": "hero-image",
+  "archetype": "hero_image",
+  "headline_position": "upper-left",
+  "cta_position": "bottom-bar",
+  "image_treatment": "natural-photorealism",
+  "text_density": "low",
+  "visual_weight": "image-dominant",
+  "score": 90,
+  "recommended_for": [
+    "roofing"
+  ],
+  "design_principles": {
+    "aspect_ratio": "1080:1350",
+    "composition": "Image-first residential architecture with high negative space",
+    "typography": "High-contrast sans headline",
+    "cta_treatment": "High-contrast brand colored pill"
+  },
+  "source": "inbox_upload"
+}

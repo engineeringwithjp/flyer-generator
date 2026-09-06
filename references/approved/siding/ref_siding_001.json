@@ -1,0 +1,26 @@
+{
+  "id": "ref_siding_001",
+  "name": "Composite Insulation Cutaway",
+  "category": "siding",
+  "style": "product-education",
+  "layout": "product-education",
+  "archetype": "product_education",
+  "headline_position": "top-center",
+  "cta_position": "bottom-bar",
+  "image_treatment": "crisp-overcast-photoreal",
+  "text_density": "low",
+  "visual_weight": "balanced-product-callout",
+  "score": 92,
+  "recommended_for": [
+    "composite siding",
+    "built-in insulation",
+    "energy efficiency",
+    "ascend siding"
+  ],
+  "design_principles": {
+    "composition": "Full exterior facade paired with an inset technical feature badge showing high-density thermal foam backing",
+    "typography": "High-impact hook paired with 3 crisp bullet points on impact resistance and thermal barrier",
+    "color": "Dark glass badge with crimson accent border",
+    "negative_space": "Main entryway preserved cleanly"
+  }
+}

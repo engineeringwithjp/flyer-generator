@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "canvas": {
+    "width": 1080,
+    "height": 1350,
+    "aspect_ratio": "4:5",
+    "safe_margins": {
+      "top": 80,
+      "bottom": 80,
+      "left": 72,
+      "right": 72
+    }
+  },
+  "brand_defaults": {
+    "accent_color": "#80272B",
+    "dark_neutral": "#1C1C1E",
+    "light_neutral": "#FFFFFF",
+    "card_bg": "rgba(28, 28, 30, 0.82)",
+    "font_family_primary": "Helvetica, Arial, sans-serif",
+    "font_family_serif": "Georgia, serif"
+  },
+  "hierarchy_scales": {
+    "headline_hero": 76,
+    "headline_editorial": 64,
+    "subhead": 36,
+    "bullet_body": 26,
+    "cta_text": 30,
+    "badge_tag": 20,
+    "disclaimer": 18
+  },
+  "max_text_density": {
+    "headline_words": 8,
+    "subhead_words": 16,
+    "bullet_count": 4,
+    "cta_words": 4
+  },
+  "contrast": {
+    "min_ratio_headline": 4.5,
+    "min_ratio_body": 3.0
+  }
+}

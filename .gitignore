@@ -1,0 +1,42 @@
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+.claude/worktrees/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Environment Variables & Secrets
+.env
+.env.local
+*.pem
+*.key
+service_account.json
+gdrive_token.json
+
+# Operating System & IDE
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Output Artifacts (Keep directory structure via .gitkeep)
+output/202*/*
+!output/202*/.gitkeep
+output/approved/*
+!output/approved/.gitkeep
+output/rejected/*
+!output/rejected/.gitkeep

@@ -1,0 +1,20 @@
+{
+  "client_id": "all-elite",
+  "approved_count": 1,
+  "rejected_count": 1,
+  "preferred_archetypes": {
+    "hero_image": 1.2,
+    "product_education": 1.25,
+    "editorial_overlay": 0.8,
+    "split_image": 1.1,
+    "architectural_detail": 0.95
+  },
+  "feedback_notes": [
+    "Prioritize house-first compositions with clear sky contrast for headline",
+    "Keep crimson accent strictly on CTA and badges",
+    "Ensure contact numbers are large and clear for mobile scrolling",
+    "[2026-09-06] Clean insulation badge",
+    "[2026-09-06] REJECTED: Too dark for autumn"
+  ],
+  "last_updated": "2026-09-06T03:09:01.142029+00:00"
+}

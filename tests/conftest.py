@@ -11,7 +11,7 @@ import shutil
 from pathlib import Path
 
 import pytest
-from PIL import Image
+from PIL import Image, ImageDraw
 
 REAL_ROOT = Path(__file__).resolve().parent.parent
 
@@ -171,16 +171,50 @@ def _reset_caches() -> None:
 
 
 def _write_image(path: Path, color, size=(1600, 1200)) -> None:
+    """A stand-in photograph.
+
+    Must vary at *large* scales, not just per pixel. The provenance check
+    downsamples before counting colours, so pixel noise averages away and a
+    noisy-but-flat fixture is still classified as generated art and barred from
+    production. Broad gradients plus many differently-coloured regions survive
+    the downsample, which is what a real photograph looks like to the detector.
+    """
+    import random
+
     path.parent.mkdir(parents=True, exist_ok=True)
+    rng = random.Random(hash(path.name) & 0xFFFF)
     image = Image.new("RGB", size, color)
-    # A little structure so contrast/variance analysis has something to read.
+    draw = ImageDraw.Draw(image)
+
+    # A broad vertical gradient, like sky into ground.
+    for y in range(size[1]):
+        t = y / size[1]
+        draw.line(
+            [(0, y), (size[0], y)],
+            fill=(
+                min(255, max(0, int(color[0] + 60 * (0.5 - t)))),
+                min(255, max(0, int(color[1] + 50 * (0.5 - t)))),
+                min(255, max(0, int(color[2] + 40 * (0.5 - t)))),
+            ),
+        )
+
+    # Many differently-toned regions, like foliage, roof planes and driveway.
+    for _ in range(500):
+        x0 = rng.randint(0, size[0] - 1)
+        y0 = rng.randint(0, size[1] - 1)
+        draw.ellipse(
+            [x0, y0, x0 + rng.randint(20, 140), y0 + rng.randint(20, 140)],
+            fill=(rng.randint(30, 225), rng.randint(30, 225), rng.randint(30, 225)),
+        )
+
+    # Structure for contrast and negative-space analysis.
     for x in range(0, size[0], 90):
         for y in range(0, size[1], 90):
             image.paste(
                 tuple(min(255, c + 26) for c in color),
                 (x, y, min(x + 45, size[0]), min(y + 45, size[1])),
             )
-    image.save(path, quality=90)
+    image.save(path, quality=92)
 
 
 @pytest.fixture()

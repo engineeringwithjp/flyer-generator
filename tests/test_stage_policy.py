@@ -123,10 +123,13 @@ def test_a_premium_message_never_gets_a_before_photo(staged_library):
     assert chosen.provenance.stage in ("after", "neutral")
 
 
-def test_a_problem_message_does_get_the_worn_roof(staged_library):
+def test_a_problem_message_never_gets_a_finished_roof(staged_library):
+    """The rule is what must NOT appear: a completed roof cannot illustrate a
+    problem. Unclassified is legitimately allowed here, so assert the exclusion
+    rather than a specific stage."""
     chosen = select_asset(staged_library, "testco", "roofing", "hero-full", angle="problem")
     assert chosen is not None
-    assert chosen.provenance.stage in ("before", "during", "neutral")
+    assert chosen.provenance.stage != "after"
 
 
 def test_no_suitable_stage_yields_a_brand_background(repo):

@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with:
           fonts: "false"
@@ -36,7 +36,7 @@ jobs:
 
       - name: Open a proposal pull request
         if: steps.check.outputs.count != '0'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: design-system/proposal-${{ github.run_number }}
           commit-message: "docs(design-system): distillation proposal"

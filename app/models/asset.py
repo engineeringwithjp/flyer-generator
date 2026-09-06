@@ -78,7 +78,15 @@ class Provenance(BaseModel):
     origin_path: str = Field(default="", description="Where it was ingested from")
     project: str = Field(default="", description="Project slug, e.g. 'bergenfield'")
     address_label: str = Field(default="", description="Human label, e.g. 'Bergenfield'")
-    stage: Literal["", "before", "during", "after"] = ""
+    stage: Literal["", "before", "during", "after", "neutral"] = Field(
+        default="",
+        description=(
+            "What state the work is in. 'before' is the old/damaged condition, "
+            "'during' is mid-installation, 'after' is finished work, 'neutral' is "
+            "a property with no visible work state. Empty means unclassified, "
+            "which bars the image from any message that implies finished work."
+        ),
+    )
 
     captured_at: str = ""
     camera: str = Field(default="", description="EXIF Make/Model when present")

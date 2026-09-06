@@ -50,6 +50,57 @@ def pending(catalog: AssetCatalog, client_id: str | None = None) -> list[Asset]:
     return sorted(waiting, key=lambda a: a.quality_score, reverse=True)
 
 
+def set_stage(catalog: AssetCatalog, asset_ids: list[str], stage: str) -> list[Asset]:
+    """Record what work state an image shows.
+
+    Without this a photograph can illustrate any message, so a worn roof can end
+    up on a flyer selling premium roofing. Stage is the gate that prevents it.
+    """
+    valid = {"before", "during", "after", "neutral", ""}
+    if stage not in valid:
+        raise AssetError(f"stage must be one of {sorted(valid - {''})}, got {stage!r}")
+
+    updated: list[Asset] = []
+    for asset_id in asset_ids:
+        asset = catalog.index.by_id(asset_id)
+        if asset is None:
+            raise AssetError(f"Unknown asset id: {asset_id}")
+        asset.provenance.stage = stage  # type: ignore[assignment]
+        catalog.index.upsert(asset)
+        _persist_sidecar(asset)
+        updated.append(asset)
+        log.info("%s -> stage %s", asset.id, stage or "unclassified")
+    save_asset_index(catalog.index)
+    return updated
+
+
+def _persist_sidecar(asset: Asset) -> None:
+    """Write the stage next to the file so a reindex does not lose it."""
+    settings = get_settings()
+    path = (settings.paths.root / asset.path).with_suffix(".json")
+    payload: dict = {}
+    if path.exists():
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            payload = {}
+    payload.setdefault("provenance", {})["stage"] = asset.provenance.stage
+    try:
+        path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    except OSError as exc:  # pragma: no cover
+        log.warning("Could not write sidecar for %s: %s", asset.id, exc)
+
+
+def unclassified(catalog: AssetCatalog, client_id: str | None = None) -> list[Asset]:
+    """Production assets with no work state recorded."""
+    assets = catalog.index.assets
+    if client_id:
+        assets = [a for a in assets if a.client_id == client_id]
+    return [
+        a for a in assets if a.production_eligible and not a.provenance.stage and not a.is_synthetic
+    ]
+
+
 def promote(catalog: AssetCatalog, asset_ids: list[str], move: bool = True) -> list[Asset]:
     """Approve assets and move them into ``assets/approved/``."""
     settings = get_settings()

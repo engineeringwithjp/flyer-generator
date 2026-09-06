@@ -271,7 +271,30 @@ def _apply_project_label(parts: tuple, provenance) -> None:
                 provenance.address_label = part.replace("-", " ").replace("_", " ").title()
                 break
 
+    provenance.stage = infer_stage(tokens)
+
+
+def infer_stage(tokens: list[str]) -> str:
+    """Work out whether a photo shows before, during, after or neutral work.
+
+    Ordered deliberately: an explicit 'before'/'during'/'after' token wins, then
+    stronger descriptive words, and only then the weak neutral hints. A file
+    called 'roof_bergenfield_after_architectural' must not be read as neutral
+    just because it also says 'roof'.
+    """
+    from ..config import load_json_config
+
+    try:
+        keywords = load_json_config("stage-policy.json")["keywords"]
+    except Exception:
+        keywords = {}
+
+    present = set(tokens)
     for stage in ("before", "during", "after"):
-        if stage in tokens:
-            provenance.stage = stage
-            break
+        if stage in present:
+            return stage
+    for stage in ("after", "during", "before", "neutral"):
+        for word in keywords.get(stage, []):
+            if word in present:
+                return stage
+    return ""

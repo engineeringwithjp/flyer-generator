@@ -67,6 +67,7 @@ def repo(tmp_path, monkeypatch):
         "layouts.json",
         "typography.json",
         "connectors.json",
+        "stage-policy.json",
     ):
         shutil.copy2(REAL_ROOT / "config" / name, root / "config" / name)
     for path in (REAL_ROOT / ".claude/skills/construction-flyer").glob("*.md"):

@@ -8,7 +8,7 @@ from .image_utils import (
     region_luminance,
 )
 from .metadata import derive_service_from_path
-from .review import pending, promote, reject
+from .review import pending, promote, reject, set_stage, unclassified
 from .selector import select_asset
 
 __all__ = [
@@ -23,6 +23,8 @@ __all__ = [
     "pending",
     "promote",
     "reject",
+    "set_stage",
+    "unclassified",
     "load_rgb",
     "region_luminance",
     "save_asset_index",

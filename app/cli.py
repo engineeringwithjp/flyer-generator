@@ -386,6 +386,28 @@ def cmd_assets(args: argparse.Namespace) -> int:
 
     catalog = AssetCatalog.load(refresh=args.refresh)
 
+    if args.stage and args.set_stage_for:
+        from .assets.review import set_stage
+
+        for asset in set_stage(catalog, list(args.set_stage_for), args.stage):
+            print(f"  {GREEN}{args.stage}{RESET}  {asset.path.split('/')[-1]}")
+        return 0
+
+    if args.unclassified:
+        from .assets.review import unclassified
+
+        waiting = unclassified(catalog, args.client)
+        if not waiting:
+            print(f"{GREEN}Every production asset has a work state recorded.{RESET}")
+            return 0
+        print(f"{BOLD}{len(waiting)} production asset(s) with no work state{RESET}")
+        print(f"{DIM}These cannot illustrate premium, upgrade, proof, emotional or offer")
+        print(f"messages, because an unknown state might be a tear-off.{RESET}\n")
+        for asset in waiting:
+            print(f"  {asset.id}")
+        print(f"\n{DIM}Tag them with:  flyer assets --stage after --set-stage-for <id> <id>{RESET}")
+        return 0
+
     if args.promote or args.reject or args.promote_top:
         ids = list(args.promote or [])
         if args.promote_top:
@@ -786,6 +808,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ast.add_argument("--reject", nargs="+", metavar="ID", help="reject these asset ids")
     ast.add_argument("--refresh", action="store_true", help="rebuild the index first")
+    ast.add_argument(
+        "--unclassified",
+        action="store_true",
+        help="list production assets with no work state recorded",
+    )
+    ast.add_argument(
+        "--stage",
+        choices=["before", "during", "after", "neutral"],
+        help="work state to record (use with --set-stage-for)",
+    )
+    ast.add_argument(
+        "--set-stage-for", nargs="+", metavar="ID", help="asset ids to apply --stage to"
+    )
     ast.add_argument("--show", type=int, default=25)
     ast.set_defaults(func=cmd_assets)
 

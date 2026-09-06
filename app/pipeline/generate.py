@@ -252,6 +252,7 @@ def _produce_flyer(
             planned.layout,
             recent_assets,
             exclude=used_assets,
+            angle=planned.angle,
         )
         secondary = None
 

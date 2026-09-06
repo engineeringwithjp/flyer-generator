@@ -32,6 +32,31 @@ def _modifiers() -> dict:
     return load_json_config("scoring.json").get("asset_modifiers", {})
 
 
+def allowed_stages(angle: str) -> tuple[set[str], bool]:
+    """Which work states may illustrate this angle, and whether unclassified is ok.
+
+    A flyer selling premium roofing must not show a worn-out roof. Stage policy
+    lives in ``config/stage-policy.json`` so the rule is editable without code.
+    """
+    try:
+        config = load_json_config("stage-policy.json")
+    except Exception:
+        return {"after", "neutral", "before", "during", ""}, True
+
+    entry = config.get("policy", {}).get(angle)
+    allow = set(entry["allow"]) if entry else set(config.get("default_allow", []))
+    unclassified_ok = angle in config.get("unclassified", {}).get("allow_for_angles", [])
+    return allow, unclassified_ok
+
+
+def stage_permitted(asset: Asset, angle: str) -> bool:
+    stages, unclassified_ok = allowed_stages(angle)
+    stage = asset.provenance.stage
+    if not stage:
+        return unclassified_ok
+    return stage in stages
+
+
 def score_asset(
     asset: Asset,
     service: str,
@@ -87,6 +112,7 @@ def select_asset(
     recent_asset_ids: list[str] | None = None,
     exclude: set[str] | None = None,
     allow_non_production: bool = False,
+    angle: str = "",
 ) -> Asset | None:
     """Best asset for this campaign, or ``None`` when nothing is eligible.
 
@@ -118,6 +144,31 @@ def select_asset(
             log.warning(
                 "No production-eligible photography for %s/%s. Falling back to a brand "
                 "background rather than using a placeholder.",
+                client_id,
+                service,
+            )
+            return None
+
+    # A worn roof cannot illustrate premium roofing, and a finished roof cannot
+    # illustrate storm damage. Filter to the work states this message allows.
+    if angle:
+        on_message = [a for a in pool if stage_permitted(a, angle)]
+        rejected = len(pool) - len(on_message)
+        if rejected:
+            stages, unclassified_ok = allowed_stages(angle)
+            log.info(
+                "Excluded %d asset(s) whose work state does not suit a %r message (allowed: %s%s)",
+                rejected,
+                angle,
+                ", ".join(sorted(stages)) or "none",
+                ", unclassified" if unclassified_ok else "",
+            )
+        pool = on_message
+        if not pool:
+            log.warning(
+                "No photograph matches a %r message for %s/%s. Using a brand "
+                "background rather than a contradictory image.",
+                angle,
                 client_id,
                 service,
             )

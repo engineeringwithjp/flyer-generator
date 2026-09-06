@@ -1,0 +1,31 @@
+{
+  "$comment": "Which work states may illustrate which message. A flyer selling premium roofing must not show a worn-out roof: it reads as confusing at best and dishonest at worst. Keyed by campaign angle.",
+  "version": 1,
+
+  "policy": {
+    "premium":   {"allow": ["after", "neutral"],                       "why": "Selling finished quality. A worn or half-stripped roof contradicts it."},
+    "upgrade":   {"allow": ["after", "neutral"],                       "why": "Showing the result the homeowner is buying."},
+    "proof":     {"allow": ["after", "during"],                        "why": "Showing the work. Finished, or genuinely underway."},
+    "emotional": {"allow": ["after", "neutral"],                       "why": "Protection and pride. Not a damaged house."},
+    "trust":     {"allow": ["after", "during", "neutral"],             "why": "A crew working is credible; so is finished work."},
+    "offer":     {"allow": ["after", "neutral"],                       "why": "An offer is aspirational. Lead with the outcome."},
+    "problem":   {"allow": ["before", "during", "neutral"],            "why": "Naming a symptom. A worn roof is exactly the point."},
+    "urgency":   {"allow": ["before", "during", "neutral"],            "why": "Storm damage and emergencies show the damage."},
+    "education": {"allow": ["before", "during", "after", "neutral"],   "why": "Teaching can use any state."}
+  },
+
+  "default_allow": ["after", "neutral"],
+
+  "unclassified": {
+    "$comment": "An image with no stage could be anything, including a tear-off. Treated as unusable wherever the message implies finished work, which is the fail-closed choice.",
+    "allow_for_angles": ["education", "problem", "urgency"]
+  },
+
+  "keywords": {
+    "$comment": "Filename tokens that establish a stage without a vision call.",
+    "after":   ["after", "completed", "complete", "finished", "new", "curb", "curbappeal", "final", "done"],
+    "during":  ["during", "progress", "inprogress", "install", "installing", "underlayment", "tearoff", "tear", "wip", "midinstall"],
+    "before":  ["before", "aged", "old", "damaged", "worn", "failing", "leak", "storm", "hail", "missing"],
+    "neutral": ["aerial", "estate", "neighborhood", "neighbourhood", "street", "exterior", "elevation"]
+  }
+}

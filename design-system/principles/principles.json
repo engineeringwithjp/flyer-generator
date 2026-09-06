@@ -125,6 +125,11 @@
       "id": "frames-need-review",
       "class": "hard",
       "rule": "A frame extracted from client video is real media but is not approved photography. It ranks above stock and below a curated client photograph, and a human must promote it before it can appear on a client flyer."
+    },
+    {
+      "id": "work-state-must-match-message",
+      "class": "hard",
+      "rule": "The work state in the photograph must match what the flyer claims. A worn or half-stripped roof cannot illustrate premium, upgrade, offer or emotional messages; a finished roof cannot illustrate storm damage. An image whose state is unknown is barred from any message implying finished work. See config/stage-policy.json."
     }
   ],
   "composition_archetypes": [

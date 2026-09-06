@@ -1,0 +1,79 @@
+{
+  "$comment": "Renderer layout registry. Adding a layout requires a matching builder in app/rendering/templates.py.",
+  "layouts": {
+    "hero-full": {
+      "template_family": "premium",
+      "description": "Full-bleed photograph with a gradient scrim; copy stacked in the lower half.",
+      "image_slots": 1,
+      "text_density": "low",
+      "cta_position": "bottom-left",
+      "needs_photo": true
+    },
+    "banner-lower-third": {
+      "template_family": "modern",
+      "description": "Photograph in the upper two thirds, solid brand band carrying the copy below.",
+      "image_slots": 1,
+      "text_density": "medium",
+      "cta_position": "bottom-center",
+      "needs_photo": false
+    },
+    "split-diagonal": {
+      "template_family": "bold",
+      "description": "Angled split between photograph and brand colour. High energy.",
+      "image_slots": 1,
+      "text_density": "medium",
+      "cta_position": "bottom-left",
+      "needs_photo": false
+    },
+    "offer-badge": {
+      "template_family": "emergency",
+      "description": "Heavily darkened photo, centred copy stack, circular offer badge.",
+      "image_slots": 1,
+      "text_density": "medium",
+      "cta_position": "bottom-center",
+      "needs_photo": false
+    },
+    "before-after": {
+      "template_family": "before-after",
+      "description": "Two stacked panels labelled BEFORE / AFTER with copy beneath.",
+      "image_slots": 2,
+      "text_density": "low",
+      "cta_position": "bottom-center",
+      "needs_photo": false
+    },
+    "stat-stack": {
+      "template_family": "minimal",
+      "description": "Typographic layout with up to three proof points. Photo optional.",
+      "image_slots": 1,
+      "text_density": "high",
+      "cta_position": "bottom-center",
+      "needs_photo": false
+    },
+    "hero-editorial": {
+      "template_family": "premium",
+      "description": "Full-bleed aerial photography, giant two-tone headline with one accented word, a row of pill chips, and a combined CTA + phone pill at the base. The house style extracted from the operator's reference flyers.",
+      "image_slots": 1,
+      "text_density": "low",
+      "cta_position": "bottom-center",
+      "needs_photo": true
+    }
+  },
+  "canvas_presets": {
+    "social-portrait": {
+      "width": 1080,
+      "height": 1350
+    },
+    "social-square": {
+      "width": 1080,
+      "height": 1080
+    },
+    "story": {
+      "width": 1080,
+      "height": 1920
+    },
+    "link-share": {
+      "width": 1200,
+      "height": 628
+    }
+  }
+}

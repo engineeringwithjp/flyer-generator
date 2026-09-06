@@ -1,31 +1,75 @@
-# Quality Control: The Human Design Test & Automated Gates
+# Quality control
 
-## 1. The Human Design Test (Mandatory Gate)
-Before any flyer is delivered to the user or uploaded to Google Drive, it must pass the Human Design Test.
+Two passes run on every flyer.
 
-Ask: **"Does this look like it was designed by a high-end branding and marketing agency in New York / New Jersey, or does it look like an automated AI bot?"**
+**Deterministic** (`app/pipeline/validate.py`) — no API, runs in CI, gates every
+Drive upload. Dimensions, file integrity, placeholder text, duplicate words,
+risky claims, unverified numbers, unauthorised offers, phone format, blank
+output, edge bleed.
 
-### Evaluation Checklist (100 Points Total)
+**Vision** (`app/ai/qa_agent.py`) — you, looking at the rendered PNG. The
+judgement calls a machine cannot make.
 
-| Check | Requirement | Points |
-| :--- | :--- | :--- |
-| **1. Architectural Realism** | Believable suburban architecture, realistic rooflines, correct window geometry. No AI melting or surreal turrets. | 15 |
-| **2. Restraint & Negative Space** | The home has room to breathe. No walls of text or cluttered corner badges. | 15 |
-| **3. Typography Execution** | High contrast, strong size contrast between hook and subhead, clean font pairing. | 15 |
-| **4. Anti-AI Linguistic Check** | Zero em dashes (`—`), zero emojis, no buzzwords ("revolutionize", "elevate"). | 15 |
-| **5. Brand Color Precision** | `#80272B` used selectively on CTA and badges; not smeared across the photo. | 10 |
-| **6. Verified Claims** | No fabricated discounts, fake statistics, or unverified warranties. | 10 |
-| **7. Mobile Feed Safe Margins** | Text and CTA are positioned within the safe zone (72px padding minimum). | 10 |
-| **8. Hierarchy Clarity** | Viewer understands the core service and benefit within 1.5 seconds. | 10 |
+A flyer fails when either pass records an `error`. On failure the pipeline
+regenerates once with a heavier scrim and reduced copy, then keeps whichever
+attempt scored higher.
 
-**Passing Threshold**: Score >= **85/100**. Any score below 85 triggers automatic adjustment and regeneration.
+## Your checklist, in priority order
 
----
+### 1. The thumbnail test — highest weight
+Imagine it 180px wide in a feed. Is the headline still legible? Is the message
+still clear? If not, that is an **error**, not a warning.
 
-## 2. Immediate Disqualification Criteria
-If any of the following are detected, the flyer fails instantly:
-1. Presence of any em dash (`—` or `--`).
-2. Presence of emojis (`🔥`, `🚀`, etc.).
-3. Fabricated discount numbers not in `client.json` (e.g. "$500 OFF").
-4. Illegible dark text on dark backgrounds or white text on bright skies without a shadow/scrim.
-5. Canvas dimensions not equal to 1080 x 1350 px.
+### 2. Contrast
+Any text sitting on a photo region too bright or too busy for it. **Error.**
+
+### 3. Clipping and overlap
+Text or logo running off an edge, colliding, or crowding the margin. **Error.**
+
+### 4. Text volume
+More than roughly 25 words. **Warning** at 25-34, **error** beyond.
+
+### 5. Campaign relevance
+Does the imagery match the service? A kitchen on a roofing flyer is an
+**error**.
+
+### 6. Photographic realism
+Fake-looking architecture, impossible roof geometry, wrong construction detail.
+**Error** — this destroys credibility.
+
+### 7. Brand accuracy
+Company name and contact details rendered correctly. A wrong phone number is
+the only truly unrecoverable defect. **Error.**
+
+### 8. Manufacturer subordination
+Does a manufacturer brand dominate? **Error.**
+
+### 9. The human design test
+
+> Does this look like an actual professional designer created it?
+
+Check: visual hierarchy · restraint · believable photography · intentional
+spacing · typographic quality · coherent composition · appropriate branding ·
+realistic architecture · the visual telling the story before the words.
+
+Fail it if it resembles a generic AI advert, a Canva template, a corporate
+infographic, a random AI poster, an over-symmetrical template, or an
+over-designed advertisement. **Warning**, escalating to **error** when more than
+one applies.
+
+## Calibration
+
+Be exacting, but do not invent problems. A plain, clean flyer that reads well at
+thumbnail size is a **pass**, even if it is not exciting. Boring and legible
+beats interesting and unreadable.
+
+Mark `passed: false` only when at least one genuine `error` exists.
+
+## The feedback loop
+
+`flyer feedback <flyer_id> approve|reject --reason "..."` records the human
+verdict. Approvals raise the score of the references used; rejections lower it.
+Rejection reasons accumulate in the history and feed the next distillation.
+
+Evidence priority: the client's own approved flyers > recorded preferences >
+approved external references > experimental references.

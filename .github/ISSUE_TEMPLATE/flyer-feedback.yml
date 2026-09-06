@@ -1,0 +1,36 @@
+name: Flyer feedback
+description: Approve or reject a generated flyer, with reasons the system can learn from.
+title: "Feedback: "
+labels: [flyer-review]
+body:
+  - type: input
+    id: flyer_id
+    attributes:
+      label: Flyer ID
+      description: From the run summary, e.g. run_2026-09-05_ab12cd_01
+    validations: { required: true }
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Verdict
+      options: [approve, reject]
+    validations: { required: true }
+  - type: checkboxes
+    id: reasons
+    attributes:
+      label: If rejected, what went wrong?
+      options:
+        - label: Headline too small at thumbnail size
+        - label: Too much text
+        - label: CTA weak or hard to see
+        - label: Image too dark or too bright
+        - label: Image does not match the service
+        - label: Architecture or construction detail looks wrong
+        - label: Looks AI-generated / template-like
+        - label: Branding wrong or manufacturer too prominent
+        - label: Copy makes a claim we cannot back up
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: This feeds the next distillation, so specifics help.

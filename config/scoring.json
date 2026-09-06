@@ -1,0 +1,33 @@
+{
+  "$comment": "Reference-selection scoring. Weights must sum to 1.0.",
+  "weights": {
+    "service_relevance": 0.3,
+    "style_relevance": 0.25,
+    "campaign_relevance": 0.2,
+    "historical_performance": 0.15,
+    "client_preference": 0.1
+  },
+  "status_multipliers": {
+    "approved": 1.0,
+    "experimental": 0.75,
+    "rejected": 0.0
+  },
+  "diversity": {
+    "recent_window_days": 10,
+    "reference_reuse_penalty": 0.35,
+    "layout_repeat_penalty": 0.5,
+    "campaign_repeat_penalty": 1.0
+  },
+  "asset_weights": {
+    "service_match": 0.45,
+    "negative_space_fit": 0.3,
+    "contrast_headroom": 0.25
+  },
+  "asset_modifiers": {
+    "$comment": "Applied multiplicatively AFTER the weighted score, so they can override a strong weighted match. Recency has to be able to beat the client-owned bonus, otherwise the same photo runs every day.",
+    "client_owned_bonus": 1.25,
+    "placeholder_penalty": 0.35,
+    "recency_penalty_most_recent": 0.4,
+    "recency_penalty_decay": 0.12
+  }
+}

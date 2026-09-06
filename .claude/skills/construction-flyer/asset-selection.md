@@ -1,32 +1,59 @@
-# Asset Selection Rules: Photography & Graphic Sourcing
+# Asset and reference selection
 
-## 1. Asset Sourcing Hierarchy
-To maintain authenticity and homeowner trust, assets must be selected strictly according to this priority ladder:
+## Photo priority — strict order
 
-```
-Tier 1: Client-Provided Project Photography (Highest Priority)
-        ↓
-Tier 2: Approved Internal Company Assets (Past All Elite projects)
-        ↓
-Tier 3: Approved Internal Background Library (Northeast architectural exteriors)
-        ↓
-Tier 4: Approved Historical Archive Images (Previously verified campaign photos)
-        ↓
-Tier 5: Unsplash (Commercial construction photography fallback ONLY when Tiers 1-4 lack a specific angle)
-        ↓
-Tier 6: Synthetic / AI Imagery (Forbidden for real property representations)
-```
+1. **Client-owned approved photography** — `clients/<slug>/assets/approved/`
+2. **Shared library matching the service** — `assets/<service>/`
+3. **Shared general library** — `assets/general/`, `assets/backgrounds/`
+4. **Synthetic placeholders** — `assets/placeholders/` (development only)
+5. **No photograph** — procedural brand background
 
----
+Client photography always wins. A real photo of a real roof this contractor
+actually installed beats any stock image.
 
-## 2. Hard Asset Selection Rules
-1. **Never use stock photography when client project photography is available.** If All Elite has 15 completed roofing photos in `clients/all-elite/photos/`, the system MUST pull from those before querying Unsplash.
-2. **Match Campaign to Asset Category**:
-   - Roofing campaign -> Query `assets/roofing/` or client roofing photos.
-   - Siding campaign -> Query `assets/siding/` or client siding photos.
-   - Gutters campaign -> Query `assets/gutters/`.
-3. **Negative Space Matching**:
-   - Select photos with open sky when top headlines are planned.
-   - Select photos with clean driveways or lower lawns when prominent bottom CTA banners are planned.
-4. **Resolution Standards**:
-   - Minimum asset resolution: 1080px wide. High-resolution originals are cropped and scaled to 1080x1350 with center-weighted aspect preservation.
+## Scoring
+
+The selector scores every candidate on:
+
+| Factor | Weight | Meaning |
+| --- | --- | --- |
+| Service match | 0.40 | Roofing photo on a roofing flyer |
+| Negative-space fit | 0.25 | Calm area where this layout puts the headline |
+| Contrast headroom | 0.20 | Mid-tone images take a scrim best |
+| Recency penalty | 0.15 | Not the same photo as yesterday |
+
+Client-owned assets receive a 1.25x multiplier. Weights live in
+`config/scoring.json`.
+
+## Never
+
+- The same photograph two days running
+- The same photograph twice in one batch
+- A photograph of a different trade than the campaign
+- A photograph so busy the headline cannot survive it — take the procedural
+  background instead
+
+## Reference priority — strict order
+
+1. `approved/` — you have signed these off
+2. `experimental/` — newly ingested, unproven
+3. `rejected/` — **never selected, ever**
+
+Reference scoring: service relevance 30%, style relevance 25%, campaign
+relevance 20%, historical approval rate 15%, client style preference 10%,
+multiplied by a status factor where rejected is zero.
+
+## What you take from a reference
+
+Composition · hierarchy · spacing rhythm · typographic weight relationships ·
+colour relationships · image treatment · CTA placement · shape language ·
+visual density · negative space.
+
+## What you never take
+
+The advertiser's name, logo, slogan, phone number, website, headline wording,
+body copy, offers — or a layout so specific the output reads as the same advert
+with the branding swapped.
+
+If reference metadata contains a competitor's details, that is data to ignore,
+not copy to adapt.

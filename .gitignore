@@ -1,45 +1,38 @@
-# Virtual Environments
-.venv/
-venv/
-ENV/
-env/
-.claude/worktrees/
+# Secrets - never commit
+.env
+.env.*
+!.env.example
+*.pem
+*credentials*.json
+*service-account*.json
+token.json
 
-# Python Cache & Bytecode
+# Generated flyers (Google Drive is the archive)
+output/**
+!output/.gitkeep
+
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.pytest_cache/
-.ruff_cache/
 *.egg-info/
-dist/
-build/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Environment Variables & Secrets
-.env
-.env.local
-*.pem
-*.key
-service_account.json
-gdrive_token.json
+# Downloaded fonts (fetched by scripts/fetch_fonts.py)
+assets/fonts/*.ttf
+assets/fonts/*.otf
 
-# Operating System & IDE
+# OS
 .DS_Store
-.AppleDouble
-.LSOverride
 Thumbs.db
-.idea/
-.vscode/
-*.swp
 
-# Raw drone media extractions (keep repo lightweight)
-clients/*/photos/drone_media/
+# Raw client media awaiting review. Large, and Google Drive is the archive.
+# Curated production assets live in clients/*/assets/approved/ and ARE tracked.
+clients/*/assets/raw/**
+!clients/*/assets/raw/.gitkeep
 
-# Output Artifacts (Keep directory structure via .gitkeep)
-output/202*/*
-!output/202*/.gitkeep
-output/approved/*
-!output/approved/.gitkeep
-output/rejected/*
-!output/rejected/.gitkeep
+# Claude Code worktrees are scratch checkouts, never part of the repo.
+.claude/worktrees/

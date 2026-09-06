@@ -1,0 +1,87 @@
+name: Record flyer feedback
+
+# Comment "approve <flyer_id>" or "reject <flyer_id> reason, reason" on a
+# flyer-review issue and the verdict is written into the generation history,
+# which reweights the references that produced it.
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  feedback:
+    if: >
+      github.event.issue.state == 'open' &&
+      contains(github.event.issue.labels.*.name, 'flyer-review') &&
+      (startsWith(github.event.comment.body, 'approve ') ||
+       startsWith(github.event.comment.body, 'reject '))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: ./.github/actions/setup
+        with:
+          fonts: "false"
+          extras: "dev"
+
+      - name: Apply the decisions
+        id: apply
+        env:
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          applied=0
+          while IFS= read -r line; do
+            set -- $line
+            verdict="$1"; flyer="$2"; shift 2 || true
+            reasons="$*"
+            [ -z "$flyer" ] && continue
+            case "$verdict" in
+              approve|reject) ;;
+              *) continue ;;
+            esac
+            args=("$flyer" "$verdict")
+            if [ -n "$reasons" ]; then
+              IFS=',' read -ra parts <<< "$reasons"
+              for part in "${parts[@]}"; do
+                trimmed="$(echo "$part" | sed 's/^ *//;s/ *$//')"
+                [ -n "$trimmed" ] && args+=(--reason "$trimmed")
+              done
+            fi
+            if python -m app.cli feedback "${args[@]}"; then
+              applied=$((applied+1))
+            fi
+          done <<< "$COMMENT"
+          echo "applied=$applied" >> "$GITHUB_OUTPUT"
+
+      - name: Commit the feedback
+        if: steps.apply.outputs.applied != '0'
+        run: |
+          git config user.name  "flyer-generator[bot]"
+          git config user.email "flyer-generator[bot]@users.noreply.github.com"
+          git add data/generation-history data/references/index.json references || true
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+          else
+            git commit -m "chore(feedback): record ${{ steps.apply.outputs.applied }} decision(s) from #${{ github.event.issue.number }}"
+            git push
+          fi
+
+      - name: Acknowledge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const applied = '${{ steps.apply.outputs.applied }}';
+            const body = applied === '0'
+              ? 'No decisions were recognised. Use `approve <flyer_id>` or `reject <flyer_id> reason, reason`.'
+              : `Recorded ${applied} decision(s). Reference scores have been updated and will influence the next run.`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number, body,
+            });

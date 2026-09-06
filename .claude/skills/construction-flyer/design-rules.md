@@ -1,82 +1,83 @@
-# All Elite Construction Design System
+# Design rules
 
-## 1. Global Brand Rules
-- **Brand Identity**: All Elite Construction Corp.
-- **Tone**: Professional, trustworthy, architectural, premium residential exterior construction.
-- **Aesthetic**: Clean, corporate, editorial, human-designed.
-- **Target Audience**: Residential homeowners in New Jersey / Tri-State Area.
-- **Primary Goal**: High-trust lead generation for major exterior investments.
+The structured, machine-readable version of these rules is
+`design-system/principles/principles.json`, which is injected into your prompt
+automatically. This document is the reasoning behind them.
 
----
+## The hierarchy
 
-## 2. Composition Archetypes
-Flyers are rendered in **1080 x 1350 px (4:5 aspect ratio)** optimized for Instagram and Facebook feed retention.
+```
+PROPERTY / PHOTOGRAPHY
+        v
+PRIMARY HOOK          (L1 - one idea)
+        v
+SUPPORTING MESSAGE    (L2 - one sentence)
+        v
+KEY BENEFITS          (L3 - three or four maximum, often zero)
+        v
+BRAND / CTA           (L4)
+```
 
-### Archetype 1: Hero Image (Default)
-- **Visual**: 70-80% full-bleed property photograph with high negative space (sky or lawn).
-- **Layout**: Top-aligned primary hook and subhead, floating dark glass badge for benefits, bottom corporate bar with CTA and phone.
-- **Best For**: Roof replacements, complete siding renovations, curb appeal transformations.
+This is the default, not a template. Product-education, before/after and
+storm-emergency flyers legitimately reorder it. When you depart from it, say why
+in `designer_notes`.
 
-### Archetype 2: Editorial Overlay
-- **Visual**: Full-frame cinematic property photo with subtle dark gradient overlay (35% to 75% opacity).
-- **Layout**: Large editorial headline in serif/clean sans pairing, minimal copy, elegant accent lines in `#80272B`.
-- **Best For**: Luxury exterior remodeling, architectural roofing, executive estates.
+## Choosing the archetype
 
-### Archetype 3: Split Image / Before & After
-- **Visual**: Precision dual-panel split (horizontal or vertical 50/50 split) comparing outdated/damaged condition with completed installation.
-- **Layout**: Clear "BEFORE" and "AFTER" architectural pill labels, centered central divider, bottom unified CTA banner.
-- **Best For**: Storm restoration, aging roof transformation, siding modernization.
+Pick the composition archetype first; the layout follows from it.
 
-### Archetype 4: Architectural Detail
-- **Visual**: High-detail macro photograph focusing on craftsmanship (copper flashing, ridge cap, precision corner miters, seamless gutters).
-- **Layout**: Off-center focus with callout lines pointing to engineering precision.
-- **Best For**: Premium materials, craftsmanship differentiation, discerning homeowners.
+| Situation | Archetype | Layout |
+| --- | --- | --- |
+| Brand, premium positioning, full replacement | `hero-image` | `hero-full` |
+| Standard service promotion (the workhorse) | `split-image` | `banner-lower-third` |
+| Trust, licensing, credibility | `editorial-overlay` | `stat-stack` |
+| Material quality, workmanship, close-up | `architectural-detail` | `hero-full` |
+| Proof of work | `before-after` | `before-after` |
+| Manufacturer product, assembly, insulation | `product-education` | `hero-full` |
+| An authorised offer | `promotional` | `offer-badge` |
+| Seasonal timing | `seasonal` | `split-diagonal` |
+| Storm / emergency | `storm-emergency` | `offer-badge` |
 
-### Archetype 5: Product Education
-- **Visual**: Property hero paired with an inset technical cutaway / visual magnification badge.
-- **Layout**: Headline highlighting homeowner outcome (e.g. lower energy bills) + visual callout explaining the technology (e.g. foam backing).
-- **Best For**: ASCEND® Composite Foam Backed Siding, CertainTeed® CertaPlank®, energy efficiency.
+## Overlay strength — the most common failure
 
-### Archetype 6: Promotional
-- **Visual**: Inviting residential home in warm golden hour or crisp morning light.
-- **Layout**: Distinct seasonal offer pill (e.g. "Early Spring Booking Incentive"), clear value proposition, deadline-driven CTA.
-- **Best For**: Seasonal scheduling, multi-service package incentives.
+Text placed over an under-darkened photograph is the single most frequent way a
+flyer fails QA. Calibrate against the asset's reported `mean_luminance`:
 
-### Archetype 7: Seasonal Maintenance
-- **Visual**: Weather-appropriate residential setting (autumn leaves, pre-winter frost, post-winter thaw).
-- **Layout**: Proactive prevention checklist (3 quick bullet points), urgent yet dignified headline.
-- **Best For**: Gutter protection, pre-winter roof inspection, ice dam prevention.
+| Photo | Overlay strength |
+| --- | --- |
+| Dark, calm (luminance < 0.35) | 0.35 – 0.50 |
+| Mid-tone (0.35 – 0.6) | 0.50 – 0.65 |
+| Bright, or busy (> 0.6) | 0.65 – 0.85 |
+| Snow, bright sky, white siding | 0.75 – 0.90 |
 
-### Archetype 8: Storm / Emergency Restorations
-- **Visual**: High-contrast dramatic sky or clean post-repair home exterior.
-- **Layout**: High visual urgency without sensationalism. Emphasizes rapid response, certified inspection, and insurance claims navigation.
-- **Best For**: Wind damage, hail inspection, sudden leaks, fallen limb damage.
+When unsure, go darker. An over-darkened photo looks moody. An under-darkened
+one looks broken.
 
----
+## Contrast
 
-## 3. Typography Rules & Scale
-- **Hierarchy Level 1 (Hook)**: 64px - 84px bold, uppercase or editorial title case. 1-2 lines maximum.
-- **Hierarchy Level 2 (Subhead)**: 32px - 42px regular/medium. Clear homeowner benefit.
-- **Hierarchy Level 3 (Key Benefits)**: 24px - 28px clean sans. 3-4 bullet points maximum.
-- **Hierarchy Level 4 (CTA & Contact)**: 28px - 34px bold button pill + company contact details.
-- **Font Selection**:
-  - Primary Headlines: Modern Grotesk Sans (Helvetica, Roboto, Inter) or Architectural Serif (Georgia, Garamond) for luxury campaigns.
-  - Body & Badges: Clean Geometric Sans.
-  - Zero decorative handwriting scripts or novelty display fonts.
+- Body-scale text: minimum 4.5:1 against what is behind it.
+- Display text: minimum 3:1.
+- Never solve a contrast problem by shrinking the type. Solve it with a scrim,
+  a solid band, or a different crop.
 
----
+## Spacing
 
-## 4. Color Palette
-- **Primary Brand Accent**: `#80272B` (Deep Crimson / Burgundy).
-  - Used strictly for: CTA button backgrounds, subtle accent rules, pill badges, and key highlight terms.
-  - NEVER flood the entire background with red.
-- **Supporting Dark Neutrals**: `#1C1C1E` (Onyx Black), `#2C2C2E` (Charcoal).
-- **Supporting Light Neutrals**: `#FFFFFF` (Pure White), `#F4F4F6` (Architectural Off-White).
-- **Glass / Tint Overlays**: `rgba(28, 28, 30, 0.75)` for text readability over bright skies.
+- Nothing important inside the safe margin.
+- Space between groups must exceed space within a group. If the support line
+  is as far from the headline as it is from the CTA, the grouping is broken.
+- Empty space is a design decision. Do not fill it.
 
----
+## Restraint
 
-## 5. Margin & Safe Zones
-- **Top / Bottom Margins**: 80px minimum.
-- **Left / Right Margins**: 72px minimum.
-- **Center Safety**: Critical headlines and phone numbers must never touch the canvas edges to survive social feed cropping.
+Before finalising, remove one element. If the flyer still works, leave it
+removed. Over-design is the difference between an advert that looks bought and
+one that looks generated.
+
+## Variety obligations
+
+Across one batch: different layout, different angle, different treatment.
+Across a week: no repeated campaign, no repeated headline structure, no three
+consecutive flyers with the same alignment.
+
+Uniformity across 500 flyers a year is a worse outcome than any single
+imperfect flyer.

@@ -1,0 +1,59 @@
+name: Distil historical prompts
+
+# Prompt-to-Skill. Reads design-system/historical-prompts/ and proposes design
+# rules. It never applies anything: the output is a pull request to review.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["design-system/historical-prompts/**"]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  distill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          fonts: "false"
+
+      - name: Anything in the corpus?
+        id: check
+        run: |
+          count=$(find design-system/historical-prompts -type f \( -name '*.md' -o -name '*.txt' \) ! -name 'README.md' | wc -l | tr -d ' ')
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+
+      - name: Distil
+        if: steps.check.outputs.count != '0'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m app.cli distill
+
+      - name: Open a proposal pull request
+        if: steps.check.outputs.count != '0'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: design-system/proposal-${{ github.run_number }}
+          commit-message: "docs(design-system): distillation proposal"
+          title: "Design-system proposal from ${{ steps.check.outputs.count }} historical prompt(s)"
+          labels: design-system
+          body: |
+            Claude read the historical prompt corpus and extracted the underlying
+            rules: deduplicated, classified hard / soft / optional, with conflicts
+            surfaced rather than silently resolved.
+
+            **Nothing has been applied.** Review
+            `design-system/proposals/` and merge what you agree with into
+            `design-system/principles/principles.json`.
+          delete-branch: true
+
+      - name: Empty corpus
+        if: steps.check.outputs.count == '0'
+        run: |
+          echo "No historical prompts found." >> "$GITHUB_STEP_SUMMARY"
+          echo "Add .md or .txt files to design-system/historical-prompts/successful/ and /unsuccessful/." >> "$GITHUB_STEP_SUMMARY"

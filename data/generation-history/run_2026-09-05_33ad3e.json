@@ -1,0 +1,121 @@
+{
+  "run_id": "run_2026-09-05_33ad3e",
+  "client_id": "all-elite",
+  "date": "2026-09-05",
+  "started_at": "2026-09-06T03:57:21+00:00",
+  "finished_at": "2026-09-05T23:57:21-04:00",
+  "requested_count": 1,
+  "model": "offline",
+  "offline": true,
+  "plan": {
+    "client_id": "all-elite",
+    "date": "2026-09-05",
+    "season": "fall",
+    "flyers": [
+      {
+        "slot": 1,
+        "campaign_id": "roof-replacement",
+        "service": "roofing",
+        "angle": "urgency",
+        "layout": "banner-lower-third",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      }
+    ],
+    "strategy_note": "Deterministic rotation (Claude unavailable or disabled)."
+  },
+  "tools_used": [
+    "offline-fallback"
+  ],
+  "renderer": "internal",
+  "results": [
+    {
+      "spec": {
+        "id": "run_2026-09-05_33ad3e_01",
+        "client_id": "all-elite",
+        "campaign_id": "roof-replacement",
+        "service": "roofing",
+        "style": "corporate-trust",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "banner-lower-third",
+          "type_pairing": "condensed-editorial",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "clients:all-elite:assets:approved:roof_completed_neighborhood_contrast_002",
+          "secondary_asset_id": null,
+          "crop": "focal",
+          "overlay": "none",
+          "overlay_strength": 0.25,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Fast Roofing Service",
+          "support": "Roofing repair for Bergen County homeowners",
+          "bullets": [
+            "Licensed & insured New Jersey contractor",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#6B1528",
+          "accent": "#C9952A",
+          "ink": "#1A1A1A",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": false,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "A suitable internal photograph exists, so no stock search.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "a suitable client or internal photograph already exists",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-06T03:57:21+00:00"
+      },
+      "image_path": "output/_real/banner-lower-third/flyer-01.png",
+      "metadata_path": "output/_real/banner-lower-third/flyer-01.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 1578384,
+      "rendered_at": "2026-09-06T03:57:21+00:00",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    }
+  ],
+  "errors": []
+}

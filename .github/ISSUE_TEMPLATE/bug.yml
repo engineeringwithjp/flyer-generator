@@ -1,0 +1,23 @@
+name: Bug
+description: Something in the pipeline is broken.
+labels: [bug]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options: [planning, copywriting, art direction, rendering, QA, Google Drive, connectors, automation, CLI]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes: { label: What happened }
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: Command
+      description: The exact command, and the output.
+      render: shell
+  - type: input
+    id: run
+    attributes: { label: Run ID or Actions run URL }

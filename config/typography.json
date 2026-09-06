@@ -1,0 +1,66 @@
+{
+  "$comment": "Type pairings. The design director picks one per flyer so a week of flyers does not share a single voice. Each pairing maps a logical role to ordered font-file stems in assets/fonts/.",
+  "default": "condensed-editorial",
+  "pairings": {
+    "condensed-editorial": {
+      "description": "Barlow Condensed display over Lato. The house voice, matching the website.",
+      "suits": ["premium-modern", "corporate-trust", "warm-residential"],
+      "roles": {
+        "display":  ["BarlowCondensed-Bold", "Anton-Regular", "Oswald-Bold"],
+        "headline": ["BarlowCondensed-Bold", "Anton-Regular"],
+        "subhead":  ["Lato-Regular", "Inter-Regular"],
+        "body":     ["Lato-Regular", "Inter-Regular"],
+        "bold":     ["Lato-Bold", "Lato-Black", "Inter-Bold"]
+      },
+      "tracking_scale": 1.0
+    },
+    "impact-promotional": {
+      "description": "Anton display, tight and loud. For offers and urgency.",
+      "suits": ["bold-promotional", "urgent-emergency"],
+      "roles": {
+        "display":  ["Anton-Regular", "Archivo-Black", "BarlowCondensed-Bold"],
+        "headline": ["Anton-Regular", "Archivo-Black"],
+        "subhead":  ["Lato-Bold", "Inter-SemiBold", "Lato-Regular"],
+        "body":     ["Lato-Regular", "Inter-Regular"],
+        "bold":     ["Lato-Black", "Archivo-Black", "Lato-Bold"]
+      },
+      "tracking_scale": 0.8
+    },
+    "grotesque-corporate": {
+      "description": "Heavy grotesque throughout. Clean, corporate, no condensed drama.",
+      "suits": ["corporate-trust", "clean-minimal"],
+      "roles": {
+        "display":  ["Archivo-Black", "Lato-Black", "Inter-Bold"],
+        "headline": ["Archivo-Black", "Lato-Black"],
+        "subhead":  ["Inter-Regular", "Lato-Regular"],
+        "body":     ["Inter-Regular", "Lato-Regular"],
+        "bold":     ["Inter-Bold", "Lato-Bold"]
+      },
+      "tracking_scale": 1.15
+    },
+    "serif-editorial": {
+      "description": "Serif display over a clean sans. Premium, architectural, magazine-like.",
+      "suits": ["premium-modern", "clean-minimal", "warm-residential"],
+      "roles": {
+        "display":  ["PlayfairDisplay-Bold", "SourceSerif4-Bold", "BarlowCondensed-Bold"],
+        "headline": ["PlayfairDisplay-Bold", "SourceSerif4-Bold"],
+        "subhead":  ["Inter-Regular", "Lato-Regular"],
+        "body":     ["Inter-Regular", "Lato-Regular"],
+        "bold":     ["Inter-SemiBold", "Lato-Bold"]
+      },
+      "tracking_scale": 1.05
+    },
+    "condensed-industrial": {
+      "description": "Oswald display, squared and technical. Trades and workmanship.",
+      "suits": ["industrial", "corporate-trust", "urgent-emergency"],
+      "roles": {
+        "display":  ["Oswald-Bold", "BarlowCondensed-Bold", "Anton-Regular"],
+        "headline": ["Oswald-Bold", "BarlowCondensed-Bold"],
+        "subhead":  ["Inter-Regular", "Lato-Regular"],
+        "body":     ["Inter-Regular", "Lato-Regular"],
+        "bold":     ["Oswald-SemiBold", "Inter-Bold", "Lato-Bold"]
+      },
+      "tracking_scale": 1.1
+    }
+  }
+}

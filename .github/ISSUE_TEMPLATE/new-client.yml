@@ -1,0 +1,46 @@
+name: Add a construction client
+description: Everything needed to onboard another contractor.
+title: "New client: "
+labels: [client]
+body:
+  - type: markdown
+    attributes:
+      value: Adding a client is configuration, not code. This issue collects what goes in `client.json`.
+  - type: input
+    id: company
+    attributes: { label: Company name }
+    validations: { required: true }
+  - type: input
+    id: slug
+    attributes: { label: Slug, description: "lowercase-with-hyphens, becomes the folder name" }
+    validations: { required: true }
+  - type: input
+    id: services
+    attributes: { label: Services, description: "Comma separated, e.g. Roofing, Siding, Gutters" }
+    validations: { required: true }
+  - type: input
+    id: area
+    attributes: { label: Service area, description: "Counties or towns" }
+  - type: input
+    id: phone
+    attributes: { label: Phone, description: "Exactly as it should print on a flyer" }
+    validations: { required: true }
+  - type: input
+    id: website
+    attributes: { label: Website }
+  - type: input
+    id: colors
+    attributes: { label: Brand colours, description: "Hex, primary first" }
+  - type: textarea
+    id: proof
+    attributes:
+      label: Verified proof points
+      description: >
+        The ONLY claims the system will be allowed to print. Licence numbers,
+        years in business, warranties, certifications. One per line. Leave blank
+        and the flyers will make no claims at all.
+  - type: textarea
+    id: offers
+    attributes:
+      label: Authorised offers
+      description: Leave blank and no discount language will ever appear.

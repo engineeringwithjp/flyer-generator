@@ -1,11 +1,56 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flyer-generator"
+version = "0.1.0"
+description = "AI-powered construction marketing flyer automation using Claude"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "engineeringwithjp" }]
+dependencies = [
+    "anthropic>=0.40",
+    "pydantic>=2.7",
+    "Pillow>=10.3",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+drive = [
+    "google-api-python-client>=2.140",
+    "google-auth>=2.34",
+    "google-auth-oauthlib>=1.2",
+]
+dev = [
+    "pytest>=8.2",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[project.scripts]
+flyer = "app.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
 [tool.ruff]
-line-length = 120
-target-version = "py311"
+line-length = 100
+target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I"]
-ignore = ["E501", "E402"]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+warn_unused_ignores = false
+disallow_untyped_defs = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = ["test_*.py"]
+markers = [
+    "integration: tests that require real external credentials (deselect with -m 'not integration')",
+]

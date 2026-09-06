@@ -1,0 +1,121 @@
+{
+  "run_id": "run_2026-09-05_c66902",
+  "client_id": "all-elite",
+  "date": "2026-09-05",
+  "started_at": "2026-09-06T03:54:18+00:00",
+  "finished_at": "2026-09-05T23:54:19-04:00",
+  "requested_count": 1,
+  "model": "offline",
+  "offline": true,
+  "plan": {
+    "client_id": "all-elite",
+    "date": "2026-09-05",
+    "season": "fall",
+    "flyers": [
+      {
+        "slot": 1,
+        "campaign_id": "exterior-upgrade",
+        "service": "windows",
+        "angle": "emotional",
+        "layout": "before-after",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      }
+    ],
+    "strategy_note": "Deterministic rotation (Claude unavailable or disabled)."
+  },
+  "tools_used": [
+    "offline-fallback"
+  ],
+  "renderer": "internal",
+  "results": [
+    {
+      "spec": {
+        "id": "run_2026-09-05_c66902_01",
+        "client_id": "all-elite",
+        "campaign_id": "exterior-upgrade",
+        "service": "windows",
+        "style": "warm-residential",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "before-after",
+          "type_pairing": "condensed-editorial",
+          "text_align": "center",
+          "accent_shape": false,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": null,
+          "secondary_asset_id": null,
+          "crop": "center",
+          "overlay": "none",
+          "overlay_strength": 0.2,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Protect What Matters Most",
+          "support": "Windows for Bergen County homeowners",
+          "bullets": [
+            "Licensed & insured New Jersey contractor",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#6B1528",
+          "accent": "#C9952A",
+          "ink": "#1A1A1A",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": true,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "No internal photograph and Unsplash is unavailable; falling back to a procedural brand background.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "it needs authorisation",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-06T03:54:18+00:00"
+      },
+      "image_path": "/Users/johnpineda/Documents/Projects/flyer-generator/.claude/worktrees/flyer-generation-agent-35692d/Documents/Projects/flyer-generator/output/2026-09-05/all-elite/flyer-01.png",
+      "metadata_path": "/Users/johnpineda/Documents/Projects/flyer-generator/.claude/worktrees/flyer-generation-agent-35692d/Documents/Projects/flyer-generator/output/2026-09-05/all-elite/flyer-01.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 59971,
+      "rendered_at": "2026-09-06T03:54:19+00:00",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    }
+  ],
+  "errors": []
+}

@@ -1,40 +1,81 @@
-# Copywriting Rules: Clear, Direct, Homeowner-Oriented
+# Copywriting rules
 
-## 1. Core Philosophy
-Construction marketing must bridge technical craftsmanship with homeowner desires: protection, pride of ownership, energy efficiency, and value retention.
+## Structure
 
-Flyers are viewed on mobile feeds during rapid scrolling. Copy must communicate the core value proposition in under **2 seconds**.
+| Level | Field | Budget | Job |
+| --- | --- | --- | --- |
+| L1 | `headline` | 3-8 words, <= 54 chars | The whole message |
+| L2 | `support` | one sentence, <= 110 chars | The specific, the local, the qualifier |
+| L3 | `bullets` | 0-3, <= 44 chars each | Proof. Often correctly empty |
+| L4 | `cta` | <= 32 chars | One action |
+| — | `eyebrow` | <= 34 chars | Optional label: service, county, season |
+| — | `offer_badge` | <= 26 chars | Only with an authorised offer |
+| — | `disclaimer` | <= 120 chars | Offer fine print, verbatim |
 
----
+Character budgets are hard renderer limits. The renderer will shrink type to
+make an overlong headline fit, and small type fails the thumbnail test.
 
-## 2. Information Density Policy
-Flyers enforce **Low Information Density**:
-- **1 Primary Hook**: Punchy, bold (3 to 7 words).
-- **1 Supporting Subheadline**: Direct homeowner benefit (8 to 15 words).
-- **3 to 4 Bullet Benefits**: Micro-points highlighting tangible features (e.g., "Impact Resistant", "Thermal Insulation", "Clean Jobsite Guarantee").
-- **1 Primary CTA**: Clear action verb (e.g., "Schedule Free Estimate", "Request Inspection").
-- **Contact Anchor**: Phone number, website, and local service territory.
+## Voice
 
----
+Write for a homeowner on a phone who is not shopping for a roof.
 
-## 3. Strict Anti-Fabrication Policy (Non-Negotiable)
-Under no circumstances may the system invent claims to sound more persuasive. The following are strictly forbidden unless explicitly stored in `client.json`:
+- Plain language. If a contractor would not say it out loud, do not write it.
+- Concrete over abstract. "Missing shingles after the last storm" beats
+  "compromised roofing integrity".
+- Benefit before feature. What they get, not what you do.
+- Local specificity when true. "Bergen County homeowners" beats "homeowners".
+- One idea. Two ideas is two flyers.
 
-| Forbidden Fabrications | Reason |
-| :--- | :--- |
-| **Fake Discounts** (e.g. "Save 30% Today Only") | Diminishes premium brand perception & creates legal liability. |
-| **Unverified Warranties** (e.g. "Lifetime 50-Year Guarantee") | Must only state verified manufacturer warranties stored in profile. |
-| **Fabricated Licensing** (e.g. "Fully Licensed & Bonded #12345") | Must match exact state registration numbers in `client.json`. |
-| **Made-Up Statistics** (e.g. "99.8% of NJ Homeowners Choose Us") | Destroys homeowner trust. |
-| **Phantom Awards** (e.g. "#1 Rated Contractor in Bergen County") | Avoids false advertising regulations. |
-| **Fake Customer Counts** (e.g. "Over 10,000 Roofs Installed") | Only verified metrics are permitted. |
+## The headline test
 
----
+Read the headline alone. Does a stranger know what is being sold and why they
+should care? If not, it is decoration, not a headline.
 
-## 4. Voice and Tone Guidelines
-- **Sound Like**: An established, reputable, local building contractor who takes immense pride in their work.
-- **Do Not Sound Like**: A pushy digital marketer, a corporate Silicon Valley SaaS platform, or an AI prompt spitting buzzwords.
-- **Forbidden Words / Phrases**:
-  - "Revolutionize", "Game-changer", "Cutting-edge", "Elevate your living experience", "Delve into excellence".
-- **Zero Em Dashes**: Never use `—` or `--`. Use periods, pipes (`|`), or clean bullet points (`•`).
-- **Zero Emojis**: Never use `🔥`, `🚀`, `🔨`, `🏠`, `⭐`, `💥`. Maintain a corporate, architectural aesthetic.
+Then shrink it mentally to 180px wide. If it stops working, it is too long.
+
+## Never invent
+
+Discounts · statistics · percentages · warranties · certifications · awards ·
+years in business · customer counts · licence numbers · guarantees · financing
+terms · response times.
+
+The only permitted sources are `client.proof_points`, `client.offers` and a
+product's `benefits`. If a list is empty, the flyer makes no claim of that kind.
+
+A number that is not traceable to the client profile is a QA error, not a
+stylistic preference.
+
+## Never write
+
+- "Free roof", "no cost to you", "insurance will pay for everything"
+- "Guaranteed approval", "we'll get your claim approved"
+- Fabricated scarcity or countdowns
+- "#1", "best", "top-rated" without a citable source in `proof_points`
+- Storm urgency for a storm that did not happen
+
+## Banned filler
+
+unlock · elevate your · in today's · look no further · we've got you covered ·
+game-changer · seamless · cutting-edge · world-class · unparalleled ·
+take your home to the next level · peace of mind you deserve
+
+These are the fingerprints of generated copy. Their presence is a warning; a
+cluster of them is a failure.
+
+## Density
+
+Default is low. One hook, one supporting line, at most three or four benefits,
+one CTA. Roughly 25 words total across the whole flyer.
+
+Never say the same thing in two places. If the headline says "free estimate",
+the CTA says something else, or the headline changes.
+
+Never add text because space exists.
+
+## CTAs that work
+
+Get A Free Estimate · Book Your Free Inspection · Schedule Your Estimate ·
+Call For Same-Day Service (only if the client offers it) · See Our Work ·
+Request Your Quote
+
+One CTA. Imperative. No full stop.

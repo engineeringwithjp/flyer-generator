@@ -1,0 +1,8 @@
+# Everything is owned by the maintainer by default.
+*                                   @engineeringwithjp
+
+# Areas where a mistake is expensive.
+/design-system/                     @engineeringwithjp
+/.claude/skills/                    @engineeringwithjp
+/clients/                           @engineeringwithjp
+/.github/workflows/                 @engineeringwithjp

@@ -1,0 +1,23 @@
+{
+  "$comment": "Learned and declared operator preferences. The distiller appends to this; you may edit it by hand. Everything here is evidence, not dogma - weight is how strongly it should steer generation.",
+  "version": 1,
+  "client_defaults": {
+    "all-elite": {
+      "preferred_archetypes": ["hero-image", "split-image", "architectural-detail", "before-after"],
+      "avoid_archetypes": [],
+      "default_text_density": "low",
+      "accent_usage": "punctuation-only",
+      "photography_bias": "real client property photography over stock",
+      "tone_bias": ["premium", "architectural", "restrained"]
+    }
+  },
+  "declared": [
+    {"id": "pref-house-hero", "weight": 1.0, "source": "operator-spec", "statement": "The house is the hero in almost every flyer."},
+    {"id": "pref-editorial", "weight": 0.9, "source": "operator-spec", "statement": "Premium editorial look preferred over promotional-flyer look."},
+    {"id": "pref-minimal-copy", "weight": 1.0, "source": "operator-spec", "statement": "Minimal copy. One idea."},
+    {"id": "pref-accent-restraint", "weight": 0.9, "source": "operator-spec", "statement": "#80272B used as punctuation, not as a fill."},
+    {"id": "pref-show-dont-tell", "weight": 0.9, "source": "operator-spec", "statement": "Show a construction benefit visually rather than explaining it in text."},
+    {"id": "pref-manufacturer-subordinate", "weight": 1.0, "source": "operator-spec", "statement": "Manufacturer products are material options; All Elite is the advertiser."}
+  ],
+  "learned": []
+}

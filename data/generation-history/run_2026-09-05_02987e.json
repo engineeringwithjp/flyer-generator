@@ -1,0 +1,98 @@
+{
+  "run_id": "run_2026-09-05_02987e",
+  "client_id": "all-elite",
+  "date": "2026-09-05",
+  "started_at": "2026-09-05T23:05:55+00:00",
+  "finished_at": "2026-09-05T19:05:55-04:00",
+  "requested_count": 1,
+  "model": "offline",
+  "offline": true,
+  "plan": {
+    "client_id": "all-elite",
+    "date": "2026-09-05",
+    "season": "fall",
+    "flyers": [
+      {
+        "slot": 1,
+        "campaign_id": "window-replacement",
+        "service": "windows",
+        "angle": "upgrade",
+        "layout": "stat-stack",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      }
+    ],
+    "strategy_note": "Deterministic rotation (Claude unavailable or disabled)."
+  },
+  "results": [
+    {
+      "spec": {
+        "id": "run_2026-09-05_02987e_01",
+        "client_id": "all-elite",
+        "campaign_id": "window-replacement",
+        "service": "windows",
+        "style": "clean-minimal",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "stat-stack",
+          "type_pairing": "grotesque-corporate",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "assets:placeholders:windows:placeholder-window-bay-exterior",
+          "secondary_asset_id": null,
+          "crop": "focal",
+          "overlay": "dark_gradient",
+          "overlay_strength": 0.9,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Windows Done Right",
+          "support": "Windows replacement for Bergen County homeowners",
+          "bullets": [
+            "Licensed & insured New Jersey contractor",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#6B1528",
+          "accent": "#C9952A",
+          "ink": "#1A1A1A",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "created_at": "2026-09-05T23:05:55+00:00"
+      },
+      "image_path": "output/_layouts/stat-stack/flyer-01.png",
+      "metadata_path": "output/_layouts/stat-stack/flyer-01.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 128576,
+      "rendered_at": "2026-09-05T23:05:55+00:00",
+      "qa_passed": true,
+      "qa_score": 100,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    }
+  ],
+  "errors": []
+}

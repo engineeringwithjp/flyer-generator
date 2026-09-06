@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Add a design reference
+    url: https://github.com/engineeringwithjp/flyer-generator/upload/main/references/inbox
+    about: Drop an image straight into references/inbox and the ingest workflow catalogues it.
+  - name: Generate flyers now
+    url: https://github.com/engineeringwithjp/flyer-generator/actions/workflows/generate-flyers.yml
+    about: Run the pipeline manually instead of waiting for 10:07.

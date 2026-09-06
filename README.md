@@ -1,505 +1,686 @@
-# Flyer Generator 🏗️📐
+<div align="center">
 
-[![Daily Construction Flyer Automation](https://github.com/engineeringwithjp/flyer-generator/actions/workflows/generate-flyers.yml/badge.svg)](https://github.com/engineeringwithjp/flyer-generator/actions/workflows/generate-flyers.yml)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Code Style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Architecture: Agency-Grade](https://img.shields.io/badge/Architecture-Agency--Grade-crimson.svg)](#system-architecture)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+# Flyer Generator
 
-> **Autonomous AI construction marketing production system** powered by Claude, standardized design rules, client assets, deterministic 1080×1350 rendering, and daily scheduled cloud delivery.
+**AI-powered construction marketing automation.**
+Two original, brand-accurate social flyers every weekday, from a four-line brief.
 
----
+[![Tests](https://github.com/engineeringwithjp/flyer-generator/actions/workflows/tests.yml/badge.svg)](https://github.com/engineeringwithjp/flyer-generator/actions/workflows/tests.yml)
+[![Generate flyers](https://github.com/engineeringwithjp/flyer-generator/actions/workflows/generate-flyers.yml/badge.svg)](https://github.com/engineeringwithjp/flyer-generator/actions/workflows/generate-flyers.yml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-1f6feb)](https://www.python.org/)
+[![Claude](https://img.shields.io/badge/Claude-Opus%205-8b5cf6)](https://www.anthropic.com/)
+[![Ruff](https://img.shields.io/badge/lint-ruff-261230)](https://docs.astral.sh/ruff/)
+[![mypy](https://img.shields.io/badge/types-mypy-2a6db2)](https://mypy-lang.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2ea043)](LICENSE)
 
-## 🌟 Table of Contents
-- [1. Executive Summary](#1-executive-summary)
-- [2. The Primary Problem Solved: Prompt Minimization](#2-the-primary-problem-solved-prompt-minimization)
-- [3. System Architecture](#3-system-architecture)
-- [4. Connected Design Ecosystem (Canva + Figma + Unsplash + Mobbin)](#4-connected-design-ecosystem)
-- [5. Standardized Design System & Rules](#5-standardized-design-system--rules)
-- [6. Composition Archetypes](#6-composition-archetypes)
-- [7. Directory Structure](#7-directory-structure)
-- [8. Quickstart & Local Execution](#8-quickstart--local-execution)
-- [9. Unified CLI Reference (`flyer_cli.py`)](#9-unified-cli-reference-flyer_clipy)
-- [10. Google Drive Cloud Delivery](#10-google-drive-cloud-delivery)
-- [11. GitHub Actions 10:07 AM Daily Scheduler](#11-github-actions-1007-am-daily-scheduler)
-- [12. Multi-Contractor Scaling Guide](#12-multi-contractor-scaling-guide)
-- [13. Quality Control & The Human Design Test](#13-quality-control--the-human-design-test)
-- [14. Component Status & Secrets Guide](#14-component-status--secrets-guide)
+`Claude decides what to say · a deterministic renderer decides how it looks · QA decides what ships`
+
+</div>
 
 ---
 
-## 1. Executive Summary
-**Flyer Generator** is not a generic image generator or a single bloated prompt. It is a full-stack **construction marketing automation agent** built specifically for residential exterior contractors (roofing, siding, gutters, windows, and emergency storm restoration), defaulting to **All Elite Construction Corp.** in Northern New Jersey.
+## The problem this solves
 
-### What it produces:
-- **Two high-converting 1080×1350 (4:5) social media flyers per day**.
-- **Real Property First**: Treats real property photos as sacred; preserves authentic architecture, rooflines, and landscaping.
-- **Agency-Level Human Aesthetic**: Eliminates "AI sludge"—zero em dashes (`—`), zero cheesy emojis (`🔥`, `🚀`), zero fabricated warranties or discounts, and disciplined `#80272B` brand accenting.
-- **Automated Delivery**: Uploads directly to your Google Drive (`12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT`) every weekday at 10:07 AM Eastern.
+Producing marketing for a construction client means re-explaining the same
+things every single time: the house is the hero, keep it to 4:5, minimal copy,
+use the brand maroon as an accent not a fill, don't let the manufacturer brand
+take over, don't make it look AI-generated, don't invent a warranty.
 
----
+That knowledge is written down **once** here. A flyer request then only carries
+what is different about that flyer.
 
-## 2. The Primary Problem Solved: Prompt Minimization
+<table>
+<tr><th width="50%">Before</th><th width="50%">After</th></tr>
+<tr valign="top"><td>
 
-### ❌ The Old Way (Repetitive 800-Word Brief Every Time)
-Before this system, generating a single flyer required constantly re-explaining:
-> *"Remember the house is the hero. Remember 4:5 ratio (1080x1350). Remember All Elite's accent is #80272B. Don't use em dashes. Don't use emojis. Preserve the roofline. Put the phone number at the bottom. Make sure the headline has high contrast against the sky. Don't invent fake 50% discounts..."*
+```
+A 600-word Master Image-Generation Brief,
+pasted in full, every time:
 
-### ✅ The New Way (The 4-Line Prompt)
-Because all brand standards, photography rules, typography scales, and negative constraints are permanently encoded into the Claude Skill and machine-readable design system, generating today's flyer now requires only:
-
-```text
-Client: All Elite
-Campaign: Composite Siding
-Focus: Built-in insulation
-CTA: Free Estimate
+  aesthetic, composition, typography,
+  image treatment, house preservation,
+  branding, marketing principles,
+  text density, icon usage, colour,
+  dimensions, what looks professional,
+  what looks AI-made, what never to do
+  ...then the actual request
 ```
 
-**The system automatically resolves everything else:**
+</td><td>
+
 ```
-USER INPUT (4 Lines)
-    ↓
-CLIENT PROFILE (All Elite brand colors, phone, approved claims)
-    ↓
-GLOBAL DESIGN SYSTEM (Hierarchy, safe margins, typography scale)
-    ↓
-CAMPAIGN RULES (Siding product education, continuous thermal barrier)
-    ↓
-REFERENCE LIBRARY (Matches approved reference ref_siding_001)
-    ↓
-ASSET LIBRARY (Pulls verified client siding project photo)
-    ↓
-GENERATION HISTORY (Verifies no recent duplicate headlines)
-    ↓
-CLAUDE AGENT & COPYWRITER (Zero em dashes, zero emojis, verified claims)
-    ↓
-FLYER SPECIFICATION (Structured JSON definition)
-    ↓
-DETERMINISTIC RENDERER (Pixel-perfect 1080x1350 PNG)
-    ↓
-QA GATE (Human Design Test >= 85/100)
-    ↓
-GOOGLE DRIVE (Uploaded to folder 12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT)
+CLIENT:   all-elite
+CAMPAIGN: siding
+MESSAGE:  built-in insulation
+CTA:      Free Estimate
 ```
 
----
+Everything else comes from the Skill,
+the design system and the client profile.
 
-## 3. System Architecture
+</td></tr>
+</table>
 
-```mermaid
-flowchart TD
-    subgraph INPUTS ["1. Inputs & Knowledge Base"]
-        A[User Campaign Directive]
-        B[Client Profile: client.json]
-        C[Claude Skill & Markdown Rules]
-        D[Machine Design System: principles.json]
-        E[Generation History: history.json]
-    end
-
-    subgraph ENGINE ["2. Core Decision & Assembly"]
-        F[Campaign Planner]
-        G[Tool Decision Engine]
-        H[Reference Selector]
-        I[Asset Selector]
-        J[Copywriter]
-    end
-
-    subgraph ECOSYSTEM ["3. Connected Design Ecosystem"]
-        K1[Client Project Photos]
-        K2[Internal Approved Backgrounds]
-        K3[Unsplash Stock Fallback]
-        K4[Mobbin / Figma Inspiration]
-        K5[Canva Editable Workflows]
-    end
-
-    subgraph PRODUCTION ["4. Rendering & Quality Control"]
-        L[Deterministic Pillow Renderer]
-        M[QA Gate: Human Design Test]
-        N{Score >= 85?}
-        O[Regenerate / Adjust]
-    end
-
-    subgraph DELIVERY ["5. Cloud Delivery & Learning"]
-        P[Google Drive Folder: 12Ho15EiJumnZkSAPm...]
-        Q[Human Approval / Rejection Loop]
-        R[Update preferences.json]
-    end
-
-    A & B & C & D & E --> F
-    F --> G
-    G --> H & I & J
-    I --> K1
-    K1 -.->|Missing| K2
-    K2 -.->|Missing| K3
-    H -.->|Research| K4
-    G -.->|If Editable| K5
-    K1 & H & J --> L
-    L --> M
-    M --> N
-    N -- No --> O
-    O --> L
-    N -- Yes --> P
-    P --> Q
-    Q --> R
-```
-
----
-
-## 4. Connected Design Ecosystem
-
-The system integrates with **Canva**, **Figma**, **Unsplash**, and **Mobbin** as **supporting tools**. They never replace the deterministic core pipeline or create points of failure.
-
-### Strict Sourcing & Tool Priority:
-```
-1. Client-Provided Project Photography (Highest Priority)
-       ↓
-2. Internal Design System & Approved Rules
-       ↓
-3. Approved Reference Library
-       ↓
-4. Connected Design Tools (Figma / Mobbin / Canva)
-       ↓
-5. Supplemental Stock Photography (Unsplash Fallback Only)
-```
-
-### Automatic Decision Engine:
-```mermaid
-flowchart TD
-    Start[New Flyer Request] --> PhotosCheck{Do suitable client photos exist?}
-    PhotosCheck -->|Yes| UseClient[Use Client Project Photos]
-    PhotosCheck -->|No| BgCheck{Approved internal background?}
-    BgCheck -->|Yes| UseInternal[Use Approved Backgrounds]
-    BgCheck -->|No| Unsplash[Search Unsplash for Architectural Stock]
-
-    UseClient & UseInternal & Unsplash --> RefCheck{Approved references in library?}
-    RefCheck -->|Yes| UseRef[Blend Internal References]
-    RefCheck -->|No| Mobbin[Query Mobbin / Figma for Modern Layouts]
-
-    UseRef & Mobbin --> FormatCheck{Client requires editable file?}
-    FormatCheck -->|Yes| Canva[Route to Canva / Figma Workflow]
-    FormatCheck -->|No| Renderer[Deterministic 1080x1350 Renderer]
-
-    Renderer --> QA[QA Gate & Google Drive]
-```
-
-### Connector Status Matrix:
-| Connector | Role & When Used | Fallback Behavior | Status |
-| :--- | :--- | :--- | :--- |
-| **Canva** | Used when an editable client deliverable is requested (`--force-canva`). | Uses deterministic internal renderer. | `INTEGRATED & FALLBACK READY` |
-| **Figma** | Master design tokens, component frames, and layout review. | Uses local `data/design-system/principles.json`. | `INTEGRATED & FALLBACK READY` |
-| **Unsplash** | Supplemental exterior photography **only** when client & internal photos are missing. | Uses internal background archive or photorealistic synthesis. | `INTEGRATED & FALLBACK READY` |
-| **Mobbin** | Visual pattern discovery, spacing inspiration, and modern hierarchy. | Uses approved references in `references/approved/`. | `INTEGRATED & FALLBACK READY` |
-
----
-
-## 5. Standardized Design System & Rules
-
-The rules extracted from historical prompts are organized into modular, maintainable markdown documents inside `.claude/skills/construction-flyer/`:
-
-- **[`SKILL.md`](.claude/skills/construction-flyer/SKILL.md)**: Main skill orchestrator and pipeline logic.
-- **[`design-rules.md`](.claude/skills/construction-flyer/design-rules.md)**: 14-level design hierarchy, grid systems, safe margins, and font scales.
-- **[`photography-rules.md`](.claude/skills/construction-flyer/photography-rules.md)**: **The House is the Hero** standard. Preservation of real rooflines, windows, siding courses, landscaping, and perspective.
-- **[`copywriting-rules.md`](.claude/skills/construction-flyer/copywriting-rules.md)**: Homeowner benefit copy. Strict anti-fabrication rules (no fake warranties, stats, or unverified claims).
-- **[`branding-rules.md`](.claude/skills/construction-flyer/branding-rules.md)**: All Elite `#80272B` accent allocation (10-15% max). Subordination of manufacturer brands (ASCEND® and CertainTeed® presented as material options installed by All Elite).
-- **[`negative-rules.md`](.claude/skills/construction-flyer/negative-rules.md)**: Universal blacklist: **Zero em dashes (`—`)**, **Zero emojis**, no Canva template clutter, no warped AI architecture.
-- **[`quality-control.md`](.claude/skills/construction-flyer/quality-control.md)**: 100-point Human Design Test audit criteria.
-- **[`asset-selection.md`](.claude/skills/construction-flyer/asset-selection.md)**: Strict 5-tier photo sourcing priority.
-- **[`reference-analysis.md`](.claude/skills/construction-flyer/reference-analysis.md)**: Abstraction of layout and typography without copying third-party graphics.
-
----
-
-## 6. Composition Archetypes
-
-The deterministic rendering engine supports 8 distinct architectural layouts:
-
-| Archetype | Best For | Visual Treatment |
-| :--- | :--- | :--- |
-| **1. Hero Image** | Roof replacements, curb appeal | 75% full-bleed property photo, open sky headline, dark floating benefits card, bottom CTA bar. |
-| **2. Editorial Overlay** | Luxury estates, architectural shingles | Cinematic full-frame photo, subtle 40% dark gradient, architectural serif/sans pairing. |
-| **3. Split Image (Before/After)** | Storm damage restoration, aging roofs | Precision 50/50 comparison split with architectural "BEFORE" / "AFTER" badges. |
-| **4. Architectural Detail** | Gutters, copper flashing, siding miters | Macro craftsmanship detail with callout lines highlighting engineering precision. |
-| **5. Product Education** | ASCEND® Composite Foam Backed Siding | Full exterior facade paired with an inset technical cutaway showing continuous thermal foam backing. |
-| **6. Promotional** | Seasonal booking incentives | Inviting suburban home with a tasteful seasonal pill tag and deadline-driven CTA. |
-| **7. Seasonal Maintenance** | Fall gutter protection, pre-winter inspection | Weather-appropriate photography with a proactive 3-point homeowner prevention checklist. |
-| **8. Storm / Emergency** | Wind damage, hail, sudden leaks | Dramatic sky, high visual urgency, certified inspection, and insurance claims navigation. |
-
----
-
-## 7. Directory Structure
-
-```text
-flyer-generator/
-├── .claude/
-│   └── skills/
-│       └── construction-flyer/          # Complete Claude Skill Knowledge Base
-│           ├── SKILL.md
-│           ├── design-rules.md
-│           ├── copywriting-rules.md
-│           ├── photography-rules.md
-│           ├── branding-rules.md
-│           ├── quality-control.md
-│           ├── asset-selection.md
-│           ├── reference-analysis.md
-│           └── negative-rules.md
-├── data/
-│   └── design-system/                  # Machine-Readable Parameters
-│       ├── principles.json
-│       ├── successful-patterns.json
-│       ├── failed-patterns.json
-│       └── preferences.json            # Dynamic weights updated by feedback
-├── references/                         # Design Reference Library
-│   ├── inbox/                          # Drop new inspiration images here
-│   ├── approved/                       # Verified high-converting references
-│   │   ├── roofing/
-│   │   ├── siding/
-│   │   ├── gutters/
-│   │   ├── windows/
-│   │   └── general/
-│   ├── experimental/                   # Concepts under review
-│   └── rejected/                       # Anti-pattern blacklist
-├── assets/                             # Photography & Graphic Assets
-│   ├── backgrounds/
-│   ├── construction/
-│   ├── roofing/
-│   ├── siding/
-│   ├── gutters/
-│   └── windows/
-├── clients/                            # Multi-Client Contractor Profiles
-│   ├── all-elite/
-│   │   ├── client.json                 # Brand config, colors, phone, claims
-│   │   ├── logo/
-│   │   └── photos/                     # Real client project photography
-│   └── client-002/
-│       ├── client.json
-│       ├── logo/
-│       └── photos/
-├── src/                                # Core Engine Source Code
-│   ├── config.py
-│   ├── core/                           # Pipeline & Models
-│   │   ├── models.py
-│   │   ├── client_manager.py
-│   │   ├── campaign_planner.py
-│   │   ├── asset_selector.py
-│   │   ├── reference_selector.py
-│   │   ├── copywriter.py
-│   │   └── history_tracker.py
-│   ├── connectors/                     # Connected Design Ecosystem
-│   │   ├── decision_engine.py
-│   │   ├── canva_connector.py
-│   │   ├── figma_connector.py
-│   │   ├── unsplash_connector.py
-│   │   └── mobbin_connector.py
-│   ├── renderer/                       # Deterministic Pillow 1080x1350 Renderer
-│   │   ├── engine.py
-│   │   ├── archetypes.py
-│   │   ├── layout.py
-│   │   └── typography.py
-│   ├── qa/                             # Quality Assurance & Gates
-│   │   ├── checker.py
-│   │   └── human_design_test.py
-│   └── services/                       # Cloud Delivery & Feedback
-│       ├── google_drive.py
-│       └── feedback_learner.py
-├── scripts/                            # Automation & Maintenance Scripts
-│   ├── generate_flyers.py
-│   ├── ingest_reference.py
-│   ├── feedback.py
-│   ├── generate_sample_assets.py
-│   └── audit_system.py
-├── tests/                              # Pytest Automated Test Suite
-│   ├── conftest.py
-│   ├── test_client_manager.py
-│   ├── test_campaign_planner.py
-│   ├── test_asset_selector.py
-│   ├── test_copywriter.py
-│   ├── test_renderer.py
-│   ├── test_qa_checker.py
-│   ├── test_connectors.py
-│   ├── test_google_drive.py
-│   └── test_end_to_end.py
-├── .github/
-│   └── workflows/
-│       └── generate-flyers.yml         # 10:07 AM Eastern GitHub Actions Workflow
-├── output/                             # Generated Flyers & History
-│   ├── history.json
-│   ├── approved/
-│   ├── rejected/
-│   └── 2026/
-├── flyer_cli.py                        # Unified CLI Entrypoint
-├── pyproject.toml
-├── requirements.txt
-├── .env.example
-└── README.md
-```
-
----
-
-## 8. Quickstart & Local Execution
-
-### Prerequisites
-- Python 3.11+
-- Virtualenv
-
-### 1. Clone and Set Up Virtual Environment
 ```bash
-git clone git@github.com:engineeringwithjp/flyer-generator.git
+flyer generate --campaign siding --message "built-in insulation" --cta "Free Estimate"
+```
+
+---
+
+## How it works
+
+```mermaid
+flowchart TD
+    subgraph K["Knowledge — written once"]
+        DS["Design system<br/><i>hard / soft / optional rules</i>"]
+        SK["Claude Skill<br/><i>9 instruction documents</i>"]
+        CL["Client profile<br/><i>brand, contact, proof points</i>"]
+    end
+
+    subgraph L["Libraries — you grow these"]
+        RL["Reference library<br/><i>approved / experimental / rejected</i>"]
+        AL["Photo library<br/><i>client photos, backgrounds</i>"]
+        HI["Generation history<br/><i>what has already been made</i>"]
+    end
+
+    BRIEF["Short brief<br/><i>campaign + message + CTA</i>"] --> PLAN
+
+    K --> PLAN
+    L --> PLAN
+
+    subgraph C["Claude — four decisions"]
+        PLAN["Campaign planner"] --> REFSEL["Reference + asset selection"]
+        REFSEL --> COPY["Copywriter"]
+        COPY --> ART["Design director"]
+    end
+
+    ART --> SPEC["FlyerSpecification<br/><i>validated JSON contract</i>"]
+    SPEC --> REND["Deterministic renderer<br/><i>Pillow, 1080x1350</i>"]
+    REND --> QA{"Quality control<br/><i>machine + vision</i>"}
+    QA -->|fail| RETRY["One automatic retry<br/><i>heavier scrim, less copy</i>"] --> REND
+    QA -->|pass| OUT["output/ + Google Drive"]
+    OUT --> REVIEW["Approve / reject"]
+    REVIEW -.->|reweights references| RL
+
+    style K fill:#eef2ff,stroke:#6366f1
+    style L fill:#f0fdf4,stroke:#22c55e
+    style C fill:#faf5ff,stroke:#a855f7
+    style QA fill:#fff7ed,stroke:#f97316
+```
+
+**The separation of concerns that makes it reliable:** Claude never draws
+anything. It emits a validated `FlyerSpecification`, and a deterministic
+renderer turns that into pixels. The same spec always produces the same image,
+so a good flyer can be reproduced and a bad one can be diagnosed.
+
+---
+
+## Status
+
+Honest labels. Nothing below is claimed as working unless it has been run.
+
+| | Capability | Notes |
+|:--|:--|:--|
+| ✅ | **Two flyers from a four-line brief** | 6 layouts, 5 type pairings, 1080x1350 |
+| ✅ | **Design system as machine-readable rules** | 60+ rules, classified hard / soft / optional |
+| ✅ | **Deterministic renderer** | Pillow. Same spec → identical pixels |
+| ✅ | **Campaign planner with memory** | No repeated campaign within 10 days |
+| ✅ | **Quality control** | 20+ machine checks. Em dashes, emoji, AI filler, fabricated numbers, unauthorised offers, blank renders |
+| ✅ | **Anti-AI-tell gate** | Em/en dashes and emoji are hard failures |
+| ✅ | **Reference library with scored selection** | Approved > experimental; rejected never selected |
+| ✅ | **Approval feedback loop** | Approvals reweight the references that produced them |
+| ✅ | **Connector decision engine** | Chooses when *not* to call an external tool, and records why |
+| ✅ | **Multi-client** | A new contractor is a folder and a JSON file |
+| ✅ | **Test suite** | 260 tests, ruff clean, mypy clean, no network in unit tests |
+| ✅ | **GitHub Actions** | 6 workflows: generate, tests, ingest, approval, gallery, distil |
+| ⚙️ | **Claude integration** | Code complete and mocked-tested. Needs `ANTHROPIC_API_KEY` |
+| ⚙️ | **Google Drive upload** | Code complete and mocked-tested. Needs OAuth secrets. Target folder verified |
+| ⚙️ | **Reference ingestion** | Code complete and mocked-tested. Needs `ANTHROPIC_API_KEY` |
+| ⚙️ | **Prompt-to-Skill distillation** | Built. Needs a corpus in `design-system/historical-prompts/` |
+| 🔌 | **Unsplash / Figma / Canva** | Adapters + fallbacks implemented. **Never called.** Need tokens |
+| 🔌 | **Mobbin** | Interface + fallback implemented. No adapter reachable in this environment |
+| 🧪 | **GitHub Pages gallery** | Built, not yet deployed |
+| 📋 | Social publishing, A/B testing, web dashboard | Interfaces left clean. Not built |
+
+✅ working · ⚙️ needs configuration · 🔌 connector not verified · 🧪 experimental · 📋 planned
+
+---
+
+## Quick start
+
+```bash
+git clone https://github.com/engineeringwithjp/flyer-generator.git
 cd flyer-generator
-
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+make install     # venv + dependencies + brand fonts
+make preview     # two flyers, no API key, no upload
 ```
 
-### 2. Generate Starter Photorealistic Assets
+Look in `output/<today>/all-elite/`. That works with **no credentials and no
+photographs** — the renderer falls back to procedural brand backgrounds and a
+deliberately conservative copywriter that cannot make a claim.
+
+Then turn on Claude:
+
 ```bash
-python flyer_cli.py sample-assets
+cp .env.example .env      # add ANTHROPIC_API_KEY
+flyer generate --count 2 --no-upload
 ```
 
-### 3. Run the Master System Audit
+New to this? **[GETTING-STARTED.md](GETTING-STARTED.md)** walks through it with no assumptions.
+
+Full walkthrough: **[docs/SETUP.md](docs/SETUP.md)** ·
+How to verify it: **[docs/TESTING.md](docs/TESTING.md)**
+
+---
+
+## The daily workflow
+
+<table>
+<tr><td width="33%" valign="top">
+
+### You find a flyer you like
+
+Drop it in `references/inbox/` and push.
+
+Claude analyses the design DNA — composition, hierarchy, type, treatment, CTA
+placement — files it under `experimental/`, and opens a PR.
+
+You promote what you like:
+
 ```bash
-python flyer_cli.py audit
+flyer promote ref_000001 approved
 ```
-*(Confirms all 28/28 system checks pass!)*
 
-### 4. Generate Today's Two Flyers
+</td><td width="33%" valign="top">
+
+### 10:07 AM, every weekday
+
+GitHub Actions runs the pipeline. Two flyers land in Google Drive under
+`Flyers/2026/September/09-05/`.
+
+A review issue opens with the headlines, campaigns and QA scores.
+
+Nothing that fails QA is uploaded.
+
+</td><td width="33%" valign="top">
+
+### You review
+
+Comment on the issue:
+
+```
+approve run_2026-09-05_ab12cd_01
+reject  run_2026-09-05_ab12cd_02 too much text
+```
+
+Approvals raise the score of the references that produced them. Rejections
+lower it. The system gets closer to your taste.
+
+</td></tr>
+</table>
+
+---
+
+## The design system
+
+The answer to "stop making me repeat myself". Rules live in
+`design-system/principles/principles.json`, are classified, and are compiled
+into the system prompt of every Claude call.
+
+| Class | Meaning |
+|:--|:--|
+| `hard` | Follow essentially every time. A violation is a QA error |
+| `soft` | Follow by default. May be broken when composition benefits, with a stated reason |
+| `optional` | A technique for appropriate campaigns. Never universal |
+
+<details>
+<summary><b>The rules that shape every flyer</b></summary>
+
+**Global** — property-first composition · one idea per flyer · understood in
+1–2 seconds · 1080x1350 · nothing against an edge · low information density ·
+never repeat information · never add text because space exists · vary across
+the week
+
+**Photography** — the house is the hero · preserve architecture, roofline,
+windows, proportions, landscaping, driveway, perspective · photorealistic
+Northeast suburban · natural daylight · adapt by cropping and scrim, never by
+redesigning the property · verify contrast before placing text
+
+**Typography** — four levels only · at most two families · the headline must
+survive being scaled to 180px · no paragraphs · no microscopic text · clear
+size steps
+
+**Colour** — the brand colour is punctuation, not paint · let the property's
+palette lead · 4.5:1 contrast floor · one accent
+
+**Branding** — the client is the advertiser · manufacturer products are
+material options, never the advertising brand · contact details byte-for-byte
+from `client.json`
+
+**Product presentation** — show the benefit; a construction feature that can be
+demonstrated visually must not be explained in paragraphs
+
+**The NEVER list** — excessive text · huge banners · repetitive card grids ·
+corporate infographic layouts · template symmetry · over-design · fake-looking
+houses · impossible roof geometry · inaccurate construction detail · excessive
+HDR · gradient soup · brand-colour floods · decorative icons · manufacturer
+brands leading · anything that reads as a Canva template · em dashes · emoji ·
+invented claims of any kind
+
+</details>
+
+<details>
+<summary><b>Composition archetypes</b></summary>
+
+| Archetype | Use case | Layout | Density |
+|:--|:--|:--|:--|
+| `hero-image` | Brand, premium, full replacement | `hero-full` | low |
+| `split-image` | Standard service promotion (the workhorse) | `banner-lower-third` | medium |
+| `editorial-overlay` | Trust, licensing, credibility | `stat-stack` | medium |
+| `architectural-detail` | Material quality, workmanship | `hero-full` | low |
+| `before-after` | Proof of work | `before-after` | low |
+| `product-education` | Manufacturer products, assemblies | `hero-full` | low |
+| `promotional` | Authorised offers only | `offer-badge` | medium |
+| `seasonal` | Timing-driven campaigns | `split-diagonal` | medium |
+| `storm-emergency` | Storm damage, emergency response | `offer-badge` | medium |
+
+</details>
+
+<details>
+<summary><b>Why the flyers don't all look the same</b></summary>
+
+Two flyers a weekday is ~500 a year. The failure mode is not one bad flyer, it
+is 500 identical ones. The system varies deliberately:
+
+- **6 layouts**, never the same one twice in a batch or two days running
+- **5 type pairings** — condensed editorial, impact promotional, grotesque
+  corporate, serif editorial, condensed industrial
+- **Campaign rotation** — no repeat within 10 days, enforced from history
+- **Angle pairing** — a demand-capture flyer alongside a trust flyer
+- **Overlay, crop, alignment and CTA** chosen per flyer by the design director
+- **Recency penalties** on both photographs and references
+
+</details>
+
+---
+
+## Connected design ecosystem
+
+Canva, Figma, Unsplash and Mobbin are **supplemental**. The decision engine's
+bias is toward doing nothing: an external call has to beat what the repository
+already has.
+
+```mermaid
+flowchart TD
+    A[New flyer] --> B{Suitable client<br/>or internal photo?}
+    B -->|yes| C[Use it. No stock search]
+    B -->|no| D{Stock allowed<br/>and reachable?}
+    D -->|yes| E[Unsplash]
+    D -->|no| F[Procedural brand background]
+
+    C --> G{Internal reference<br/>library sufficient?}
+    E --> G
+    F --> G
+    G -->|yes| H[Use internal references]
+    G -->|thin / weak match / stale| I{Mobbin reachable?}
+    I -->|yes| J[Pattern research]
+    I -->|no| H
+
+    H --> K{Editable deliverable<br/>requested?}
+    J --> K
+    K -->|no| L[Internal renderer]
+    K -->|yes| M{Canva reachable?}
+    M -->|yes| N[Canva]
+    M -->|no| O{Figma reachable?}
+    O -->|yes| P[Figma]
+    O -->|no| L
+
+    L --> Q[QA]
+    N --> Q
+    P --> Q
+    Q --> R[Google Drive]
+
+    style C fill:#dcfce7,stroke:#16a34a
+    style F fill:#dcfce7,stroke:#16a34a
+    style H fill:#dcfce7,stroke:#16a34a
+    style L fill:#dcfce7,stroke:#16a34a
+    style Q fill:#fff7ed,stroke:#f97316
+```
+
+| Tool | Role | Used when | Never used when | Fallback |
+|:--|:--|:--|:--|:--|
+| **Unsplash** | Asset | No client photo, no internal background, and the campaign needs a photograph | A suitable internal image exists | Approved internal backgrounds, then a procedural brand background |
+| **Mobbin** | Reference | The internal library is thin, matches poorly, or the direction has gone stale | An approved internal reference already scores well | The internal reference library, then design-system defaults |
+| **Figma** | Template | Building or revising the master layout system | A routine daily flyer | The local design system and the internal renderer |
+| **Canva** | Production | The client asked for an editable file | Deterministic rendering already produces the deliverable | The internal renderer (a PNG, not an editable file) |
+
+**Source priority.** Client photos → approved internal work → the design system
+→ the reference library → Figma / Canva / Mobbin → Unsplash.
+
+**Every decision is recorded**, including the ones not to call anything:
+
 ```bash
-python flyer_cli.py generate --client all-elite --count 2 --campaign "Composite Siding" --focus "Built-in insulation" --cta "Free Estimate"
-```
-Generated flyers are immediately saved to `output/2026/MM-DD/` and recorded in `output/history.json`.
+$ flyer decide
+Decision  Internal sources only: A suitable internal photograph exists, so no
+          stock search.; The internal reference library is sufficient
+          (5 references, best score 0.80).
 
----
-
-## 9. Unified CLI Reference (`flyer_cli.py`)
-
-| Command | Arguments | Description |
-| :--- | :--- | :--- |
-| `generate` | `--client <id>` `--count <n>` `--campaign <str>` `--focus <str>` `--cta <str>` | Executes the full 8-step generation pipeline. |
-| `ingest` | *(none)* | Scans `references/inbox/`, analyzes dropped flyers, categorizes, and moves them to `references/approved/`. |
-| `approve` | `--file <path>` `--archetype <str>` `--note <str>` | Marks flyer approved, saves to `output/approved/`, and increases archetype weight in `preferences.json`. |
-| `reject` | `--file <path>` `--archetype <str>` `--reason <str>` | Marks flyer rejected, saves to `output/rejected/`, and penalizes archetype weight. |
-| `audit` | *(none)* | Runs full Master System Audit verifying directories, rules, clients, and connectors. |
-| `sample-assets` | *(none)* | Rebuilds starter high-res architectural photos and client logos. |
-
----
-
-## 10. Google Drive Cloud Delivery
-
-Target Root Folder ID: `12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT`  
-[Open Google Drive Folder](https://drive.google.com/drive/folders/12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT?usp=sharing)
-
-### Authentication Modes:
-1. **Automated Server / GitHub Actions (Recommended)**: Set `GDRIVE_SERVICE_ACCOUNT_KEY` secret containing the Service Account JSON key.
-2. **Local Workstation**: Place `service_account.json` in the root directory.
-3. **Offline / Development Fallback**: If no Google credentials are set, the system automatically saves files locally in `output/` and logs a simulated upload so pipeline testing never crashes.
-
-### Automatic Folder Hierarchy:
-```text
-Google Drive
-└── 12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT/
-    └── all-elite_composite_siding_20260905_1.png
-    └── all-elite_roof_replacement_20260905_2.png
+  skipped unsplash: a suitable client or internal photograph already exists
+  skipped mobbin:   the internal reference library already covers this campaign
+  skipped canva:    deterministic rendering already produces the deliverable
+  skipped figma:    no template work is required for a routine daily flyer
 ```
 
----
+You can still override in plain language:
 
-## 11. GitHub Actions 10:07 AM Daily Scheduler
-
-The workflow in [`.github/workflows/generate-flyers.yml`](.github/workflows/generate-flyers.yml) runs:
-- **Automatically**: Every Monday through Friday at **10:07 AM America/New_York** (`7 14 * * 1-5` UTC).
-- **Manually (`workflow_dispatch`)**: Click "Run workflow" on GitHub and specify `client`, `count`, `campaign`, and `focus`.
-
-### What GitHub Actions does:
-1. Checks out repository.
-2. Sets up Python and installs dependencies.
-3. Runs Master System Audit.
-4. Executes flyer generation for today's campaign.
-5. Uploads generated PNGs as workflow artifacts.
-6. Automatically uploads flyers to your Google Drive folder.
-7. Commits updated generation history (`output/history.json`) and feedback learning (`preferences.json`) back to the repo with `[skip ci]`.
-
----
-
-## 12. Multi-Contractor Scaling Guide
-
-Adding a second construction client (e.g. `client-002`) takes 3 simple steps without touching a line of code:
-
-### Step 1: Create Client Folder & Configuration
-Create `clients/client-002/client.json`:
-```json
-{
-  "id": "client-002",
-  "company_name": "Apex Exterior Systems",
-  "short_name": "Apex Exteriors",
-  "phone": "(973) 555-0182",
-  "service_area": "Morris County, NJ",
-  "brand_colors": {
-    "primary_accent": "#1E3A8A",
-    "dark_neutral": "#0F172A",
-    "light_neutral": "#FFFFFF"
-  },
-  "drive_folder_id": "12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT",
-  "services": ["Roof Replacement", "Seamless Gutters"],
-  "approved_claims": ["Licensed NJ Contractor", "Free 15-Point Inspection"]
-}
-```
-
-### Step 2: Add Client Assets
-- Logo: `clients/client-002/logo/logo.png`
-- Photos: `clients/client-002/photos/apex_roof_001.jpg`
-
-### Step 3: Generate Flyers for the New Client
 ```bash
-python flyer_cli.py generate --client client-002 --count 2
+flyer generate --tools "use canva"
+flyer generate --tools "no stock photography"
+flyer generate --tools "internal assets only"
+```
+
+```bash
+$ flyer connectors     # what is actually reachable right now
+```
+
+> **Verified status:** none of the four has been called from this repository.
+> The adapters, decision engine, provenance model and every fallback path are
+> implemented and tested; the live calls require tokens that are not configured.
+> With all four absent — the default — the system runs entirely on internal
+> sources.
+
+---
+
+## Repository layout
+
+```
+flyer-generator/
+├── .claude/skills/construction-flyer/   The creative instruction layer
+│   ├── SKILL.md                         Entry point, loaded by every stage
+│   ├── design-rules.md                  Hierarchy, archetypes, overlay calibration
+│   ├── photography-rules.md             The house is the hero
+│   ├── branding-rules.md                Client vs manufacturer
+│   ├── copywriting-rules.md             Voice, budgets, banned language
+│   ├── asset-selection.md               Photo and reference scoring
+│   ├── reference-analysis.md            Reading a reference without copying it
+│   ├── quality-control.md               The review checklist
+│   ├── negative-rules.md                The NEVER list
+│   └── construction-marketing.md        Trade, customer, seasonality
+│
+├── design-system/                       Machine-readable knowledge
+│   ├── principles/principles.json       Classified rules + archetypes
+│   ├── preferences/preferences.json     Declared and learned preferences
+│   ├── patterns/successful-patterns.json
+│   ├── failures/failed-patterns.json    The NEVER list, structured
+│   ├── historical-prompts/              Prompt-to-Skill corpus
+│   ├── proposals/                       Distillation output (review, don't auto-apply)
+│   └── CONFLICTS.md                     Contradictions, resolved explicitly
+│
+├── app/
+│   ├── ai/          claude_client · campaign_planner · copywriter
+│   │                design_director · qa_agent · reference_analyzer
+│   │                prompt_distiller · skill
+│   ├── assets/      catalog · selector · image_utils · metadata
+│   ├── clients/     loader · validator
+│   ├── connectors/  base · adapters · registry · policy
+│   ├── rendering/   renderer · templates · typography · composition · export
+│   ├── drive/       auth · uploader · folders
+│   ├── pipeline/    generate · ingest · validate · history
+│   ├── models/      Pydantic contracts between every layer
+│   └── cli.py
+│
+├── config/          campaigns · layouts · typography · scoring · connectors
+├── clients/         all-elite/ · _template/
+├── references/      inbox · approved · experimental · rejected
+├── assets/          Shared photography, by service
+├── data/            Indexes and generation history
+├── tests/           260 tests
+└── .github/         6 workflows + composite setup action
 ```
 
 ---
 
-## 13. Quality Control & The Human Design Test
+## CLI
 
-Every flyer generated must pass the automated **Human Design Test Gate** (passing score >= 85/100):
+```bash
+flyer generate --client all-elite --count 2
+flyer generate --campaign siding --message "built-in insulation" --cta "Free Estimate"
+flyer generate --tools "internal only" --no-upload
 
-| Audit Check | Failure Trigger | Penalty |
-| :--- | :--- | :--- |
-| **Zero Em Dashes** | Any presence of `—` or `--` | -25 pts (Immediate Failure) |
-| **Zero Emojis** | Any marketing emoji (`🔥`, `🚀`, etc.) | -25 pts (Immediate Failure) |
-| **No Fabricated Claims** | Unsupported discounts ("50% OFF") or fake statistics | -20 pts |
-| **Exact Canvas Dimensions** | Image is not exactly 1080×1350 px | -30 pts |
-| **Headline Text Density** | Headline exceeds 10 words (mobile scan failure) | -10 pts |
-| **Verified Contact Info** | Missing or malformed phone number | -15 pts |
+flyer ingest-reference references/inbox/nice-ad.jpg
+flyer promote ref_000001 approved
+flyer list-references --status approved
 
----
+flyer feedback run_2026-09-05_ab12cd_01 reject --reason "headline too small"
+flyer history --limit 20
 
-## 14. Component Status & Secrets Guide
-
-### Component Status
-| Feature | Status |
-| :--- | :--- |
-| **Claude Skill & 8 Rulebooks** | `WORKING` |
-| **Machine-Readable Design System JSON** | `WORKING` |
-| **5-Tier Asset Sourcing Ladder** | `WORKING` |
-| **Deterministic 1080×1350 Renderer** | `WORKING` |
-| **8 Composition Archetypes** | `WORKING` |
-| **Automated QA & Human Design Test** | `WORKING` |
-| **Reference Ingestion Pipeline** | `WORKING` |
-| **Approval / Rejection Learning Loop** | `WORKING` |
-| **Google Drive Integration** | `WORKING` (Live when service account secret added) |
-| **GitHub Actions 10:07 AM Automation** | `WORKING` |
-| **Canva / Figma / Unsplash / Mobbin Connectors** | `INTEGRATED & FALLBACK TESTED` |
-
-### Required GitHub Secrets:
-Add these under **GitHub Repository Settings -> Secrets and variables -> Actions**:
-
-| Secret Name | Required? | Description |
-| :--- | :--- | :--- |
-| `ANTHROPIC_API_KEY` | Optional | For Claude Code agentic workflows or automated prompt synthesis. |
-| `GDRIVE_SERVICE_ACCOUNT_KEY` | Required for Live Uploads | JSON string of Google Cloud Service Account with write access to Google Drive folder `12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT`. |
-| `GDRIVE_ROOT_FOLDER_ID` | Optional | Target folder ID (defaults to `12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT`). |
-| `UNSPLASH_ACCESS_KEY` | Optional | For supplemental stock exterior photography when client photos are missing. |
-| `CANVA_API_KEY` | Optional | For editable client templates. |
-| `FIGMA_ACCESS_TOKEN` | Optional | For syncing remote Figma components. |
-| `MOBBIN_API_KEY` | Optional | For UI/visual pattern research. |
+flyer validate          # configuration, clients, libraries, fonts
+flyer connectors        # what external tools are reachable
+flyer decide            # dry-run the connector decision engine
+flyer design-system     # inspect the compiled rules
+flyer layouts           # the six layouts
+flyer catalog           # rebuild the photo index
+flyer distill           # Prompt-to-Skill
+flyer gallery           # build the static review gallery
+```
 
 ---
 
-## 📄 License
-MIT License. Built with pride for residential building contractors.
+## Adding things
+
+<details>
+<summary><b>A reference flyer you found online</b></summary>
+
+```bash
+cp ~/Downloads/nice-roofing-ad.jpg references/inbox/
+git add references/inbox && git commit -m "feat(references): add a roofing reference" && git push
+```
+
+The ingest workflow analyses it, files it under `experimental/`, and opens a PR
+with the extracted metadata. Promote what you like with
+`flyer promote ref_000001 approved`.
+
+Locally: `flyer ingest-reference`.
+
+</details>
+
+<details>
+<summary><b>Client photography</b></summary>
+
+```
+clients/all-elite/assets/approved/roofing-shingle-replacement-01.jpg
+clients/all-elite/assets/approved/siding-colonial-white-02.jpg
+```
+
+Name files by service and they are tagged automatically. Client-owned photos
+outrank the shared library by 1.25x in selection, so they get used first.
+
+Then `flyer catalog`.
+
+</details>
+
+<details>
+<summary><b>Another construction client</b></summary>
+
+```bash
+cp -r clients/_template clients/second-co
+# edit clients/second-co/client.json
+flyer validate
+flyer generate --client second-co --count 2
+```
+
+No code changes. There is a test that asserts exactly this
+(`test_adding_a_client_needs_no_code_change`).
+
+</details>
+
+<details>
+<summary><b>A new layout</b></summary>
+
+1. Entry in `config/layouts.json`
+2. Builder in `app/rendering/templates.py`, registered in `LAYOUT_BUILDERS`
+3. Map it to an archetype in `principles.json`
+
+A test fails until config and code agree, and the parametrised render tests
+pick it up automatically.
+
+</details>
+
+---
+
+## The 10:07 automation
+
+```mermaid
+flowchart LR
+    A["cron 14:07 UTC<br/>cron 15:07 UTC"] --> B{"Is it 10:07 in<br/>America/New_York?"}
+    B -->|no| C["Exit. The other slot handles it"]
+    B -->|yes| D[Validate + fast tests]
+    D --> E[Generate]
+    E --> F[QA + one retry]
+    F --> G[Artifacts + Google Drive]
+    G --> H[Commit history]
+    H --> I[Open review issue]
+```
+
+GitHub Actions cron is UTC only, so 10:07 Eastern is two different UTC times
+across the year. Both slots fire and `flyer schedule-check` decides which one is
+really 10:07 locally; the other exits in seconds.
+
+**Manual runs use the same pipeline** — Actions → Generate flyers → Run
+workflow, with inputs for client, count, campaign, message, CTA and connector
+overrides. There is deliberately only one generation implementation.
+
+| Workflow | Trigger | Does |
+|:--|:--|:--|
+| `generate-flyers` | 10:07 ET weekdays, or manual | The daily run |
+| `tests` | Push, PR | ruff, mypy, pytest on 3.12 and 3.13, plus an end-to-end smoke render |
+| `ingest-reference` | Push to `references/inbox/**` | Analyses and files, opens a PR |
+| `approval` | Comment on a review issue | Records approve/reject into history |
+| `gallery` | After a successful run | Builds the static review gallery |
+| `distill` | Push to the prompt corpus, or manual | Proposes design-system rules |
+
+---
+
+## Quality control
+
+Two passes. Nothing that fails is uploaded.
+
+**Deterministic** — no API, runs in CI, gates every upload:
+
+dimensions · file integrity · blank-render detection · edge clipping ·
+placeholder text · duplicate words · **em dashes** · **emoji** · AI filler
+phrases · text volume · fabricated numbers · unauthorised offers · risky
+insurance claims · phone-number format · client mismatch
+
+**Vision** — Claude looks at the rendered PNG:
+
+thumbnail readability · contrast · clipping and overlap · campaign relevance ·
+photographic realism · brand accuracy · manufacturer subordination · and the
+**human design test**: *does this look like a professional designer made it, or
+like a Canva template?*
+
+On failure the pipeline regenerates once with a heavier scrim and less copy,
+then keeps whichever attempt scored higher.
+
+---
+
+## Troubleshooting
+
+<details>
+<summary><b>Flyers look plain / the copy is generic</b></summary>
+
+`ANTHROPIC_API_KEY` is not set, so the deterministic fallback writer is running.
+It is deliberately conservative because it is forbidden from making any claim
+that is not in `client.json`. Set the key.
+
+Check with `flyer validate` — it reports `claude_enabled`.
+
+</details>
+
+<details>
+<summary><b>Flyers have a plain gradient instead of a photo</b></summary>
+
+The photo library is empty. That is a supported state, not a bug — a clean
+brand gradient beats a mismatched photo.
+
+Add photos under `clients/<slug>/assets/approved/` or `assets/<service>/`, then
+`flyer catalog`. For development only:
+`python scripts/generate_placeholder_assets.py`.
+
+</details>
+
+<details>
+<summary><b>The typography looks wrong</b></summary>
+
+Fonts are gitignored. Run `python scripts/fetch_fonts.py`. Without them the
+renderer falls back to system fonts, which works but looks less polished.
+
+</details>
+
+<details>
+<summary><b>Nothing uploaded to Drive</b></summary>
+
+`flyer validate` reports `drive_enabled`. You need all of
+`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` and
+`GOOGLE_DRIVE_ROOT_FOLDER_ID`.
+
+Note that flyers failing QA are **never** uploaded — that is intentional.
+
+</details>
+
+<details>
+<summary><b>The scheduled run didn't fire</b></summary>
+
+GitHub delays scheduled workflows under load, sometimes by 10–30 minutes, which
+is why the target is 10:07 rather than 10:00. Scheduled workflows are also
+disabled automatically after 60 days of repository inactivity.
+
+Check Actions → Generate flyers for a skipped run: the wrong UTC slot exits on
+purpose.
+
+</details>
+
+<details>
+<summary><b>A flyer keeps failing QA</b></summary>
+
+The metadata sidecar next to the PNG lists every issue with its severity. The
+usual causes are an under-darkened overlay on a bright photo, or copy that
+tripped the anti-AI-tell gate (an em dash is a hard failure).
+
+</details>
+
+---
+
+## Roadmap
+
+| | |
+|:--|:--|
+| Next | Live connector verification · GitHub Pages gallery deploy · richer before/after with real project pairs |
+| Later | Social scheduling (Meta, Google Business) · engagement feedback into reference scoring · A/B headline testing |
+| Eventually | Web dashboard · client approval portal · cloud object storage for large libraries |
+
+Interfaces are kept clean for these. None of them are built.
+
+---
+
+## Documentation
+
+| | |
+|:--|:--|
+| **[GETTING-STARTED.md](GETTING-STARTED.md)** | **Never used a terminal? Start here** |
+| [docs/SETUP.md](docs/SETUP.md) | Local → Claude → full automation |
+| [docs/TESTING.md](docs/TESTING.md) | Four levels of verification |
+| [docs/VERSIONING.md](docs/VERSIONING.md) | Tags, branches and rollback |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Conventions and where things live |
+| [SECURITY.md](SECURITY.md) | Secrets and privacy assumptions |
+| [design-system/CONFLICTS.md](design-system/CONFLICTS.md) | Contradictions, resolved explicitly |
+
+---
+
+<div align="center">
+
+**MIT** · Built for New Jersey residential contractors
+
+*You manage the taste. Claude manages the repetitive production.*
+
+</div>

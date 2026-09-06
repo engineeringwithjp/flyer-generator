@@ -1,0 +1,46 @@
+name: Set up flyer-generator
+description: Python, cached dependencies and cached brand fonts. Used by every workflow.
+
+inputs:
+  python-version:
+    description: Python version
+    required: false
+    default: "3.12"
+  extras:
+    description: Optional dependency extras to install
+    required: false
+    default: "drive,dev"
+  fonts:
+    description: Fetch the brand typefaces (needed to render, not to lint)
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: pip
+        cache-dependency-path: pyproject.toml
+
+    - name: Install
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[${{ inputs.extras }}]"
+
+    # Fonts are gitignored (they are ~3 MB of OFL binaries), so they are
+    # fetched once and cached rather than committed.
+    - name: Restore cached fonts
+      if: inputs.fonts == 'true'
+      id: font-cache
+      uses: actions/cache@v4
+      with:
+        path: assets/fonts
+        key: fonts-${{ hashFiles('scripts/fetch_fonts.py') }}
+
+    - name: Fetch fonts
+      if: inputs.fonts == 'true' && steps.font-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: python scripts/fetch_fonts.py || echo "::warning::Font download failed; system fallbacks will be used."

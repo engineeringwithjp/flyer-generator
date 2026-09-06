@@ -1,0 +1,61 @@
+{
+  "$comment": "Campaign catalogue. Edit freely - nothing here is hard-coded in prompts.",
+  "version": 1,
+  "campaigns": [
+    {"id": "roof-replacement",       "service": "roofing",     "name": "Roof Replacement",        "angle": "upgrade",     "objective": "lead_generation", "seasons": ["spring","summer","fall"], "preferred_layouts": ["hero-full","banner-lower-third"]},
+    {"id": "roof-repair",            "service": "roofing",     "name": "Roof Repair",             "angle": "problem",     "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["banner-lower-third","split-diagonal"]},
+    {"id": "storm-damage",           "service": "roofing",     "name": "Storm Damage",            "angle": "urgency",     "objective": "lead_generation", "seasons": ["summer","fall","winter"], "preferred_layouts": ["split-diagonal","offer-badge"]},
+    {"id": "emergency-roofing",      "service": "roofing",     "name": "Emergency Roofing",       "angle": "urgency",     "objective": "phone_call",      "seasons": ["all"],                    "preferred_layouts": ["offer-badge","banner-lower-third"]},
+    {"id": "free-inspection",        "service": "roofing",     "name": "Free Roof Inspection",    "angle": "offer",       "objective": "lead_generation", "seasons": ["spring","fall"],          "preferred_layouts": ["offer-badge","banner-lower-third"]},
+    {"id": "free-estimate",          "service": "general",     "name": "Free Estimate",           "angle": "offer",       "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["offer-badge","hero-full"]},
+    {"id": "roofing-before-after",   "service": "roofing",     "name": "Roofing Before & After",  "angle": "proof",       "objective": "trust",           "seasons": ["all"],                    "preferred_layouts": ["before-after"]},
+    {"id": "seasonal-maintenance",   "service": "roofing",     "name": "Seasonal Maintenance",    "angle": "education",   "objective": "trust",           "seasons": ["fall","spring"],          "preferred_layouts": ["banner-lower-third","stat-stack"]},
+    {"id": "aging-roof",             "service": "roofing",     "name": "Is Your Roof Aging?",     "angle": "problem",     "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["hero-full","split-diagonal"]},
+    {"id": "home-protection",        "service": "roofing",     "name": "Home Protection",         "angle": "emotional",   "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full"]},
+    {"id": "premium-roofing",        "service": "roofing",     "name": "Premium Roofing",         "angle": "premium",     "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full","minimal"]},
+
+    {"id": "siding-replacement",     "service": "siding",      "name": "Siding Replacement",      "angle": "upgrade",     "objective": "lead_generation", "seasons": ["spring","summer","fall"], "preferred_layouts": ["hero-full","banner-lower-third"]},
+    {"id": "curb-appeal",            "service": "siding",      "name": "Curb Appeal",             "angle": "emotional",   "objective": "brand",           "seasons": ["spring","summer"],        "preferred_layouts": ["before-after","hero-full"]},
+    {"id": "siding-energy",          "service": "siding",      "name": "Energy Efficiency",       "angle": "education",   "objective": "lead_generation", "seasons": ["winter","summer"],        "preferred_layouts": ["stat-stack","banner-lower-third"]},
+    {"id": "siding-storm-damage",    "service": "siding",      "name": "Siding Storm Damage",     "angle": "urgency",     "objective": "lead_generation", "seasons": ["summer","fall"],          "preferred_layouts": ["split-diagonal"]},
+    {"id": "siding-before-after",    "service": "siding",      "name": "Siding Before & After",   "angle": "proof",       "objective": "trust",           "seasons": ["all"],                    "preferred_layouts": ["before-after"]},
+
+    {"id": "gutter-replacement",     "service": "gutters",     "name": "Gutter Replacement",      "angle": "upgrade",     "objective": "lead_generation", "seasons": ["spring","fall"],          "preferred_layouts": ["banner-lower-third"]},
+    {"id": "gutter-protection",      "service": "gutters",     "name": "Gutter Guards",           "angle": "offer",       "objective": "lead_generation", "seasons": ["fall"],                   "preferred_layouts": ["offer-badge","banner-lower-third"]},
+    {"id": "drainage-problems",      "service": "gutters",     "name": "Drainage Problems",       "angle": "problem",     "objective": "lead_generation", "seasons": ["spring","fall"],          "preferred_layouts": ["split-diagonal"]},
+    {"id": "gutter-seasonal-prep",   "service": "gutters",     "name": "Seasonal Preparation",    "angle": "education",   "objective": "trust",           "seasons": ["fall","winter"],          "preferred_layouts": ["stat-stack"]},
+
+    {"id": "window-replacement",     "service": "windows",     "name": "Window Replacement",      "angle": "upgrade",     "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["hero-full","banner-lower-third"]},
+    {"id": "window-energy",          "service": "windows",     "name": "Energy Efficient Windows","angle": "education",   "objective": "lead_generation", "seasons": ["winter","summer"],        "preferred_layouts": ["stat-stack"]},
+    {"id": "exterior-upgrade",       "service": "windows",     "name": "Home Exterior Upgrade",   "angle": "emotional",   "objective": "brand",           "seasons": ["spring","summer"],        "preferred_layouts": ["before-after","hero-full"]},
+
+    {"id": "hvac-tuneup",            "service": "hvac",        "name": "HVAC Tune-Up",            "angle": "offer",       "objective": "lead_generation", "seasons": ["spring","fall"],          "preferred_layouts": ["offer-badge"]},
+    {"id": "hvac-replacement",       "service": "hvac",        "name": "System Replacement",      "angle": "upgrade",     "objective": "lead_generation", "seasons": ["summer","winter"],        "preferred_layouts": ["banner-lower-third"]},
+    {"id": "hvac-emergency",         "service": "hvac",        "name": "Emergency HVAC Service",  "angle": "urgency",     "objective": "phone_call",      "seasons": ["summer","winter"],        "preferred_layouts": ["offer-badge"]},
+
+    {"id": "plumbing-emergency",     "service": "plumbing",    "name": "Emergency Plumbing",      "angle": "urgency",     "objective": "phone_call",      "seasons": ["all"],                    "preferred_layouts": ["offer-badge"]},
+    {"id": "water-heater",           "service": "plumbing",    "name": "Water Heater Replacement","angle": "upgrade",     "objective": "lead_generation", "seasons": ["fall","winter"],          "preferred_layouts": ["banner-lower-third"]},
+    {"id": "leak-detection",         "service": "plumbing",    "name": "Leak Detection",          "angle": "problem",     "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["split-diagonal"]},
+
+    {"id": "electrical-panel",       "service": "electrical",  "name": "Panel Upgrade",           "angle": "upgrade",     "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["banner-lower-third"]},
+    {"id": "electrical-safety",      "service": "electrical",  "name": "Home Electrical Safety",  "angle": "education",   "objective": "trust",           "seasons": ["all"],                    "preferred_layouts": ["stat-stack"]},
+    {"id": "generator-install",      "service": "electrical",  "name": "Standby Generators",      "angle": "emotional",   "objective": "lead_generation", "seasons": ["fall","winter"],          "preferred_layouts": ["hero-full"]},
+
+    {"id": "remodeling-kitchen",     "service": "remodeling",  "name": "Kitchen Remodeling",      "angle": "emotional",   "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["before-after","hero-full"]},
+    {"id": "remodeling-bath",        "service": "remodeling",  "name": "Bathroom Remodeling",     "angle": "emotional",   "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["before-after"]},
+    {"id": "general-contracting",    "service": "general",     "name": "Full Service Contracting","angle": "premium",     "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full","minimal"]},
+    {"id": "licensed-insured",       "service": "general",     "name": "Licensed & Insured",      "angle": "trust",       "objective": "trust",           "seasons": ["all"],                    "preferred_layouts": ["stat-stack","minimal"]},
+    {"id": "financing-available",    "service": "general",     "name": "Financing Available",     "angle": "offer",       "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["offer-badge"]}
+  ],
+  "angles": {
+    "upgrade":   "Position the work as an improvement the homeowner chooses, not a disaster they suffer.",
+    "problem":   "Name a specific, visible symptom the homeowner can recognise on their own house.",
+    "urgency":   "Time-bound and concrete. Never manufacture a storm or a deadline that does not exist.",
+    "offer":     "Lead with the authorised offer from client.offers. Never invent one.",
+    "proof":     "Show the work. Before/after, completed projects, real numbers from the client profile.",
+    "education": "Teach one useful thing. Earns trust and shares well.",
+    "emotional": "Family, home, protection, pride. Restrained - never saccharine.",
+    "premium":   "Quiet confidence. Minimal text, strong photography, no discount language.",
+    "trust":     "Licensing, insurance, warranty and tenure - only what client.json states."
+  }
+}

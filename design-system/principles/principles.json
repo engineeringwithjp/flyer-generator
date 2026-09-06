@@ -1,0 +1,418 @@
+{
+  "$comment": "Canonical, machine-readable design system. Loaded into every Claude prompt by app/design_system.py. Rules are classified hard | soft | optional. Edit here, not in prompts.",
+  "version": 1,
+  "updated_at": "2026-09-05",
+  "provenance": "Authored from the operator's explicit design-system specification. No historical prompt corpus had been supplied at the time of writing; see design-system/historical-prompts/README.md.",
+  "rule_classes": {
+    "hard": "Follow essentially every time. A violation is a QA error.",
+    "soft": "Follow by default. May be broken when the composition clearly benefits; the reason must be stated in designer_notes.",
+    "optional": "A technique for appropriate campaigns only. Never universal."
+  },
+  "global": [
+    {
+      "id": "property-first",
+      "class": "hard",
+      "rule": "PROPERTY-FIRST COMPOSITION. When a real property photograph is supplied, the property is the dominant visual element unless the campaign explicitly requires another hierarchy (product education, before/after, storm emergency)."
+    },
+    {
+      "id": "one-idea",
+      "class": "hard",
+      "rule": "One primary idea per flyer. If it needs two headlines, it is two flyers."
+    },
+    {
+      "id": "two-second-read",
+      "class": "hard",
+      "rule": "The primary message must be understood in 1-2 seconds at feed scale."
+    },
+    {
+      "id": "canvas-4x5",
+      "class": "hard",
+      "rule": "Default canvas 1080x1350 (4:5), designed for Instagram and Facebook feed."
+    },
+    {
+      "id": "safe-margins",
+      "class": "hard",
+      "rule": "No critical element inside the outer safe margin. Nothing important touches an edge."
+    },
+    {
+      "id": "premium-editorial",
+      "class": "soft",
+      "rule": "Aim for premium editorial, not promotional clutter: generous negative space, restrained type, one accent."
+    },
+    {
+      "id": "restrained-branding",
+      "class": "soft",
+      "rule": "Branding is present, not loud. Logo small and cornered; contact details legible but never the hero."
+    },
+    {
+      "id": "low-density",
+      "class": "hard",
+      "rule": "LOW INFORMATION DENSITY by default: one hook, one supporting line, at most three or four benefits, one CTA."
+    },
+    {
+      "id": "no-duplicate-info",
+      "class": "hard",
+      "rule": "Never state the same information twice on one flyer."
+    },
+    {
+      "id": "no-filler",
+      "class": "hard",
+      "rule": "Never add text merely because space exists. Empty space is a design decision."
+    },
+    {
+      "id": "vary-across-days",
+      "class": "hard",
+      "rule": "Vary campaign, layout, treatment, alignment and CTA across a batch and across a week. 500 identical flyers is the real failure mode."
+    },
+    {
+      "id": "photo-is-the-canvas",
+      "class": "hard",
+      "rule": "The photograph is the whole canvas. Full bleed, edge to edge. Copy sits on it behind a scrim, never on a large solid colour band that eats the image."
+    },
+    {
+      "id": "headline-fills-the-frame",
+      "class": "hard",
+      "rule": "The headline runs nearly edge to edge and sets tight. In the approved references it occupies roughly a quarter of the canvas height. A small headline is the clearest sign a flyer was not designed."
+    },
+    {
+      "id": "support-is-an-accent-pill",
+      "class": "soft",
+      "rule": "In the hero-editorial layout the supporting line is a solid accent pill, not plain text. It separates the hook from the proof row and gives the accent its second appearance."
+    },
+    {
+      "id": "footer-not-slab",
+      "class": "hard",
+      "rule": "Contact details sit as small type bottom-left with the mark opposite. Never a full-width solid slab across the base: it boxes in the photograph."
+    }
+  ],
+  "photography": [
+    {
+      "id": "house-is-hero",
+      "class": "hard",
+      "rule": "THE HOUSE IS THE HERO. The property carries the flyer."
+    },
+    {
+      "id": "preserve-architecture",
+      "class": "hard",
+      "rule": "When a real property photo is supplied, preserve architecture, roofline, windows, proportions, landscaping, driveway and perspective. Do not redesign the property."
+    },
+    {
+      "id": "photoreal",
+      "class": "hard",
+      "rule": "Photorealistic, professional real-estate photography. Believable Northeast US / New Jersey suburban architecture."
+    },
+    {
+      "id": "natural-light",
+      "class": "soft",
+      "rule": "Natural daylight; tasteful golden hour is welcome. No artificial studio lighting on exteriors."
+    },
+    {
+      "id": "natural-landscaping",
+      "class": "soft",
+      "rule": "Natural, maintained landscaping consistent with the neighbourhood."
+    },
+    {
+      "id": "crop-not-redesign",
+      "class": "hard",
+      "rule": "Adapt the image by cropping, scrim and scale - never by inventing architecture."
+    },
+    {
+      "id": "contrast-before-text",
+      "class": "hard",
+      "rule": "Before placing text on a photo, verify the region has enough contrast. Add a scrim rather than shrinking the type."
+    },
+    {
+      "id": "frames-need-review",
+      "class": "hard",
+      "rule": "A frame extracted from client video is real media but is not approved photography. It ranks above stock and below a curated client photograph, and a human must promote it before it can appear on a client flyer."
+    }
+  ],
+  "composition_archetypes": [
+    {
+      "id": "hero-editorial",
+      "layout": "hero-editorial",
+      "use_case": "The default for All Elite. Brand, roofing, siding, premium positioning.",
+      "image_hierarchy": "Real aerial or drone photography, full bleed, the whole canvas",
+      "text_density": "low",
+      "cta": "bottom-center, CTA and phone together in one accent pill",
+      "treatment": "Scrim at top and base, photograph visible through the middle. Giant condensed uppercase headline with exactly one word in the accent colour. Pill chips for secondary information. No solid colour band."
+    },
+    {
+      "id": "hero-image",
+      "layout": "hero-full",
+      "use_case": "Brand, premium positioning, roof or full-exterior replacement",
+      "image_hierarchy": "Property dominant, full bleed",
+      "text_density": "low",
+      "cta": "bottom-left",
+      "treatment": "Dark gradient scrim rising from the base; copy in the lower 45%"
+    },
+    {
+      "id": "editorial-overlay",
+      "layout": "stat-stack",
+      "use_case": "Trust, credibility, licensing, quiet authority",
+      "image_hierarchy": "Property present but heavily subdued",
+      "text_density": "medium",
+      "cta": "bottom-left",
+      "treatment": "Strong brand-gradient wash; typography carries the design"
+    },
+    {
+      "id": "split-image",
+      "layout": "banner-lower-third",
+      "use_case": "Most service promotions; the safest workhorse",
+      "image_hierarchy": "Property in the upper half, solid brand band below",
+      "text_density": "medium",
+      "cta": "bottom-center",
+      "treatment": "Clean horizontal split with a thin accent rule"
+    },
+    {
+      "id": "architectural-detail",
+      "layout": "hero-full",
+      "use_case": "Product education, material quality, workmanship close-ups",
+      "image_hierarchy": "Tight architectural crop is the hero",
+      "text_density": "low",
+      "cta": "bottom-left",
+      "treatment": "Minimal scrim; let the material read"
+    },
+    {
+      "id": "before-after",
+      "layout": "before-after",
+      "use_case": "Siding, roofing, remodelling proof",
+      "image_hierarchy": "Two panels, equal weight, labelled",
+      "text_density": "low",
+      "cta": "bottom-center",
+      "treatment": "Before desaturated, after full colour"
+    },
+    {
+      "id": "product-education",
+      "layout": "hero-full",
+      "use_case": "Manufacturer products, assemblies, insulation, material benefits",
+      "image_hierarchy": "Detail or cutaway leads; SHOW the benefit, do not explain it in paragraphs",
+      "text_density": "low",
+      "cta": "bottom-left",
+      "treatment": "One visual callout maximum; product named as a material option, never as the advertiser"
+    },
+    {
+      "id": "promotional",
+      "layout": "offer-badge",
+      "use_case": "Authorised offers only",
+      "image_hierarchy": "Property subdued behind a centred stack",
+      "text_density": "medium",
+      "cta": "bottom-center",
+      "treatment": "Heavy flat scrim, circular accent badge"
+    },
+    {
+      "id": "seasonal",
+      "layout": "split-diagonal",
+      "use_case": "Seasonal preparation and timing-driven campaigns",
+      "image_hierarchy": "Property upper, angled brand panel lower",
+      "text_density": "medium",
+      "cta": "bottom-left",
+      "treatment": "Angled split, one accent edge"
+    },
+    {
+      "id": "storm-emergency",
+      "layout": "offer-badge",
+      "use_case": "Storm damage and emergency response",
+      "image_hierarchy": "Property subdued; urgency carried by type",
+      "text_density": "medium",
+      "cta": "bottom-center",
+      "treatment": "High contrast, restrained. Never fabricate a storm or a deadline"
+    }
+  ],
+  "typography": [
+    {
+      "id": "four-levels",
+      "class": "hard",
+      "rule": "Four information levels only: L1 primary hook, L2 supporting statement, L3 benefits, L4 CTA / contact / brand."
+    },
+    {
+      "id": "two-families",
+      "class": "hard",
+      "rule": "At most two type families per flyer: a condensed heavy display face and a clean sans for everything else."
+    },
+    {
+      "id": "headline-scale",
+      "class": "hard",
+      "rule": "The headline must remain legible when the flyer is scaled to 180px wide. In practice: 3-8 words, heavy weight, generous size."
+    },
+    {
+      "id": "no-paragraphs",
+      "class": "hard",
+      "rule": "No paragraph-heavy blocks. Supporting copy is one sentence."
+    },
+    {
+      "id": "no-micro-text",
+      "class": "hard",
+      "rule": "No microscopic text. Fine print is the only exception and it is the only thing allowed to be small."
+    },
+    {
+      "id": "limited-emphasis",
+      "class": "soft",
+      "rule": "Emphasis is a tool used once. Not every line is bold, not every word is capitalised for effect."
+    },
+    {
+      "id": "intentional-scale",
+      "class": "soft",
+      "rule": "Type sizes step clearly. Two sizes that are nearly the same read as a mistake."
+    },
+    {
+      "id": "one-accented-word",
+      "class": "soft",
+      "rule": "Colour exactly one word of the headline in the accent. This is the single most repeated device in the operator's approved references. Never two words, never a whole line."
+    }
+  ],
+  "color": [
+    {
+      "id": "flyers-are-not-the-website",
+      "class": "hard",
+      "rule": "Flyers do not reuse the website palette. The site is maroon surfaces with gold accents; a flyer is white type and ONE bright red accent over dark photography, matching the approved reference flyers. Gold does not appear on a flyer. Large maroon panels do not appear on a flyer."
+    },
+    {
+      "id": "accent-not-fill",
+      "class": "hard",
+      "rule": "The brand accent is for CTAs, accent words, rules, small graphic elements, icons and subtle overlays. Do not flood large areas with it."
+    },
+    {
+      "id": "photo-led-palette",
+      "class": "soft",
+      "rule": "Where possible let the property's own colours set the palette; the brand colour punctuates rather than dominates."
+    },
+    {
+      "id": "contrast-floor",
+      "class": "hard",
+      "rule": "All body-scale text must clear 4.5:1 contrast against what sits behind it; display text 3:1."
+    },
+    {
+      "id": "one-accent",
+      "class": "soft",
+      "rule": "One accent colour per flyer."
+    }
+  ],
+  "branding": [
+    {
+      "id": "client-primary",
+      "class": "hard",
+      "rule": "The client is the advertiser. Manufacturer brands are material options, never the advertising brand."
+    },
+    {
+      "id": "manufacturer-subordinate",
+      "class": "hard",
+      "rule": "A manufacturer name may appear in the supporting line or a benefit. It may never be the headline, and its logo may never dominate."
+    },
+    {
+      "id": "contact-verbatim",
+      "class": "hard",
+      "rule": "Contact details are reproduced byte-for-byte from client.json. Never reformatted."
+    },
+    {
+      "id": "logo-corner",
+      "class": "soft",
+      "rule": "Logo sits in a corner at modest scale and must not collide with the copy stack."
+    }
+  ],
+  "copywriting": [
+    {
+      "id": "no-invention",
+      "class": "hard",
+      "rule": "Never invent discounts, statistics, warranties, certifications, awards, years in business, guarantees or licensing claims. Only what client.proof_points and client.offers contain."
+    },
+    {
+      "id": "benefit-led",
+      "class": "soft",
+      "rule": "Lead with what the homeowner gets, not with what the contractor does."
+    },
+    {
+      "id": "homeowner-voice",
+      "class": "hard",
+      "rule": "Plain homeowner language. No industry jargon, no agency language."
+    },
+    {
+      "id": "one-cta",
+      "class": "hard",
+      "rule": "Exactly one call to action."
+    },
+    {
+      "id": "local-specific",
+      "class": "soft",
+      "rule": "Local specificity beats generality: name the state or county when it is true."
+    }
+  ],
+  "iconography": [
+    {
+      "id": "icons-explain",
+      "class": "hard",
+      "rule": "Icons explain information. They never decorate empty space."
+    },
+    {
+      "id": "icon-style",
+      "class": "soft",
+      "rule": "Minimal, architectural, thin-line, consistent weight, small scale."
+    },
+    {
+      "id": "icon-budget",
+      "class": "soft",
+      "rule": "Three icons maximum, and only when they replace words."
+    }
+  ],
+  "product_presentation": [
+    {
+      "id": "show-the-benefit",
+      "class": "hard",
+      "rule": "SHOW THE BENEFIT. A construction feature that can be demonstrated visually - close-up, magnification, simple cutaway, single callout - must not be explained in paragraphs."
+    },
+    {
+      "id": "one-callout",
+      "class": "soft",
+      "rule": "One visual callout per flyer."
+    },
+    {
+      "id": "product-as-material",
+      "class": "hard",
+      "rule": "Present a manufacturer product as a material option the client installs, e.g. 'insulated composite siding' with the product named in support, not as the flyer's subject brand."
+    }
+  ],
+  "social": [
+    {
+      "id": "default-canvas",
+      "class": "hard",
+      "rule": "1080x1350, 4:5."
+    },
+    {
+      "id": "feed-first",
+      "class": "hard",
+      "rule": "Designed for a phone in a feed, not for print."
+    },
+    {
+      "id": "thumbnail-test",
+      "class": "hard",
+      "rule": "The flyer must still communicate at 180px wide."
+    }
+  ],
+  "human_design_test": {
+    "question": "Does this look like an actual professional designer made it?",
+    "checks": [
+      "clear visual hierarchy",
+      "restraint - fewer elements than you were tempted to use",
+      "believable photography and realistic construction detail",
+      "intentional spacing and consistent margins",
+      "typographic quality and clear size steps",
+      "coherent composition rather than assembled parts",
+      "appropriate, subordinate branding",
+      "the visual tells the story before the words do"
+    ],
+    "fail_if_it_resembles": [
+      "a generic AI advertisement",
+      "a Canva template",
+      "a corporate infographic",
+      "a random AI poster",
+      "an over-symmetrical template",
+      "an over-designed advertisement"
+    ]
+  },
+  "priority_of_evidence": [
+    "the client's own approved flyers",
+    "proven design preferences recorded in preferences.json",
+    "approved external references",
+    "experimental references"
+  ]
+}

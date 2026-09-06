@@ -1,0 +1,108 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint, types and tests (py${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Ruff (lint)
+        run: ruff check app tests scripts
+
+      - name: Ruff (format)
+        run: ruff format --check app tests scripts
+
+      - name: mypy
+        run: mypy app
+
+      - name: pytest
+        run: pytest -q -m "not integration" --junitxml=results.xml
+
+      - name: Configuration validation
+        env:
+          FLYER_OFFLINE: "1"
+        run: python -m app.cli validate
+
+      - name: Test report
+        if: always()
+        run: |
+          {
+            echo "### Python ${{ matrix.python }}"
+            echo
+            python - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          p = Path("results.xml")
+          if p.exists():
+              suite = ET.parse(p).getroot()
+              node = suite if suite.tag == "testsuite" else suite[0]
+              print(f"- {node.get('tests')} tests, {node.get('failures')} failed, "
+                    f"{node.get('errors')} errored, {node.get('skipped')} skipped")
+          PY
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  smoke:
+    name: End-to-end smoke render
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      # Proves the whole pipeline runs with no API key, no credentials and no
+      # client photography - the state a fresh clone is in.
+      - name: Render every layout offline
+        env:
+          FLYER_OFFLINE: "1"
+        run: |
+          python scripts/generate_placeholder_assets.py
+          python -m app.cli catalog
+          python -m app.cli generate --count 2 --no-upload
+          python -m app.cli connectors
+
+      - name: Verify the output is a real 1080x1350 flyer
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          from PIL import Image
+
+          flyers = sorted(Path("output").rglob("flyer-*.png"))
+          if not flyers:
+              sys.exit("No flyers were produced.")
+          for path in flyers:
+              with Image.open(path) as image:
+                  assert image.size == (1080, 1350), f"{path} is {image.size}"
+                  assert path.stat().st_size > 20_000, f"{path} is suspiciously small"
+              print(f"ok  {path}  {path.stat().st_size // 1024} KB")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smoke-flyers
+          path: output/**/*.png
+          retention-days: 7

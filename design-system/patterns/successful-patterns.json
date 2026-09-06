@@ -1,0 +1,7 @@
+{
+  "$comment": "Patterns extracted from flyers and prompts the operator marked SUCCESSFUL. Populated by `flyer distill` and by `flyer feedback ... approve`. Empty until a corpus exists - it is deliberately not pre-filled with guesses.",
+  "version": 1,
+  "updated_at": null,
+  "corpus_size": 0,
+  "patterns": []
+}

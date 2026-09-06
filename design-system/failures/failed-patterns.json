@@ -1,0 +1,30 @@
+{
+  "$comment": "The NEVER / AVOID list. The first block is declared by the operator; `patterns` is appended to by the distiller from UNSUCCESSFUL examples and by rejected flyers.",
+  "version": 1,
+  "updated_at": null,
+  "corpus_size": 0,
+
+  "never": [
+    {"id": "n-text-volume",        "category": "copy",        "rule": "Excessive text. More than roughly 25 words on the flyer."},
+    {"id": "n-huge-banners",       "category": "layout",      "rule": "Huge banners and oversized colour bars swallowing the photograph."},
+    {"id": "n-repetitive-cards",   "category": "layout",      "rule": "Repetitive card grids - three identical boxes of copy."},
+    {"id": "n-corporate-info",     "category": "layout",      "rule": "Corporate infographic layouts. This is an advert, not a slide."},
+    {"id": "n-over-symmetry",      "category": "layout",      "rule": "Rigid template symmetry that reads as a stock layout."},
+    {"id": "n-over-design",        "category": "layout",      "rule": "Over-designed compositions. Restraint beats decoration."},
+    {"id": "n-fake-houses",        "category": "photography", "rule": "Fake-looking or AI-looking houses."},
+    {"id": "n-fantasy-arch",       "category": "photography", "rule": "Exaggerated mansions, fantasy architecture, impossible roof geometry."},
+    {"id": "n-bad-construction",   "category": "photography", "rule": "Inaccurate construction detail - wrong course spacing, impossible flashing, floating gutters."},
+    {"id": "n-hdr",                "category": "photography", "rule": "Excessive HDR, artificial lighting, architectural distortion."},
+    {"id": "n-unreal-landscape",   "category": "photography", "rule": "Unrealistic landscaping."},
+    {"id": "n-gradient-soup",      "category": "color",       "rule": "Excessive gradients."},
+    {"id": "n-brand-flood",        "category": "color",       "rule": "Flooding large areas with the brand colour."},
+    {"id": "n-icon-decor",         "category": "iconography", "rule": "Unnecessary, unrelated, oversized or stylistically inconsistent icons."},
+    {"id": "n-manufacturer-lead",  "category": "branding",    "rule": "A manufacturer brand leading the flyer instead of the client."},
+    {"id": "n-canva",              "category": "quality",     "rule": "Anything that reads as a Canva template or a generic AI poster."},
+    {"id": "n-micro-type",         "category": "typography",  "rule": "Microscopic text, more than two type families, or muddy size steps."},
+    {"id": "n-invented-claims",    "category": "copy",        "rule": "Any invented statistic, discount, warranty, certification, award or licensing claim."},
+    {"id": "n-scam-language",      "category": "copy",        "rule": "Free-roof / insurance-approval / fake-scarcity language."}
+  ],
+
+  "patterns": []
+}

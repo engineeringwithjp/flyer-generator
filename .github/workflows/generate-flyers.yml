@@ -1,102 +1,203 @@
-name: Daily Construction Flyer Automation
+name: Generate flyers
 
+# The daily production run. The same pipeline serves the schedule and the
+# manual button - there is deliberately only one implementation.
 on:
   schedule:
-    # Runs Monday through Friday at 10:07 AM Eastern Time (14:07 UTC)
-    - cron: '7 14 * * 1-5'
+    # GitHub Actions cron is UTC only, so 10:07 America/New_York is two
+    # different UTC times across the year. Both fire; `flyer schedule-check`
+    # decides which one is actually 10:07 locally and the other exits early.
+    - cron: "7 14 * * 1-5"   # 10:07 EDT (Mar-Nov)
+    - cron: "7 15 * * 1-5"   # 10:07 EST (Nov-Mar)
+
   workflow_dispatch:
     inputs:
       client:
-        description: 'Client identifier (e.g. all-elite, client-002)'
-        required: true
-        default: 'all-elite'
+        description: Client slug
+        required: false
+        default: all-elite
+        type: string
       count:
-        description: 'Number of flyers to generate'
-        required: true
-        default: '2'
+        description: How many flyers
+        required: false
+        default: "2"
+        type: string
       campaign:
-        description: 'Campaign topic override (optional)'
+        description: Campaign id or service (blank = the planner decides)
         required: false
-        default: ''
-      focus:
-        description: 'Campaign focus angle (optional)'
+        default: ""
+        type: string
+      message:
+        description: 'The one thing this flyer is about, e.g. "built-in insulation"'
         required: false
-        default: ''
-      upload_drive:
-        description: 'Upload generated flyers to Google Drive'
-        type: boolean
-        required: true
+        default: ""
+        type: string
+      cta:
+        description: Override the call to action
+        required: false
+        default: ""
+        type: string
+      tools:
+        description: 'Connector override, e.g. "use canva", "no stock photography", "internal only"'
+        required: false
+        default: ""
+        type: string
+      upload:
+        description: Upload to Google Drive
+        required: false
         default: true
+        type: boolean
+
+concurrency:
+  group: flyers-${{ inputs.client || 'all-elite' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
 
 jobs:
-  generate-and-deliver:
+  generate:
+    name: ${{ inputs.client || 'all-elite' }} - ${{ inputs.count || 2 }} flyer(s)
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 25
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+      - uses: ./.github/actions/setup
 
-      - name: Install Dependencies
+      # A scheduled run only proceeds at the real local time. A manual run
+      # always proceeds.
+      - name: Is it 10:07 in New Jersey?
+        id: window
+        if: github.event_name == 'schedule'
+        run: python -m app.cli schedule-check --tolerance 40 || echo "should_run=false" >> "$GITHUB_OUTPUT"
+
+      - name: Skip the duplicate UTC slot
+        if: github.event_name == 'schedule' && steps.window.outputs.should_run != 'true'
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          echo "### Skipped" >> "$GITHUB_STEP_SUMMARY"
+          echo "This cron slot is not 10:07 in \`America/New_York\` today. The other slot handles it." >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Ensure Starter Assets
-        run: |
-          python scripts/generate_sample_assets.py
+      - name: Validate configuration
+        if: github.event_name != 'schedule' || steps.window.outputs.should_run == 'true'
+        run: python -m app.cli validate
 
-      - name: Run Master System Audit
-        run: |
-          python scripts/audit_system.py
+      - name: Fast tests
+        if: github.event_name != 'schedule' || steps.window.outputs.should_run == 'true'
+        run: pytest -q -m "not integration" -x
 
-      - name: Execute Daily Flyer Generation
+      - name: Generate
+        id: generate
+        if: github.event_name != 'schedule' || steps.window.outputs.should_run == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
-          GDRIVE_ROOT_FOLDER_ID: ${{ secrets.GDRIVE_ROOT_FOLDER_ID || '12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT' }}
-          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
-          CANVA_API_KEY: ${{ secrets.CANVA_API_KEY }}
-          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
-          MOBBIN_API_KEY: ${{ secrets.MOBBIN_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-opus-5' }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          GOOGLE_DRIVE_ROOT_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_ROOT_FOLDER_ID }}
         run: |
-          CLIENT_ID="${{ github.event.inputs.client || 'all-elite' }}"
-          FLYER_COUNT="${{ github.event.inputs.count || '2' }}"
-          CAMPAIGN="${{ github.event.inputs.campaign || '' }}"
-          FOCUS="${{ github.event.inputs.focus || '' }}"
-          UPLOAD="${{ github.event.inputs.upload_drive != 'false' }}"
+          ARGS=(--client "${{ inputs.client || 'all-elite' }}" --count "${{ inputs.count || 2 }}")
+          [ -n "${{ inputs.campaign }}" ] && ARGS+=(--campaign "${{ inputs.campaign }}")
+          [ -n "${{ inputs.message }}" ]  && ARGS+=(--message  "${{ inputs.message }}")
+          [ -n "${{ inputs.cta }}" ]      && ARGS+=(--cta      "${{ inputs.cta }}")
+          [ -n "${{ inputs.tools }}" ]    && ARGS+=(--tools    "${{ inputs.tools }}")
+          if [ "${{ inputs.upload }}" = "false" ]; then ARGS+=(--no-upload); fi
+          python -m app.cli generate "${ARGS[@]}"
+        continue-on-error: true
 
-          CMD="python scripts/generate_flyers.py --client $CLIENT_ID --count $FLYER_COUNT"
-          if [ -n "$CAMPAIGN" ]; then
-            CMD="$CMD --campaign \"$CAMPAIGN\""
-          fi
-          if [ -n "$FOCUS" ]; then
-            CMD="$CMD --focus \"$FOCUS\""
-          fi
-          if [ "$UPLOAD" = "false" ]; then
-            CMD="$CMD --no-upload"
-          fi
-
-          echo "Executing: $CMD"
-          eval $CMD
-
-      - name: Upload Generated Flyers as Workflow Artifacts
+      - name: Upload the flyers as an artifact
+        if: steps.generate.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
-          name: daily-flyers
-          path: output/202*/**/*.png
+          name: flyers-${{ inputs.client || 'all-elite' }}-${{ github.run_number }}
+          path: |
+            output/**/*.png
+            output/**/*.jpg
+            output/**/*.json
+            output/**/SUMMARY.md
           if-no-files-found: warn
+          retention-days: 30
 
-      - name: Commit Generation History & Learning Updates
+      # History is the memory that stops the system repeating itself, so it is
+      # committed back to the repository rather than living only in the run.
+      - name: Commit generation history
+        if: steps.generate.outcome == 'success'
         run: |
-          git config --global user.name "Flyer Generator Bot"
-          git config --global user.email "bot@allelitenj.com"
-          git add output/history.json data/design-system/preferences.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(history): update daily flyer generation log [skip ci]" && git push)
+          git config user.name  "flyer-generator[bot]"
+          git config user.email "flyer-generator[bot]@users.noreply.github.com"
+          git add data/generation-history data/assets/index.json data/references/index.json || true
+          if git diff --cached --quiet; then
+            echo "No history changes to commit."
+          else
+            git commit -m "chore(history): record run ${{ steps.generate.outputs.run_id }}"
+            git push
+          fi
+
+      - name: Open the daily review issue
+        if: steps.generate.outcome == 'success'
+        uses: actions/github-script@v7
+        env:
+          RUN_ID: ${{ steps.generate.outputs.run_id }}
+          PASSED: ${{ steps.generate.outputs.flyers_passed }}
+          TOTAL: ${{ steps.generate.outputs.flyers_generated }}
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const client = '${{ inputs.client || "all-elite" }}';
+            const today = new Date().toISOString().slice(0, 10);
+
+            let summary = '';
+            const base = path.join('output', today, client, 'SUMMARY.md');
+            if (fs.existsSync(base)) summary = fs.readFileSync(base, 'utf8');
+
+            const artifact =
+              `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}` +
+              `/actions/runs/${context.runId}`;
+
+            const body = [
+              summary,
+              '',
+              `[Download the flyers](${artifact}) (artifact on this run).`,
+              '',
+              '---',
+              '',
+              '### Review',
+              '',
+              'Comment on this issue to record a decision. One per line:',
+              '',
+              '```',
+              'approve <flyer_id>',
+              'reject <flyer_id> headline too small, CTA weak',
+              '```',
+              '',
+              'Approvals raise the score of the references that produced them; rejections lower it.',
+            ].join('\n');
+
+            const title = `Flyer review - ${client} - ${today}`;
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'flyer-review',
+            });
+            const match = existing.data.find(i => i.title === title);
+
+            if (match) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: match.number, body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ['flyer-review'],
+              });
+            }
+
+      - name: Fail the run if generation failed
+        if: steps.generate.outcome == 'failure'
+        run: |
+          echo "::error::Flyer generation failed. See the log above." 
+          exit 1

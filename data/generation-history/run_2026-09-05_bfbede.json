@@ -1,0 +1,175 @@
+{
+  "run_id": "run_2026-09-05_bfbede",
+  "client_id": "all-elite",
+  "date": "2026-09-05",
+  "started_at": "2026-09-05T23:02:09+00:00",
+  "finished_at": "2026-09-05T19:02:09-04:00",
+  "requested_count": 2,
+  "model": "offline",
+  "offline": true,
+  "plan": {
+    "client_id": "all-elite",
+    "date": "2026-09-05",
+    "season": "fall",
+    "flyers": [
+      {
+        "slot": 1,
+        "campaign_id": "drainage-problems",
+        "service": "gutters",
+        "angle": "problem",
+        "layout": "split-diagonal",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      },
+      {
+        "slot": 2,
+        "campaign_id": "financing-available",
+        "service": "general",
+        "angle": "offer",
+        "layout": "offer-badge",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      }
+    ],
+    "strategy_note": "Deterministic rotation (Claude unavailable or disabled)."
+  },
+  "results": [
+    {
+      "spec": {
+        "id": "run_2026-09-05_bfbede_01",
+        "client_id": "all-elite",
+        "campaign_id": "drainage-problems",
+        "service": "gutters",
+        "style": "bold-promotional",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "split-diagonal",
+          "type_pairing": "impact-promotional",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "bottom-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "assets:placeholders:gutters:placeholder-gutter-fascia-run",
+          "secondary_asset_id": null,
+          "crop": "top",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.35,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Gutters Problems?",
+          "support": "Gutters for Bergen County homeowners.",
+          "bullets": [
+            "Licensed & insured New Jersey contract",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#6B1528",
+          "accent": "#C9952A",
+          "ink": "#1A1A1A",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "created_at": "2026-09-05T23:02:09+00:00"
+      },
+      "image_path": "/Users/johnpineda/Documents/Projects/flyer-generator/.claude/worktrees/flyer-generation-agent-35692d/Documents/Projects/flyer-generator/output/2026-09-05/all-elite/flyer-01.png",
+      "metadata_path": "/Users/johnpineda/Documents/Projects/flyer-generator/.claude/worktrees/flyer-generation-agent-35692d/Documents/Projects/flyer-generator/output/2026-09-05/all-elite/flyer-01.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 77513,
+      "rendered_at": "2026-09-05T23:02:09+00:00",
+      "qa_passed": true,
+      "qa_score": 100,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    },
+    {
+      "spec": {
+        "id": "run_2026-09-05_bfbede_02",
+        "client_id": "all-elite",
+        "campaign_id": "financing-available",
+        "service": "general",
+        "style": "urgent-emergency",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "offer-badge",
+          "type_pairing": "impact-promotional",
+          "text_align": "center",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "assets:placeholders:houses:placeholder-house-golden-hour",
+          "secondary_asset_id": null,
+          "crop": "focal",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.72,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Financing Available",
+          "support": "General for Bergen County homeowners.",
+          "bullets": [
+            "Licensed & insured New Jersey contract",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#6B1528",
+          "accent": "#C9952A",
+          "ink": "#1A1A1A",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "created_at": "2026-09-05T23:02:09+00:00"
+      },
+      "image_path": "/Users/johnpineda/Documents/Projects/flyer-generator/.claude/worktrees/flyer-generation-agent-35692d/Documents/Projects/flyer-generator/output/2026-09-05/all-elite/flyer-02.png",
+      "metadata_path": "/Users/johnpineda/Documents/Projects/flyer-generator/.claude/worktrees/flyer-generation-agent-35692d/Documents/Projects/flyer-generator/output/2026-09-05/all-elite/flyer-02.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 90506,
+      "rendered_at": "2026-09-05T23:02:09+00:00",
+      "qa_passed": true,
+      "qa_score": 100,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    }
+  ],
+  "errors": []
+}

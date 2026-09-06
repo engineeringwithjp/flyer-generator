@@ -1,0 +1,14 @@
+{
+  "provenance": {
+    "source_type": "client_frame",
+    "approval_status": "approved",
+    "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0002.MP4",
+    "project": "",
+    "source_video": "DJI_0002.MP4",
+    "frame_time_s": 22.551,
+    "verified_by": "human-review",
+    "notes": "Extracted from 3840x2160 footage. Quality 0.76."
+  },
+  "quality_score": 0.7617,
+  "client_id": "all-elite"
+}

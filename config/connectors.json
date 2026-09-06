@@ -1,0 +1,79 @@
+{
+  "$comment": "External design/content connectors. They SUPPLEMENT the internal system and are never a dependency: every one of them can be unavailable and the daily run still completes.",
+  "version": 1,
+
+  "connectors": {
+    "unsplash": {
+      "enabled": true,
+      "role": "asset",
+      "description": "Supplemental photography. Fills gaps only.",
+      "use_when": "No client photo, no approved internal background, and the campaign genuinely needs a photograph.",
+      "never_when": "A suitable client or internal image exists.",
+      "cost_per_call": "low",
+      "max_calls_per_run": 2
+    },
+    "mobbin": {
+      "enabled": true,
+      "role": "reference",
+      "description": "Visual-pattern research. Layout, spacing, hierarchy and typography inspiration.",
+      "use_when": "The internal reference library is thin for this campaign, or the design direction has gone stale.",
+      "never_when": "The internal library already has an approved reference that scores well.",
+      "cost_per_call": "medium",
+      "max_calls_per_run": 1,
+      "min_days_between_calls": 7
+    },
+    "figma": {
+      "enabled": true,
+      "role": "template",
+      "description": "Master design system and editable source files.",
+      "use_when": "An editable master layout or a reusable component system is being built or revised.",
+      "never_when": "A routine daily flyer that the internal renderer handles.",
+      "cost_per_call": "medium",
+      "max_calls_per_run": 1
+    },
+    "canva": {
+      "enabled": true,
+      "role": "production",
+      "description": "Client-editable deliverables.",
+      "use_when": "The client has asked for an editable file, or an approved Canva template gives a real production advantage.",
+      "never_when": "Deterministic rendering already produces the deliverable.",
+      "cost_per_call": "high",
+      "max_calls_per_run": 1
+    }
+  },
+
+  "reference_source_scores": {
+    "$comment": "Multiplies a reference's score. Internal approved work always outranks anything external.",
+    "internal_approved_client_design": 1.00,
+    "internal_approved": 0.90,
+    "figma": 0.85,
+    "canva": 0.80,
+    "mobbin": 0.75,
+    "internal_experimental": 0.60,
+    "unsplash": 0.50,
+    "unreviewed_external": 0.30,
+    "rejected": 0.0
+  },
+
+  "asset_source_scores": {
+    "client": 1.00,
+    "internal_approved": 0.85,
+    "internal_background": 0.70,
+    "internal_historical": 0.60,
+    "unsplash": 0.45,
+    "placeholder": 0.20
+  },
+
+  "thresholds": {
+    "$comment": "Tuning knobs for the decision engine. Raise these to spend less on external calls.",
+    "reference_score_floor": 0.45,
+    "min_internal_references_before_external": 3,
+    "stale_direction_after_days": 21
+  },
+
+  "defaults": {
+    "allow_external": true,
+    "allow_stock_photography": true,
+    "prefer_internal_renderer": true
+  }
+}

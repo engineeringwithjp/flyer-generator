@@ -1,0 +1,76 @@
+name: Ingest design references
+
+# Drop an image into references/inbox/, push, and it is analysed, categorised
+# and filed automatically.
+on:
+  push:
+    branches: [main]
+    paths: ["references/inbox/**"]
+  workflow_dispatch:
+    inputs:
+      status:
+        description: Where to file the analysed references
+        required: false
+        default: experimental
+        type: choice
+        options: [experimental, approved]
+
+concurrency:
+  group: reference-ingest
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+        with:
+          fonts: "false"
+
+      - name: Anything to ingest?
+        id: check
+        run: |
+          count=$(find references/inbox -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) | wc -l | tr -d ' ')
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "Found $count image(s) in the inbox."
+
+      - name: Analyse and file
+        if: steps.check.outputs.count != '0'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_VISION_MODEL: ${{ vars.ANTHROPIC_VISION_MODEL || 'claude-sonnet-5' }}
+        run: python -m app.cli ingest-reference --status "${{ inputs.status || 'experimental' }}"
+
+      - name: Open a pull request with the catalogued references
+        if: steps.check.outputs.count != '0'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: references/ingest-${{ github.run_number }}
+          commit-message: "feat(references): catalogue ${{ steps.check.outputs.count }} new reference(s)"
+          title: "Catalogue ${{ steps.check.outputs.count }} new design reference(s)"
+          labels: references
+          body: |
+            Claude analysed the images in `references/inbox/` and filed them.
+
+            Review the extracted metadata, then promote anything you like:
+
+            ```bash
+            flyer promote ref_000001 approved
+            ```
+
+            Approved references get the strongest influence on future flyers;
+            experimental ones are used at lower weight; rejected ones are never
+            selected.
+          delete-branch: true
+
+      - name: Nothing to do
+        if: steps.check.outputs.count == '0'
+        run: echo "The inbox is empty." >> "$GITHUB_STEP_SUMMARY"

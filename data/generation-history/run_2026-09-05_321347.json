@@ -1,0 +1,98 @@
+{
+  "run_id": "run_2026-09-05_321347",
+  "client_id": "all-elite",
+  "date": "2026-09-05",
+  "started_at": "2026-09-05T23:04:02+00:00",
+  "finished_at": "2026-09-05T19:04:02-04:00",
+  "requested_count": 1,
+  "model": "offline",
+  "offline": true,
+  "plan": {
+    "client_id": "all-elite",
+    "date": "2026-09-05",
+    "season": "fall",
+    "flyers": [
+      {
+        "slot": 1,
+        "campaign_id": "premium-roofing",
+        "service": "roofing",
+        "angle": "premium",
+        "layout": "split-diagonal",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      }
+    ],
+    "strategy_note": "Deterministic rotation (Claude unavailable or disabled)."
+  },
+  "results": [
+    {
+      "spec": {
+        "id": "run_2026-09-05_321347_01",
+        "client_id": "all-elite",
+        "campaign_id": "premium-roofing",
+        "service": "roofing",
+        "style": "bold-promotional",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "split-diagonal",
+          "type_pairing": "impact-promotional",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "bottom-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "assets:placeholders:roofing:placeholder-roof-architectural",
+          "secondary_asset_id": null,
+          "crop": "top",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.35,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Premium Roofing",
+          "support": "Roofing for Bergen County homeowners.",
+          "bullets": [
+            "Licensed & insured New Jersey",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#6B1528",
+          "accent": "#C9952A",
+          "ink": "#1A1A1A",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "created_at": "2026-09-05T23:04:02+00:00"
+      },
+      "image_path": "output/_layouts/split-diagonal/flyer-01.png",
+      "metadata_path": "output/_layouts/split-diagonal/flyer-01.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 104902,
+      "rendered_at": "2026-09-05T23:04:02+00:00",
+      "qa_passed": true,
+      "qa_score": 100,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    }
+  ],
+  "errors": []
+}

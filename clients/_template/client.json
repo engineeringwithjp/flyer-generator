@@ -1,0 +1,44 @@
+{
+  "id": "_template",
+  "company_name": "Your Company Name LLC",
+  "industry": "residential construction",
+  "location": "New Jersey",
+  "service_area": ["Bergen County", "Passaic County"],
+  "services": ["Roofing", "Siding", "Gutters", "Windows"],
+  "target_audience": "Residential homeowners",
+  "tone": ["professional", "trustworthy", "premium"],
+  "primary_goal": "lead_generation",
+
+  "brand": {
+    "primary_colors": ["#12243A"],
+    "secondary_colors": ["#E0A62F"],
+    "neutral_colors": ["#FFFFFF", "#12161B"],
+    "fonts": { "headline": "Anton", "body": "Inter" },
+    "logo_path": "assets/logo/logo.png",
+    "logo_dark_path": ""
+  },
+
+  "contact": {
+    "phone": "",
+    "website": "",
+    "email": "",
+    "address": ""
+  },
+
+  "drive": {
+    "root_folder_id": "",
+    "subfolder_name": ""
+  },
+
+  "offers": [],
+
+  "proof_points": [],
+
+  "forbidden_claims": [
+    "guaranteed insurance approval",
+    "free roof from your insurance company"
+  ],
+
+  "preferred_reference_styles": ["premium-modern", "corporate-trust"],
+  "enabled": false
+}

@@ -1,0 +1,44 @@
+name: Design rule change
+description: Propose a change to the permanent design system.
+title: "Design rule: "
+labels: [design-system]
+body:
+  - type: dropdown
+    id: section
+    attributes:
+      label: Section
+      options:
+        - global
+        - photography
+        - composition_archetypes
+        - typography
+        - color
+        - branding
+        - copywriting
+        - iconography
+        - product_presentation
+        - social
+        - negative (NEVER list)
+    validations: { required: true }
+  - type: dropdown
+    id: strength
+    attributes:
+      label: Strength
+      options:
+        - hard (follow essentially every time)
+        - soft (follow by default, may be broken with a stated reason)
+        - optional (a technique for appropriate campaigns only)
+    validations: { required: true }
+  - type: textarea
+    id: rule
+    attributes:
+      label: The rule
+      description: One sentence, imperative.
+    validations: { required: true }
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: >
+        Which flyers or references show this? A rule with no evidence should
+        probably stay a preference rather than becoming permanent.

@@ -1,45 +1,117 @@
 {
   "id": "all-elite",
-  "company_name": "All Elite Construction Corp.",
-  "short_name": "All Elite",
-  "tagline": "Architectural Roofing & Exterior Remodeling",
-  "phone": "(201) 755-4653",
-  "email": "info@allelitenj.com",
-  "website": "www.allelitenj.com",
-  "service_area": "Northern New Jersey & Surrounding Areas",
-  "brand_colors": {
-    "primary_accent": "#80272B",
-    "secondary_accent": "#9E3439",
-    "dark_neutral": "#1C1C1E",
-    "light_neutral": "#FFFFFF",
-    "off_white": "#F4F4F6",
-    "card_overlay": "rgba(28, 28, 30, 0.82)"
-  },
-  "typography": {
-    "primary_font": "Helvetica, Arial, sans-serif",
-    "editorial_font": "Georgia, serif"
-  },
-  "drive_folder_id": "12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT",
+  "company_name": "All Elite Roofing & Siding",
+  "industry": "residential construction",
+  "location": "New Jersey",
+  "service_area": [
+    "Bergen County",
+    "Passaic County",
+    "Hudson County",
+    "Essex County",
+    "Morris County",
+    "Union County"
+  ],
   "services": [
-    "Roof Replacement",
-    "Roof Repair",
-    "Composite Siding",
-    "Vinyl & Fiber Cement Siding",
-    "Seamless Gutters & Gutter Guards",
-    "Replacement Windows",
-    "Storm Damage Restoration",
-    "Exterior Remodeling"
+    "Roofing",
+    "Siding",
+    "Gutters",
+    "Windows"
   ],
-  "approved_claims": [
-    "Fully Insured & Registered NJ Home Improvement Contractor",
-    "Complimentary On-Site Inspection & Written Estimate",
-    "Certified Installation Specialists",
-    "Manufacturer-Backed Material Warranties"
+  "target_audience": "Residential homeowners in northern New Jersey",
+  "tone": [
+    "professional",
+    "trustworthy",
+    "premium",
+    "architectural"
   ],
-  "manufacturer_partners": [
-    "ASCEND® Composite Foam Backed Siding",
-    "CertainTeed® CertaPlank®",
-    "GAF Timberline HDZ®"
+  "primary_goal": "lead_generation",
+  "brand": {
+    "primary_colors": [
+      "#14181C",
+      "#1F262C",
+      "#6B1528"
+    ],
+    "secondary_colors": [
+      "#DC1F26",
+      "#B3141B"
+    ],
+    "neutral_colors": [
+      "#FFFFFF",
+      "#14181C",
+      "#8A9099"
+    ],
+    "fonts": {
+      "headline": "Barlow Condensed",
+      "display": "Barlow Condensed",
+      "body": "Lato"
+    },
+    "logo_path": "assets/logo/logo.png",
+    "logo_dark_path": ""
+  },
+  "contact": {
+    "phone": "(551) 335-9235",
+    "website": "alleliteconstructioncorpnj.com",
+    "email": "info@alleliteconstructioncorpnj.com",
+    "address": ""
+  },
+  "drive": {
+    "root_folder_id": "12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT",
+    "subfolder_name": ""
+  },
+  "offers": [],
+  "products": [
+    {
+      "id": "gaf-timberline-hdz",
+      "name": "GAF Timberline HDZ",
+      "manufacturer": "GAF",
+      "category": "roofing",
+      "benefits": [
+        "Architectural shingle system",
+        "Eligible for the 50-year GAF Master Elite warranty"
+      ],
+      "show_manufacturer_mark": true
+    },
+    {
+      "id": "ascend-composite-siding",
+      "name": "ASCEND\u00ae Composite Foam-Backed Siding",
+      "manufacturer": "Alside",
+      "category": "siding",
+      "benefits": [
+        "Built-in continuous insulation",
+        "Composite board-and-batten appearance"
+      ],
+      "show_manufacturer_mark": true
+    },
+    {
+      "id": "certainteed-certaplank",
+      "name": "CertainTeed\u00ae CertaPlank\u00ae",
+      "manufacturer": "CertainTeed",
+      "category": "siding",
+      "benefits": [
+        "Engineered plank siding"
+      ],
+      "show_manufacturer_mark": true
+    }
   ],
-  "default_cta": "SCHEDULE FREE ESTIMATE"
+  "proof_points": [
+    "Licensed & insured New Jersey contractor",
+    "NJ HIC #13VH12314700",
+    "GAF Master Elite contractor",
+    "25+ years of experience",
+    "2,500+ customers served",
+    "50-year GAF Master Elite warranty available"
+  ],
+  "forbidden_claims": [
+    "guaranteed insurance approval",
+    "free roof from your insurance company",
+    "we can get your claim approved",
+    "#1 roofer in New Jersey",
+    "cheapest price in New Jersey"
+  ],
+  "preferred_reference_styles": [
+    "premium-modern",
+    "corporate-trust",
+    "warm-residential"
+  ],
+  "enabled": true
 }

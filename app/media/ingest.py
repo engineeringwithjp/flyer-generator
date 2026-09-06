@@ -146,7 +146,15 @@ def ingest_media(
 
                 if not dry_run:
                     final = frames_dir / _frame_name(item.path, candidate.time_s, project)
-                    written = extract_frame(item.path, candidate.time_s, final)
+                    # Extract at the largest size a flyer can actually use, not
+                    # at capture resolution. A 4K frame is ~2 MB; at 2400px it
+                    # is ~400 KB and a 1080x1350 crop is pixel-identical.
+                    written = extract_frame(
+                        item.path,
+                        candidate.time_s,
+                        final,
+                        width=get_settings().asset_max_edge,
+                    )
                     if written is None:
                         report.errors.append(f"{item.path.name}: full-resolution extract failed")
                         continue

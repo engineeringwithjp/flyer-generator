@@ -1,0 +1,221 @@
+{
+  "run_id": "run_2026-09-06_6ad71e",
+  "client_id": "all-elite",
+  "date": "2026-09-06",
+  "started_at": "2026-09-06T15:38:35+00:00",
+  "finished_at": "2026-09-06T11:38:36-04:00",
+  "requested_count": 2,
+  "model": "offline",
+  "offline": true,
+  "plan": {
+    "client_id": "all-elite",
+    "date": "2026-09-06",
+    "season": "fall",
+    "flyers": [
+      {
+        "slot": 1,
+        "campaign_id": "free-inspection",
+        "service": "roofing",
+        "angle": "offer",
+        "layout": "offer-badge",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      },
+      {
+        "slot": 2,
+        "campaign_id": "gutter-replacement",
+        "service": "gutters",
+        "angle": "upgrade",
+        "layout": "banner-lower-third",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      }
+    ],
+    "strategy_note": "Deterministic rotation (Claude unavailable or disabled)."
+  },
+  "tools_used": [
+    "offline-fallback"
+  ],
+  "renderer": "internal",
+  "results": [
+    {
+      "spec": {
+        "id": "run_2026-09-06_6ad71e_01",
+        "client_id": "all-elite",
+        "campaign_id": "free-inspection",
+        "service": "roofing",
+        "style": "urgent-emergency",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "offer-badge",
+          "type_pairing": "impact-promotional",
+          "text_align": "center",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "clients:all-elite:assets:approved:roof_hawthorne_before_aged_shingle_001",
+          "secondary_asset_id": null,
+          "crop": "focal",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.72,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Free Roof Inspection",
+          "accent_word": "",
+          "chips": [],
+          "support": "Available to Bergen County homeowners",
+          "bullets": [
+            "Licensed & insured New Jersey contractor",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#14181C",
+          "accent": "#DC1F26",
+          "ink": "#14181C",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": false,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "A suitable internal photograph exists, so no stock search.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "a suitable client or internal photograph already exists",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-06T15:38:35+00:00"
+      },
+      "image_path": "/Users/johnpineda/Library/CloudStorage/GoogleDrive-engineeringwithjp@gmail.com/My Drive/NEDA Technologies/Client Flyers/Flyers/2026/September/09-06/flyer-01.png",
+      "metadata_path": "/Users/johnpineda/Library/CloudStorage/GoogleDrive-engineeringwithjp@gmail.com/My Drive/NEDA Technologies/Client Flyers/Flyers/2026/September/09-06/flyer-01.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 1427339,
+      "rendered_at": "2026-09-06T15:38:35+00:00",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    },
+    {
+      "spec": {
+        "id": "run_2026-09-06_6ad71e_02",
+        "client_id": "all-elite",
+        "campaign_id": "gutter-replacement",
+        "service": "gutters",
+        "style": "corporate-trust",
+        "canvas": {
+          "width": 1080,
+          "height": 1350
+        },
+        "layout": {
+          "name": "banner-lower-third",
+          "type_pairing": "condensed-editorial",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "clients:all-elite:assets:approved:roof_washington_township_curb_appeal_001",
+          "secondary_asset_id": null,
+          "crop": "focal",
+          "overlay": "none",
+          "overlay_strength": 0.25,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "Bergen County",
+          "headline": "Gutters Done Right",
+          "accent_word": "",
+          "chips": [],
+          "support": "Gutters replacement for Bergen County homeowners",
+          "bullets": [
+            "Licensed & insured New Jersey contractor",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": ""
+        },
+        "palette": {
+          "primary": "#14181C",
+          "accent": "#DC1F26",
+          "ink": "#14181C",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": false,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "A suitable internal photograph exists, so no stock search.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "a suitable client or internal photograph already exists",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-06T15:38:35+00:00"
+      },
+      "image_path": "/Users/johnpineda/Library/CloudStorage/GoogleDrive-engineeringwithjp@gmail.com/My Drive/NEDA Technologies/Client Flyers/Flyers/2026/September/09-06/flyer-02.png",
+      "metadata_path": "/Users/johnpineda/Library/CloudStorage/GoogleDrive-engineeringwithjp@gmail.com/My Drive/NEDA Technologies/Client Flyers/Flyers/2026/September/09-06/flyer-02.json",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 1430883,
+      "rendered_at": "2026-09-06T15:38:36+00:00",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    }
+  ],
+  "errors": []
+}

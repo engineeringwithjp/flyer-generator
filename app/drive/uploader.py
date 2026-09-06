@@ -167,6 +167,80 @@ class DriveUploader:
 
         raise DriveError(f"Drive upload of {path.name} failed: {last_error}")
 
+    def upload_bytes(
+        self,
+        data: bytes,
+        name: str,
+        folder_id: str,
+        mime: str = "image/png",
+        checksum: str = "",
+        description: str = "",
+    ) -> tuple[str, str]:
+        """Upload straight from memory, so no local file need ever exist.
+
+        This is what makes ``--drive-only`` possible: the renderer hands over a
+        buffer and the flyer goes to Drive without touching the disk.
+        """
+        import io
+
+        from googleapiclient.errors import HttpError
+        from googleapiclient.http import MediaIoBaseUpload
+
+        existing = self.find_existing(folder_id, name)
+        if existing and checksum and existing.get("appProperties", {}).get("sha256") == checksum:
+            log.info("Skipping %s - identical file already in Drive", name)
+            return existing["id"], existing.get("webViewLink", "")
+
+        metadata: dict[str, Any] = {
+            "name": name,
+            "description": description[:1000],
+            "appProperties": {"sha256": checksum, "source": "flyer-generator"},
+        }
+
+        last_error: Exception | None = None
+        for attempt in range(1, MAX_ATTEMPTS + 1):
+            media = MediaIoBaseUpload(io.BytesIO(data), mimetype=mime, resumable=False)
+            try:
+                shared = {"supportsAllDrives": True} if self.shared else {}
+                if existing:
+                    result = (
+                        self.service.files()
+                        .update(
+                            fileId=existing["id"],
+                            body=metadata,
+                            media_body=media,
+                            fields="id, webViewLink",
+                            **shared,
+                        )
+                        .execute()
+                    )
+                else:
+                    result = (
+                        self.service.files()
+                        .create(
+                            body={**metadata, "parents": [folder_id]},
+                            media_body=media,
+                            fields="id, webViewLink",
+                            **shared,
+                        )
+                        .execute()
+                    )
+                log.info("Uploaded %s to Drive (%d KB, no local copy)", name, len(data) // 1024)
+                return result["id"], result.get("webViewLink", "")
+            except HttpError as exc:
+                last_error = exc
+                status = getattr(exc.resp, "status", 0)
+                if status not in (403, 429, 500, 502, 503, 504) or attempt == MAX_ATTEMPTS:
+                    raise DriveError(f"Drive upload of {name} failed: {exc}") from exc
+                time.sleep(min(2**attempt, 20) + random.uniform(0, 1.0))
+            except Exception as exc:
+                last_error = exc
+                if attempt == MAX_ATTEMPTS:
+                    raise DriveError(f"Drive upload of {name} failed: {exc}") from exc
+                time.sleep(min(2**attempt, 20))
+
+        raise DriveError(f"Drive upload of {name} failed: {last_error}")
+
 
 def upload_flyer_result(
     result: FlyerResult,

@@ -132,8 +132,9 @@ def generate_flyers(
     run.plan = plan.model_dump()
     log.info("Plan: %s", ", ".join(f"{f.campaign_id}/{f.layout}" for f in plan.flyers))
 
-    base_dir = output_dir or (settings.paths.output / when.isoformat() / client.id)
+    base_dir = output_dir or _resolve_output_dir(client, when, settings)
     base_dir.mkdir(parents=True, exist_ok=True)
+    log.info("Writing flyers to %s", base_dir)
 
     canvas = CanvasSpec(width=settings.output_width, height=settings.output_height)
     used_assets: set[str] = set()
@@ -185,6 +186,26 @@ def generate_flyers(
 
 
 # ---------------------------------------------------------------- one flyer
+
+
+def _resolve_output_dir(client: Client, when: date, settings: Settings) -> Path:
+    """Where today's flyers are written.
+
+    Prefers the mounted Google Drive folder when one is configured, so nothing
+    accumulates in the project directory. Falls back to ``output/`` when Drive
+    for Desktop is not running or not set up.
+    """
+    from ..drive.local import resolve_output_dir
+
+    try:
+        drive_dir = resolve_output_dir(client.company_name, when, settings)
+    except Exception as exc:
+        log.warning("Drive folder unavailable (%s); writing locally instead", exc)
+        drive_dir = None
+
+    if drive_dir is not None:
+        return drive_dir
+    return settings.paths.output / when.isoformat() / client.id
 
 
 def _produce_flyer(
@@ -397,6 +418,29 @@ def _upload(run: GenerationRun, client: Client, when: date, settings: Settings) 
         except Exception as exc:
             run.errors.append(f"drive upload failed for {result.spec.id}: {exc}")
             log.error("Drive upload failed for %s: %s", result.spec.id, exc)
+            continue
+
+        # Once a flyer is in Drive the local copy is a cache, not an archive.
+        # Only ever delete something that actually arrived.
+        if settings.delete_after_upload and result.drive_file_id:
+            _discard_local(result)
+
+
+def _discard_local(result: FlyerResult) -> None:
+    """Remove the local render after a confirmed Drive upload."""
+    for attribute in ("image_path", "metadata_path"):
+        raw = getattr(result, attribute, "")
+        if not raw:
+            continue
+        path = Path(raw)
+        try:
+            path.unlink(missing_ok=True)
+        except OSError as exc:  # pragma: no cover - permissions
+            log.warning("Could not remove %s: %s", path, exc)
+    thumb = Path(result.image_path).parent / "thumbs" / f"{Path(result.image_path).stem}.jpg"
+    thumb.unlink(missing_ok=True)
+    result.image_path = ""
+    log.info("Local copy discarded; the flyer lives in Drive")
 
 
 def _write_run_summary(run: GenerationRun, base_dir: Path) -> Path:

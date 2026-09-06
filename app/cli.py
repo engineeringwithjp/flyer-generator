@@ -559,6 +559,120 @@ def cmd_design_system(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_drive_setup(args: argparse.Namespace) -> int:
+    """Point the flyer output at your Google Drive folder.
+
+    With Drive for Desktop running there is nothing to authorise: flyers are
+    written into the mounted folder and Drive syncs them.
+    """
+    from .drive.local import describe, find_folder, suggest_env_line
+
+    settings = get_settings()
+    info = describe(settings)
+
+    print(f"{BOLD}Google Drive for Desktop{RESET}")
+    if not info["mounts_found"]:
+        print(f"  {RED}No Drive mount found.{RESET}")
+        print(f"  {DIM}Install Google Drive for Desktop and sign in, then re-run.{RESET}")
+        return 1
+    mounts = info["mounts_found"] if isinstance(info["mounts_found"], list) else []
+    for mount in mounts:
+        print(f"  {GREEN}mounted{RESET}  {mount}")
+
+    if info["configured_exists"]:
+        print(f"\n  {GREEN}configured{RESET}  {info['configured_path']}")
+        print(f"  {DIM}Flyers are written straight into Drive.{RESET}")
+        return 0
+
+    folder = find_folder(args.folder)
+    if folder is None:
+        print(f"\n  {YELLOW}Could not find a folder named {args.folder!r}.{RESET}")
+        print(f'  {DIM}Pass --folder "Your Folder Name", or set DRIVE_LOCAL_PATH by hand.{RESET}')
+        return 1
+
+    print(f"\n  {GREEN}found{RESET}  {folder}")
+    line = suggest_env_line(folder)
+
+    env = settings.paths.root / ".env"
+    if args.write:
+        existing = env.read_text(encoding="utf-8") if env.exists() else ""
+        if "DRIVE_LOCAL_PATH" in existing:
+            print(f"  {DIM}.env already sets DRIVE_LOCAL_PATH; leaving it alone.{RESET}")
+        else:
+            with env.open("a", encoding="utf-8") as handle:
+                handle.write(f"\n# Flyers are written here instead of output/\n{line}\n")
+            print(f"  {GREEN}written to .env{RESET}")
+    else:
+        print(f"\n  Add this to .env:\n      {line}")
+        print(f"  {DIM}Or re-run with --write to do it automatically.{RESET}")
+
+    print(f"\n  {DIM}{info['streaming_hint']}{RESET}")
+    return 0
+
+
+def cmd_storage(args: argparse.Namespace) -> int:
+    """Where the disk is going, and what can safely go."""
+    from .storage import human, stale_worktrees, usage
+
+    areas = usage()
+    total = sum(areas.values())
+    print(f"{BOLD}Disk usage{RESET}  {human(total)} total\n")
+    for name, size in sorted(areas.items(), key=lambda kv: -kv[1]):
+        if not size:
+            continue
+        share = size / total * 100 if total else 0
+        bar = "#" * max(int(share / 3), 0)
+        print(f"  {human(size):>9}  {share:4.1f}%  {bar:<34} {name}")
+
+    worktrees = stale_worktrees()
+    if worktrees:
+        waste = sum(size for _, size in worktrees)
+        print(
+            f"\n  {YELLOW}{human(waste)}{RESET} is Claude Code worktrees - a complete "
+            f"duplicate of this project."
+        )
+        print(f"  {DIM}Safe to delete once your work is committed:{RESET}")
+        print("      rm -rf .claude/worktrees")
+
+    print(f"\n{DIM}Reclaim space with:  flyer clean{RESET}")
+    return 0
+
+
+def cmd_clean(args: argparse.Namespace) -> int:
+    """Reclaim disk. Nothing that is not safely reproducible is removed."""
+    from .storage import (
+        StorageReport,
+        downscale_library,
+        human,
+        prune_output,
+        prune_unreviewed_frames,
+    )
+
+    combined = StorageReport()
+    steps = []
+    if not args.only or args.only == "output":
+        steps.append(prune_output(keep_days=args.keep_days, dry_run=args.dry_run))
+    if not args.only or args.only == "frames":
+        steps.append(prune_unreviewed_frames(keep_top=args.keep_frames, dry_run=args.dry_run))
+    if not args.only or args.only == "photos":
+        steps.append(downscale_library(max_edge=args.max_edge, dry_run=args.dry_run))
+
+    for step in steps:
+        combined.freed_bytes += step.freed_bytes
+        combined.output_runs_removed += step.output_runs_removed
+        combined.frames_removed += step.frames_removed
+        combined.assets_downscaled += step.assets_downscaled
+        combined.details += step.details
+
+    label = f"{BOLD}Would free{RESET}" if args.dry_run else f"{BOLD}Freed{RESET}"
+    print(f"{label}  {human(combined.freed_bytes)}")
+    for detail in combined.details:
+        print(f"  {DIM}{detail}{RESET}")
+    if args.dry_run:
+        print(f"\n{DIM}Nothing was changed. Re-run without --dry-run to apply.{RESET}")
+    return 0
+
+
 def cmd_gallery(args: argparse.Namespace) -> int:
     from .publish import build_gallery
 
@@ -717,6 +831,38 @@ def build_parser() -> argparse.ArgumentParser:
     dsy.add_argument("--client", help="include this client's stored preferences")
     dsy.add_argument("--json", action="store_true")
     dsy.set_defaults(func=cmd_design_system)
+
+    drv = subparsers.add_parser(
+        "drive-setup", help="write flyers straight into your Google Drive folder"
+    )
+    drv.add_argument("--folder", default="Client Flyers", help="folder name to look for in Drive")
+    drv.add_argument("--write", action="store_true", help="append the setting to .env")
+    drv.set_defaults(func=cmd_drive_setup)
+
+    sto = subparsers.add_parser("storage", help="show where disk space is going")
+    sto.set_defaults(func=cmd_storage)
+
+    cln = subparsers.add_parser("clean", help="reclaim disk space safely")
+    cln.add_argument(
+        "--keep-days",
+        type=int,
+        default=7,
+        help="keep rendered flyers this many days (uploaded ones only)",
+    )
+    cln.add_argument(
+        "--keep-frames",
+        type=int,
+        default=40,
+        help="keep this many top-scoring unreviewed candidates",
+    )
+    cln.add_argument(
+        "--max-edge",
+        type=int,
+        help="downscale stored photos to this long edge (default ASSET_MAX_EDGE)",
+    )
+    cln.add_argument("--only", choices=["output", "frames", "photos"], help="run just one step")
+    cln.add_argument("--dry-run", action="store_true", help="report without deleting")
+    cln.set_defaults(func=cmd_clean)
 
     gal = subparsers.add_parser("gallery", help="build the static approved-flyer gallery")
     gal.add_argument("--out", default="site", help="output directory")

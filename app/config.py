@@ -159,6 +159,7 @@ class Settings:
     google_service_account_file: str | None
     drive_root_folder_id: str | None
     drive_is_shared_drive: bool
+    drive_local_path: str | None
 
     # --- Defaults ---
     default_client: str
@@ -173,6 +174,11 @@ class Settings:
     output_height: int
     output_format: str
 
+    # --- disk hygiene ---
+    asset_max_edge: int
+    output_retention_days: int
+    delete_after_upload: bool
+
     offline: bool
     log_level: str
 
@@ -183,6 +189,15 @@ class Settings:
     @property
     def claude_enabled(self) -> bool:
         return bool(self.anthropic_api_key) and not self.offline
+
+    @property
+    def drive_local_enabled(self) -> bool:
+        from pathlib import Path as _Path
+
+        path = self.drive_local_path
+        if not path:
+            return False
+        return _Path(path).expanduser().is_dir()
 
     @property
     def drive_enabled(self) -> bool:
@@ -210,6 +225,7 @@ class Settings:
             "vision_model": self.anthropic_vision_model,
             "claude_enabled": self.claude_enabled,
             "drive_enabled": self.drive_enabled,
+            "drive_local": self.drive_local_enabled,
             "default_client": self.default_client,
             "default_flyer_count": self.default_flyer_count,
             "canvas": f"{self.output_width}x{self.output_height}",
@@ -241,6 +257,9 @@ def load_settings(env_file: Path | None = None) -> Settings:
         google_service_account_file=_clean("GOOGLE_SERVICE_ACCOUNT_FILE"),
         drive_root_folder_id=_clean("GOOGLE_DRIVE_ROOT_FOLDER_ID"),
         drive_is_shared_drive=_bool("GOOGLE_DRIVE_IS_SHARED_DRIVE"),
+        # Google Drive for Desktop mount. When set, flyers are written straight
+        # into Drive and never land in the project folder.
+        drive_local_path=_clean("DRIVE_LOCAL_PATH"),
         default_client=_clean("DEFAULT_CLIENT") or "all-elite",
         default_flyer_count=_int("DEFAULT_FLYER_COUNT", 2),
         schedule_timezone=_clean("SCHEDULE_TIMEZONE") or "America/New_York",
@@ -252,6 +271,12 @@ def load_settings(env_file: Path | None = None) -> Settings:
         output_width=_int("OUTPUT_WIDTH", 1080),
         output_height=_int("OUTPUT_HEIGHT", 1350),
         output_format=(_clean("OUTPUT_FORMAT") or "PNG").upper(),
+        # A 1080x1350 flyer never needs more than ~2400px on the long edge,
+        # even after a focal crop. Storing 4K originals wastes an order of
+        # magnitude of disk for no visible gain.
+        asset_max_edge=_int("ASSET_MAX_EDGE", 2400),
+        output_retention_days=_int("OUTPUT_RETENTION_DAYS", 7),
+        delete_after_upload=_bool("DELETE_AFTER_UPLOAD"),
         offline=_bool("FLYER_OFFLINE"),
         log_level=_clean("LOG_LEVEL") or "INFO",
         paths=Paths(root=root),

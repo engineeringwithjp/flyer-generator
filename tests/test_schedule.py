@@ -114,11 +114,7 @@ def test_interval_still_honours_the_day_list(every_three_hours):
 
 def test_interval_slot_count_matches_the_window(every_three_hours):
     """08:00-20:00 every 3h is five runs: 8, 11, 14, 17, 20."""
-    runs = [
-        h
-        for h in range(24)
-        if decide(_at(2026, 9, 9, h, 0), tolerance_minutes=20).should_run
-    ]
+    runs = [h for h in range(24) if decide(_at(2026, 9, 9, h, 0), tolerance_minutes=20).should_run]
     assert runs == [8, 11, 14, 17, 20]
 
 
@@ -128,9 +124,7 @@ def test_a_two_hour_interval_gives_more_slots(repo, monkeypatch):
     monkeypatch.setenv("SCHEDULE_WINDOW", "08:00-20:00")
     monkeypatch.setenv("SCHEDULE_DAYS", "all")
     reset_settings_cache()
-    runs = [
-        h for h in range(24) if decide(_at(2026, 9, 9, h, 0), tolerance_minutes=15).should_run
-    ]
+    runs = [h for h in range(24) if decide(_at(2026, 9, 9, h, 0), tolerance_minutes=15).should_run]
     assert runs == [8, 10, 12, 14, 16, 18, 20]
 
 

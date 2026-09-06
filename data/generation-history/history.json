@@ -1,7 +1,53 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T00:59:51-04:00",
+  "updated_at": "2026-09-06T11:38:36-04:00",
   "entries": [
+    {
+      "run_id": "run_2026-09-06_6ad71e",
+      "flyer_id": "run_2026-09-06_6ad71e_02",
+      "date": "2026-09-06",
+      "client": "all-elite",
+      "campaign": "gutter-replacement",
+      "service": "gutters",
+      "layout": "banner-lower-third",
+      "style": "corporate-trust",
+      "headline": "Gutters Done Right",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_washington_township_curb_appeal_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-06_6ad71e",
+      "flyer_id": "run_2026-09-06_6ad71e_01",
+      "date": "2026-09-06",
+      "client": "all-elite",
+      "campaign": "free-inspection",
+      "service": "roofing",
+      "layout": "offer-badge",
+      "style": "urgent-emergency",
+      "headline": "Free Roof Inspection",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_hawthorne_before_aged_shingle_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "status": "generated",
+      "approved": null
+    },
     {
       "run_id": "run_2026-09-06_fbb934",
       "flyer_id": "run_2026-09-06_fbb934_02",

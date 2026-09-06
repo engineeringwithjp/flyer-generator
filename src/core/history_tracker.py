@@ -48,6 +48,14 @@ class HistoryTracker:
         records = [r for r in self.load_records() if r.client_id == client_id]
         return [r.headline for r in reversed(records[-limit:])]
 
+    def get_recent_assets(self, client_id: str, limit: int = 15) -> List[str]:
+        """Returns recent asset IDs used for this client to rotate photography."""
+        records = [r for r in self.load_records() if r.client_id == client_id]
+        used = []
+        for r in reversed(records[-limit:]):
+            used.extend(r.asset_ids)
+        return used
+
     def is_duplicate_angle(self, client_id: str, service: str, focus: Optional[str] = None) -> bool:
         """Checks if the service was run very recently (last 2 runs)."""
         recent = self.get_recent_services(client_id, limit=2)

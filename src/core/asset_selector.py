@@ -1,7 +1,7 @@
 """Asset selection engine enforcing the strict 5-tier photo sourcing hierarchy."""
 
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from src.config import ASSETS_DIR, CLIENTS_DIR
 from src.core.client_manager import ClientManager
@@ -24,16 +24,35 @@ class AssetSelector:
         client_id: str,
         category: str,
         allow_stock: bool = False,
-        photo_index: int = 0
+        photo_index: int = 0,
+        exclude_asset_ids: Optional[List[str]] = None,
     ) -> AssetMetadata:
         """Selects the best available background photo adhering to Tier 1 -> Tier 5 priority."""
         # Tier 1: Client-provided project photography
         client_photos = self.client_manager.get_client_photos(client_id)
         if client_photos:
-            # Check for category keyword match in filename
-            cat_lower = category.lower()
-            matching_photos = [p for p in client_photos if cat_lower in Path(p).name.lower()]
-            candidates = matching_photos if matching_photos else client_photos
+            import re
+            words = set(
+                w for w in re.split(r"[_\W]+", category.lower())
+                if len(w) > 3 and w not in ["repair", "services", "elite", "construction"]
+            )
+            # Prioritize curated photos (directly in photos/, not in deep raw subdirectories)
+            curated = [p for p in client_photos if Path(p).parent.name == "photos"]
+            search_pool = curated if curated else client_photos
+
+            def tokens_of(path_str: str):
+                return set(t for t in re.split(r"[_\W]+", Path(path_str).stem.lower()) if t)
+
+            matching = [p for p in search_pool if tokens_of(p).intersection(words)]
+            if not matching and words:
+                matching = [p for p in client_photos if tokens_of(p).intersection(words)]
+
+            candidates = matching if matching else search_pool
+            if exclude_asset_ids:
+                fresh = [p for p in candidates if f"client_{Path(p).stem}" not in exclude_asset_ids]
+                if fresh:
+                    candidates = fresh
+
             selected_path = candidates[photo_index % len(candidates)]
             return AssetMetadata(
                 asset_id=f"client_{Path(selected_path).stem}",

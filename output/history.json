@@ -1,6 +1,6 @@
 {
-  "total_generated": 16,
-  "last_updated": "2026-09-06T03:27:35.326550+00:00",
+  "total_generated": 31,
+  "last_updated": "2026-09-06T03:36:03.618826+00:00",
   "records": [
     {
       "generation_id": "all-elite_composite_siding_20260905_230306_1",
@@ -369,6 +369,351 @@
       "qa_score": 100,
       "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_232735_2.png",
       "drive_file_id": "gdrive_mock_all-elite_roof_replacement_20260905_232735_2"
+    },
+    {
+      "generation_id": "all-elite_roof_repair_20260905_233320_1",
+      "timestamp": "2026-09-05T23:33:20.274248",
+      "client_id": "all-elite",
+      "campaign": "Roof Repair",
+      "service": "Roof Repair",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_DJI_0001_frame_1"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_repair_20260905_233320_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_vinyl_&_fiber_cement_siding_20260905_233320_2",
+      "timestamp": "2026-09-05T23:33:20.449682",
+      "client_id": "all-elite",
+      "campaign": "Vinyl & Fiber Cement Siding",
+      "service": "Vinyl & Fiber Cement Siding",
+      "archetype": "product_education",
+      "headline": "ENGINEERED COMFORT. TIMELESS BEAUTY.",
+      "reference_ids": [
+        "ref_siding_001"
+      ],
+      "asset_ids": [
+        "client_DJI_0001_frame_2"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_vinyl_&_fiber_cement_siding_20260905_233320_2.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_seamless_gutters_&_gutter_guards_20260905_233337_1",
+      "timestamp": "2026-09-05T23:33:37.114035",
+      "client_id": "all-elite",
+      "campaign": "Seamless Gutters & Gutter Guards",
+      "service": "Seamless Gutters & Gutter Guards",
+      "archetype": "hero_image",
+      "headline": "PROTECT YOUR HOME FOUNDATION.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_all_elite_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_seamless_gutters_&_gutter_guards_20260905_233337_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_replacement_windows_20260905_233337_2",
+      "timestamp": "2026-09-05T23:33:37.295891",
+      "client_id": "all-elite",
+      "campaign": "Replacement Windows",
+      "service": "Replacement Windows",
+      "archetype": "hero_image",
+      "headline": "SUPERIOR THERMAL PERFORMANCE.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_replacement_in_progress_tigerpaw_003"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_replacement_windows_20260905_233337_2.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_233339_1",
+      "timestamp": "2026-09-05T23:33:39.595331",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_all_elite_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_233339_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_233344_1",
+      "timestamp": "2026-09-05T23:33:44.816411",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_233344_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_vinyl_&_fiber_cement_siding_20260905_233350_1",
+      "timestamp": "2026-09-05T23:33:50.219258",
+      "client_id": "all-elite",
+      "campaign": "Vinyl & Fiber Cement Siding",
+      "service": "Vinyl & Fiber Cement Siding",
+      "archetype": "hero_image",
+      "headline": "TRANSFORM YOUR HOME EXTERIOR.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_replacement_in_progress_tigerpaw_003"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_vinyl_&_fiber_cement_siding_20260905_233350_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_vinyl_&_fiber_cement_siding_20260905_233417_1",
+      "timestamp": "2026-09-05T23:34:18.036359",
+      "client_id": "all-elite",
+      "campaign": "Vinyl & Fiber Cement Siding",
+      "service": "Vinyl & Fiber Cement Siding",
+      "archetype": "hero_image",
+      "headline": "TRANSFORM YOUR HOME EXTERIOR.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_siding_cresskill_luxury_curb_appeal_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_vinyl_&_fiber_cement_siding_20260905_233417_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_roof_repair_20260905_233421_1",
+      "timestamp": "2026-09-05T23:34:21.347689",
+      "client_id": "all-elite",
+      "campaign": "Roof Repair",
+      "service": "Roof Repair",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_repair_20260905_233421_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_composite_siding_20260905_233421_2",
+      "timestamp": "2026-09-05T23:34:21.529731",
+      "client_id": "all-elite",
+      "campaign": "Composite Siding",
+      "service": "Composite Siding",
+      "archetype": "product_education",
+      "headline": "ENGINEERED COMFORT. TIMELESS BEAUTY.",
+      "reference_ids": [
+        "ref_siding_001"
+      ],
+      "asset_ids": [
+        "client_siding_cresskill_luxury_curb_appeal_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_composite_siding_20260905_233421_2.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_architectural_roofing_20260905_233433_1",
+      "timestamp": "2026-09-05T23:34:33.237120",
+      "client_id": "all-elite",
+      "campaign": "Architectural Roofing",
+      "service": "Architectural Roofing",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_architectural_roofing_20260905_233433_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_233550_1",
+      "timestamp": "2026-09-05T23:35:50.703423",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_bergenfield_before_tearoff_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_233550_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_233556_1",
+      "timestamp": "2026-09-05T23:35:56.972538",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_completed_neighborhood_contrast_002"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_233556_1.png",
+      "drive_file_id": null
+    },
+    {
+      "generation_id": "all-elite_composite_siding_20260905_233603_1",
+      "timestamp": "2026-09-05T23:36:03.402760",
+      "client_id": "all-elite",
+      "campaign": "Composite Siding",
+      "service": "Composite Siding",
+      "archetype": "product_education",
+      "headline": "ENGINEERED COMFORT. TIMELESS BEAUTY.",
+      "reference_ids": [
+        "ref_siding_001"
+      ],
+      "asset_ids": [
+        "client_siding_cresskill_luxury_curb_appeal_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_composite_siding_20260905_233603_1.png",
+      "drive_file_id": "gdrive_mock_all-elite_composite_siding_20260905_233603_1"
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_233603_2",
+      "timestamp": "2026-09-05T23:36:03.618671",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_dotyrd_suburban_estate_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_233603_2.png",
+      "drive_file_id": "gdrive_mock_all-elite_roof_replacement_20260905_233603_2"
     }
   ]
 }

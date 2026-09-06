@@ -7,7 +7,8 @@
     "source_video": "DJI_0017.MP4",
     "frame_time_s": 34.677,
     "verified_by": "human-review",
-    "notes": "Extracted from 3840x2160 footage. Quality 0.76."
+    "notes": "Extracted from 3840x2160 footage. Quality 0.76.",
+    "stage": "after"
   },
   "quality_score": 0.7584,
   "client_id": "all-elite"

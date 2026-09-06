@@ -1,90 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T15:48:39+00:00",
+  "updated_at": "2026-09-06T16:02:03+00:00",
   "assets": [
-    {
-      "id": "assets:backgrounds:house_001",
-      "path": "assets/backgrounds/house_001.jpg",
-      "client_id": null,
-      "service": "general",
-      "tags": [
-        "backgrounds",
-        "house"
-      ],
-      "width": 1080,
-      "height": 1350,
-      "sha256": "c6e9cf024274c9d557029179f388c2cf41fe9a99383be6728c96dfc10be250cd",
-      "focal": {
-        "x": 0.16666666666666666,
-        "y": 0.5
-      },
-      "clear_regions": [
-        "top"
-      ],
-      "mean_luminance": 0.5737,
-      "contrast": 0.5322,
-      "is_portrait": true,
-      "provenance": {
-        "source_type": "internal",
-        "approval_status": "approved",
-        "origin_path": "/Users/johnpineda/Documents/Projects/flyer-generator/assets/backgrounds/house_001.jpg",
-        "project": "",
-        "address_label": "",
-        "stage": "",
-        "captured_at": "",
-        "camera": "",
-        "source_video": "",
-        "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
-        "verified_by": "folder-convention",
-        "notes": ""
-      },
-      "quality_score": 0.0,
-      "times_used": 0,
-      "last_used": "",
-      "added_at": "2026-09-06T15:48:37+00:00"
-    },
-    {
-      "id": "assets:gutters:gutters_001",
-      "path": "assets/gutters/gutters_001.jpg",
-      "client_id": null,
-      "service": "gutters",
-      "tags": [
-        "gutters"
-      ],
-      "width": 1080,
-      "height": 1350,
-      "sha256": "c6e9cf024274c9d557029179f388c2cf41fe9a99383be6728c96dfc10be250cd",
-      "focal": {
-        "x": 0.16666666666666666,
-        "y": 0.5
-      },
-      "clear_regions": [
-        "top"
-      ],
-      "mean_luminance": 0.5737,
-      "contrast": 0.5322,
-      "is_portrait": true,
-      "provenance": {
-        "source_type": "internal",
-        "approval_status": "approved",
-        "origin_path": "/Users/johnpineda/Documents/Projects/flyer-generator/assets/gutters/gutters_001.jpg",
-        "project": "",
-        "address_label": "",
-        "stage": "",
-        "captured_at": "",
-        "camera": "",
-        "source_video": "",
-        "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
-        "verified_by": "folder-convention",
-        "notes": ""
-      },
-      "quality_score": 0.0,
-      "times_used": 0,
-      "last_used": "",
-      "added_at": "2026-09-06T15:48:37+00:00"
-    },
     {
       "id": "assets:placeholders:general:placeholder-neighbourhood-street",
       "path": "assets/placeholders/general/placeholder-neighbourhood-street.jpg",
@@ -123,7 +40,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -171,7 +88,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -219,7 +136,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -267,7 +184,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -317,7 +234,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -371,7 +288,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -422,7 +339,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -469,7 +386,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -515,7 +432,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -563,7 +480,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -571,89 +488,6 @@
       "times_used": 1,
       "last_used": "2026-09-05T19:05:55-04:00",
       "added_at": "2026-09-05T23:01:34+00:00"
-    },
-    {
-      "id": "assets:roofing:roof_001",
-      "path": "assets/roofing/roof_001.jpg",
-      "client_id": null,
-      "service": "roofing",
-      "tags": [
-        "roof",
-        "roofing"
-      ],
-      "width": 1080,
-      "height": 1350,
-      "sha256": "c6e9cf024274c9d557029179f388c2cf41fe9a99383be6728c96dfc10be250cd",
-      "focal": {
-        "x": 0.16666666666666666,
-        "y": 0.5
-      },
-      "clear_regions": [
-        "top"
-      ],
-      "mean_luminance": 0.5737,
-      "contrast": 0.5322,
-      "is_portrait": true,
-      "provenance": {
-        "source_type": "internal",
-        "approval_status": "approved",
-        "origin_path": "/Users/johnpineda/Documents/Projects/flyer-generator/assets/roofing/roof_001.jpg",
-        "project": "",
-        "address_label": "",
-        "stage": "",
-        "captured_at": "",
-        "camera": "",
-        "source_video": "",
-        "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
-        "verified_by": "folder-convention",
-        "notes": ""
-      },
-      "quality_score": 0.0,
-      "times_used": 0,
-      "last_used": "",
-      "added_at": "2026-09-06T15:48:37+00:00"
-    },
-    {
-      "id": "assets:siding:siding_001",
-      "path": "assets/siding/siding_001.jpg",
-      "client_id": null,
-      "service": "siding",
-      "tags": [
-        "siding"
-      ],
-      "width": 1080,
-      "height": 1350,
-      "sha256": "c6e9cf024274c9d557029179f388c2cf41fe9a99383be6728c96dfc10be250cd",
-      "focal": {
-        "x": 0.16666666666666666,
-        "y": 0.5
-      },
-      "clear_regions": [
-        "top"
-      ],
-      "mean_luminance": 0.5737,
-      "contrast": 0.5322,
-      "is_portrait": true,
-      "provenance": {
-        "source_type": "internal",
-        "approval_status": "approved",
-        "origin_path": "/Users/johnpineda/Documents/Projects/flyer-generator/assets/siding/siding_001.jpg",
-        "project": "",
-        "address_label": "",
-        "stage": "",
-        "captured_at": "",
-        "camera": "",
-        "source_video": "",
-        "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
-        "verified_by": "folder-convention",
-        "notes": ""
-      },
-      "quality_score": 0.0,
-      "times_used": 0,
-      "last_used": "",
-      "added_at": "2026-09-06T15:48:37+00:00"
     },
     {
       "id": "clients:all-elite:assets:approved:dji_0002_frame_23s",
@@ -684,12 +518,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0002.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "during",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0002.MP4",
         "frame_time_s": 22.551,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 3840x2160 footage. Quality 0.76."
       },
@@ -727,12 +561,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0003.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "during",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0003.MP4",
         "frame_time_s": 22.917,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 3840x2160 footage. Quality 0.79."
       },
@@ -774,12 +608,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0017.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "after",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0017.MP4",
         "frame_time_s": 34.677,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 3840x2160 footage. Quality 0.76."
       },
@@ -817,12 +651,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0035.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "neutral",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0035.MP4",
         "frame_time_s": 43.956,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:14+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 3840x2160 footage. Quality 0.77."
       },
@@ -860,12 +694,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0085.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "neutral",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0085.MP4",
         "frame_time_s": 27.953,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 3840x2160 footage. Quality 0.79."
       },
@@ -903,12 +737,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0088.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "after",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0088.MP4",
         "frame_time_s": 4.156,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 3840x2160 footage. Quality 0.79."
       },
@@ -948,12 +782,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0161.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "neutral",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0161.MP4",
         "frame_time_s": 24.165,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 1920x1080 footage. Quality 0.78."
       },
@@ -991,12 +825,12 @@
         "origin_path": "/Volumes/Untitled/DCIM/101MEDIA/DJI_0162.MP4",
         "project": "",
         "address_label": "",
-        "stage": "",
+        "stage": "neutral",
         "captured_at": "",
         "camera": "",
         "source_video": "DJI_0162.MP4",
         "frame_time_s": 13.64,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "human-review",
         "notes": "Extracted from 1920x1080 footage. Quality 0.79."
       },
@@ -1040,7 +874,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1088,7 +922,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1132,7 +966,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1176,7 +1010,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1220,7 +1054,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1264,7 +1098,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:37+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1309,7 +1143,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1354,7 +1188,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1399,7 +1233,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1444,7 +1278,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1492,7 +1326,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1537,7 +1371,7 @@
         "camera": "",
         "source_video": "",
         "frame_time_s": null,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "folder-convention",
         "notes": ""
       },
@@ -1581,7 +1415,7 @@
         "camera": "",
         "source_video": "DJI_0004.MP4",
         "frame_time_s": 14.911,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.72."
       },
@@ -1625,7 +1459,7 @@
         "camera": "",
         "source_video": "DJI_0006.MP4",
         "frame_time_s": 3.737,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.69."
       },
@@ -1669,7 +1503,7 @@
         "camera": "",
         "source_video": "DJI_0012.MP4",
         "frame_time_s": 59.9,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -1713,7 +1547,7 @@
         "camera": "",
         "source_video": "DJI_0014.MP4",
         "frame_time_s": 9.816,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -1757,7 +1591,7 @@
         "camera": "",
         "source_video": "DJI_0020.MP4",
         "frame_time_s": 23.503,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:15+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -1801,7 +1635,7 @@
         "camera": "",
         "source_video": "DJI_0021.MP4",
         "frame_time_s": 0.5,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.69."
       },
@@ -1845,7 +1679,7 @@
         "camera": "",
         "source_video": "DJI_0022.MP4",
         "frame_time_s": 6.122,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -1889,7 +1723,7 @@
         "camera": "",
         "source_video": "DJI_0025.MP4",
         "frame_time_s": 2.667,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -1933,7 +1767,7 @@
         "camera": "",
         "source_video": "DJI_0029.MP4",
         "frame_time_s": 33.539,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.76."
       },
@@ -1977,7 +1811,7 @@
         "camera": "",
         "source_video": "DJI_0030.MP4",
         "frame_time_s": 23.001,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -2021,7 +1855,7 @@
         "camera": "",
         "source_video": "DJI_0033.MP4",
         "frame_time_s": 27.225,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -2065,7 +1899,7 @@
         "camera": "",
         "source_video": "DJI_0036.MP4",
         "frame_time_s": 22.903,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.75."
       },
@@ -2109,7 +1943,7 @@
         "camera": "",
         "source_video": "DJI_0042.MP4",
         "frame_time_s": 30.669,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -2153,7 +1987,7 @@
         "camera": "",
         "source_video": "DJI_0045.MP4",
         "frame_time_s": 22.433,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -2197,7 +2031,7 @@
         "camera": "",
         "source_video": "DJI_0046.MP4",
         "frame_time_s": 27.542,
-        "ingested_at": "2026-09-06T15:48:38+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -2241,7 +2075,7 @@
         "camera": "",
         "source_video": "DJI_0047.MP4",
         "frame_time_s": 38.788,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.74."
       },
@@ -2287,7 +2121,7 @@
         "camera": "",
         "source_video": "DJI_0048.MP4",
         "frame_time_s": 25.898,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -2331,7 +2165,7 @@
         "camera": "",
         "source_video": "DJI_0059.MP4",
         "frame_time_s": 32.097,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.72."
       },
@@ -2375,7 +2209,7 @@
         "camera": "",
         "source_video": "DJI_0060.MP4",
         "frame_time_s": 30.831,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.72."
       },
@@ -2419,7 +2253,7 @@
         "camera": "",
         "source_video": "DJI_0062.MP4",
         "frame_time_s": 8.574,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -2463,7 +2297,7 @@
         "camera": "",
         "source_video": "DJI_0063.MP4",
         "frame_time_s": 16.351,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -2507,7 +2341,7 @@
         "camera": "",
         "source_video": "DJI_0064.MP4",
         "frame_time_s": 22.727,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -2551,7 +2385,7 @@
         "camera": "",
         "source_video": "DJI_0069.MP4",
         "frame_time_s": 17.794,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -2595,7 +2429,7 @@
         "camera": "",
         "source_video": "DJI_0077.MP4",
         "frame_time_s": 19.967,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.70."
       },
@@ -2639,7 +2473,7 @@
         "camera": "",
         "source_video": "DJI_0079.MP4",
         "frame_time_s": 22.018,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -2683,7 +2517,7 @@
         "camera": "",
         "source_video": "DJI_0086.MP4",
         "frame_time_s": 34.982,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:16+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.71."
       },
@@ -2727,7 +2561,7 @@
         "camera": "",
         "source_video": "DJI_0089.MP4",
         "frame_time_s": 22.813,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.74."
       },
@@ -2771,7 +2605,7 @@
         "camera": "",
         "source_video": "DJI_0095.MP4",
         "frame_time_s": 30.332,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.72."
       },
@@ -2815,7 +2649,7 @@
         "camera": "",
         "source_video": "DJI_0098.MP4",
         "frame_time_s": 51.933,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.73."
       },
@@ -2859,7 +2693,7 @@
         "camera": "",
         "source_video": "DJI_0099.MP4",
         "frame_time_s": 13.142,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.73."
       },
@@ -2903,7 +2737,7 @@
         "camera": "",
         "source_video": "DJI_0100.MP4",
         "frame_time_s": 28.717,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.75."
       },
@@ -2947,7 +2781,7 @@
         "camera": "",
         "source_video": "DJI_0101.MP4",
         "frame_time_s": 3.672,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.74."
       },
@@ -2991,7 +2825,7 @@
         "camera": "",
         "source_video": "DJI_0104.MP4",
         "frame_time_s": 13.404,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 3840x2160 footage. Quality 0.73."
       },
@@ -3035,7 +2869,7 @@
         "camera": "",
         "source_video": "DJI_0148.MP4",
         "frame_time_s": 31.624,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.71."
       },
@@ -3081,7 +2915,7 @@
         "camera": "",
         "source_video": "DJI_0155.MP4",
         "frame_time_s": 47.256,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.70."
       },
@@ -3125,7 +2959,7 @@
         "camera": "",
         "source_video": "DJI_0158.MP4",
         "frame_time_s": 4.292,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.72."
       },
@@ -3169,7 +3003,7 @@
         "camera": "",
         "source_video": "DJI_0159.MP4",
         "frame_time_s": 22.58,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.75."
       },
@@ -3213,7 +3047,7 @@
         "camera": "",
         "source_video": "DJI_0160.MP4",
         "frame_time_s": 23.725,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.75."
       },
@@ -3257,7 +3091,7 @@
         "camera": "",
         "source_video": "DJI_0170.MP4",
         "frame_time_s": 19.937,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.76."
       },
@@ -3305,7 +3139,7 @@
         "camera": "",
         "source_video": "DJI_0211.MP4",
         "frame_time_s": 30.214,
-        "ingested_at": "2026-09-06T15:48:39+00:00",
+        "ingested_at": "2026-09-06T16:01:17+00:00",
         "verified_by": "media-ingest",
         "notes": "Extracted from 1920x1080 footage. Quality 0.70."
       },

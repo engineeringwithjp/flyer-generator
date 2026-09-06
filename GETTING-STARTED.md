@@ -260,6 +260,90 @@ protecting the client, not a crash.
 
 ---
 
+## Working on it again later
+
+### Where the project actually lives
+
+```
+~/Documents/Projects/flyer-generator        <- the real project. This is it.
+```
+
+That folder is the git repository, and everything in it is pushed to GitHub.
+Nothing else on your Mac is needed.
+
+### About `.claude/worktrees/`
+
+Claude Code sometimes makes a **worktree** — a scratch copy of a project — so it
+can work without disturbing your files. They are disposable by design.
+
+The one currently sitting in this project is stale: it is an older snapshot,
+and it does not even belong to this repository (it belongs to a different repo
+that happens to be checked out in your home folder). It is roughly 790 MB of
+duplicate.
+
+**Deleting it loses nothing.** To remove it cleanly, so git's bookkeeping stays
+tidy:
+
+```bash
+git -C ~ worktree remove --force ~/Documents/Projects/flyer-generator/.claude/worktrees/flyer-generation-agent-35692d
+git -C ~ worktree prune
+```
+
+If that reports an error, the blunt version is fine too:
+
+```bash
+rm -rf ~/Documents/Projects/flyer-generator/.claude/worktrees
+git -C ~ worktree prune
+```
+
+### Getting revisions from Claude Code afterwards
+
+Nothing changes. Open the project the way you normally would:
+
+```bash
+cd ~/Documents/Projects/flyer-generator
+claude
+```
+
+Then ask for what you want — *"make the headline bigger"*, *"add a layout for
+gutter guards"*, *"the red is too bright"*. Claude reads the project, makes the
+change, and you commit it.
+
+If Claude Code decides it wants a worktree for a particular job, it creates a
+**fresh** one automatically and cleans it up afterwards. You never have to make
+one yourself, and you never have to keep an old one around.
+
+### If you ever do lose the folder
+
+```bash
+cd ~/Documents/Projects
+git clone https://github.com/engineeringwithjp/flyer-generator.git
+cd flyer-generator
+make install
+flyer drive-setup --write
+```
+
+You would need to re-add two things that are deliberately not in git: your
+`.env` (secrets) and `clients/all-elite/assets/raw/` (large unreviewed media).
+Everything else — code, design system, approved photos, references, history —
+comes back with the clone.
+
+### Rolling back a change you dislike
+
+```bash
+git tag -n                  # the checkpoints
+git checkout v0.6.0         # look at an older state
+git checkout main           # come back
+```
+
+Or undo just one thing:
+
+```bash
+git checkout v0.6.0 -- design-system/principles/principles.json
+```
+
+---
+
 ## The one-line version
 
 ```bash

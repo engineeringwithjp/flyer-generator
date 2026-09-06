@@ -6,9 +6,18 @@ on:
   schedule:
     # GitHub Actions cron is UTC only, so 10:07 America/New_York is two
     # different UTC times across the year. Both fire; `flyer schedule-check`
-    # decides which one is actually 10:07 locally and the other exits early.
+    # decides which one is really 10:07 locally and the other exits in seconds.
     - cron: "7 14 * * 1-5"   # 10:07 EDT (Mar-Nov)
     - cron: "7 15 * * 1-5"   # 10:07 EST (Nov-Mar)
+
+    # TO RUN EVERY FEW HOURS INSTEAD: comment out the two lines above,
+    # uncomment the line below, and set these repository variables:
+    #   SCHEDULE_MODE=interval
+    #   SCHEDULE_INTERVAL_HOURS=3
+    #   SCHEDULE_WINDOW=08:00-20:00
+    # The hourly trigger is deliberate: it is the only DST-proof way to hit
+    # arbitrary local slots. Runs outside a slot exit in about 20 seconds.
+    # - cron: "7 * * * *"
 
   workflow_dispatch:
     inputs:
@@ -69,16 +78,21 @@ jobs:
 
       # A scheduled run only proceeds at the real local time. A manual run
       # always proceeds.
-      - name: Is it 10:07 in New Jersey?
+      - name: Is this a scheduled slot in New Jersey?
         id: window
         if: github.event_name == 'schedule'
+        env:
+          SCHEDULE_MODE: ${{ vars.SCHEDULE_MODE || 'daily' }}
+          SCHEDULE_INTERVAL_HOURS: ${{ vars.SCHEDULE_INTERVAL_HOURS || '3' }}
+          SCHEDULE_WINDOW: ${{ vars.SCHEDULE_WINDOW || '08:00-20:00' }}
+          SCHEDULE_DAYS: ${{ vars.SCHEDULE_DAYS || 'mon-fri' }}
         run: python -m app.cli schedule-check --tolerance 40 || echo "should_run=false" >> "$GITHUB_OUTPUT"
 
       - name: Skip the duplicate UTC slot
         if: github.event_name == 'schedule' && steps.window.outputs.should_run != 'true'
         run: |
           echo "### Skipped" >> "$GITHUB_STEP_SUMMARY"
-          echo "This cron slot is not 10:07 in \`America/New_York\` today. The other slot handles it." >> "$GITHUB_STEP_SUMMARY"
+          echo "Not a scheduled slot in \`America/New_York\` right now." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Validate configuration
         if: github.event_name != 'schedule' || steps.window.outputs.should_run == 'true'
@@ -94,6 +108,10 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-opus-5' }}
+          SCHEDULE_MODE: ${{ vars.SCHEDULE_MODE || 'daily' }}
+          SCHEDULE_INTERVAL_HOURS: ${{ vars.SCHEDULE_INTERVAL_HOURS || '3' }}
+          SCHEDULE_WINDOW: ${{ vars.SCHEDULE_WINDOW || '08:00-20:00' }}
+          SCHEDULE_DAYS: ${{ vars.SCHEDULE_DAYS || 'mon-fri' }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}

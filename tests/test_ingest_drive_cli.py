@@ -345,10 +345,15 @@ def test_feedback_on_an_unknown_flyer_fails(repo, capsys):
     assert _run(["feedback", "not-a-flyer", "approve"]) == 1
 
 
-def test_cli_schedule_check_reports_a_decision(repo, capsys):
+def test_cli_schedule_check_reports_a_decision(repo, capsys, monkeypatch):
+    from app.config import reset_settings_cache
+
+    monkeypatch.setenv("SCHEDULE_DAYS", "all")
+    reset_settings_cache()
     code = _run(["schedule-check", "--tolerance", "1440"])
     assert code == 0
-    assert "Should run: yes" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "Should run" in out and "Timezone" in out
 
 
 def test_cli_gallery_builds_a_page(repo, tmp_path, capsys):

@@ -357,23 +357,26 @@ def cmd_schedule_check(args: argparse.Namespace) -> int:
     GitHub Actions cron is UTC-only, so the workflow fires on both possible UTC
     hours and this command decides which one is the real 10:07 locally.
     """
-    from datetime import datetime
-    from zoneinfo import ZoneInfo
+    from .schedule import decide
 
     settings = get_settings()
-    now = datetime.now(ZoneInfo(settings.schedule_timezone))
-    target_hour, target_minute = (int(p) for p in settings.schedule_time.split(":"))
+    result = decide(tolerance_minutes=args.tolerance)
 
-    minutes_now = now.hour * 60 + now.minute
-    minutes_target = target_hour * 60 + target_minute
-    within = abs(minutes_now - minutes_target) <= args.tolerance
+    print(f"Timezone   {settings.schedule_timezone}")
+    print(f"Now        {result.local_time}")
+    if result.mode == "interval":
+        print(
+            f"Schedule   every {settings.schedule_interval_hours}h within "
+            f"{settings.schedule_window} on {settings.schedule_days}"
+        )
+    else:
+        print(f"Schedule   {settings.schedule_time} on {settings.schedule_days}")
+    verdict = f"{GREEN}yes{RESET}" if result.should_run else f"{DIM}no{RESET}"
+    print(f"Should run {verdict}  ({result.reason})")
 
-    print(f"Local time in {settings.schedule_timezone}: {now:%Y-%m-%d %H:%M %Z}")
-    print(f"Target: {settings.schedule_time} (+/-{args.tolerance} min)")
-    print(f"Should run: {'yes' if within else 'no'}")
-    _set_output("should_run", "true" if within else "false")
-    _set_output("local_date", now.date().isoformat())
-    return 0 if within else 1
+    _set_output("should_run", "true" if result.should_run else "false")
+    _set_output("local_date", result.local_date)
+    return 0 if result.should_run else 1
 
 
 def cmd_assets(args: argparse.Namespace) -> int:

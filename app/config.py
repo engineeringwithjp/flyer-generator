@@ -165,6 +165,10 @@ class Settings:
     default_flyer_count: int
     schedule_timezone: str
     schedule_time: str
+    schedule_mode: str
+    schedule_interval_hours: int
+    schedule_window: str
+    schedule_days: str
     output_width: int
     output_height: int
     output_format: str
@@ -241,6 +245,10 @@ def load_settings(env_file: Path | None = None) -> Settings:
         default_flyer_count=_int("DEFAULT_FLYER_COUNT", 2),
         schedule_timezone=_clean("SCHEDULE_TIMEZONE") or "America/New_York",
         schedule_time=_clean("SCHEDULE_TIME") or "10:07",
+        schedule_mode=(_clean("SCHEDULE_MODE") or "daily").lower(),
+        schedule_interval_hours=_int("SCHEDULE_INTERVAL_HOURS", 3),
+        schedule_window=_clean("SCHEDULE_WINDOW") or "08:00-20:00",
+        schedule_days=(_clean("SCHEDULE_DAYS") or "mon-fri").lower(),
         output_width=_int("OUTPUT_WIDTH", 1080),
         output_height=_int("OUTPUT_HEIGHT", 1350),
         output_format=(_clean("OUTPUT_FORMAT") or "PNG").upper(),

@@ -5,8 +5,9 @@ Analysed for design DNA only. No wording, logo, offer or trade dress from any of
 these is reusable: three are competitors (Arruda Roofing, Abraham Roofing), one
 is a manufacturer (IKO), one is an agency (FARM).
 
-**The image files were pasted into chat, not committed.** Drop them into
-`references/inbox/` to have them catalogued with IDs and scored by the selector.
+**The files are now in `references/inbox/`**, converted from the operator's HEIC
+screenshots. Run `flyer ingest-reference` (needs `ANTHROPIC_API_KEY`) to have
+them catalogued with ids and scored by the selector.
 
 ## The five
 
@@ -17,6 +18,35 @@ is a manufacturer (IKO), one is an agency (FARM).
 | 3 | Abraham Roofing | Aerial roof. Logo top-centre. Large headline, three-line support. Four accent pill labels with thin-line icons placed spatially over the roof. Accent pill CTA + phone at base |
 | 4 | IKO (manufacturer) | Roof photo with an angled white panel cut across the lower third holding the logo. Headline top-left on sky. Very high white space |
 | 5 | Abraham Roofing | Aerial roof. Headline with one word accented. Four white rounded cards, each a small photo + heading + two short lines. Solid accent CTA bar + phone |
+| 6 | Harford Roofing | Full-bleed photo with **no scrim at all**. Enormous white geometric-sans headline over three staggered lines. Logo top-right. No chips, no CTA, no contact bar. A seasonal joke carries it |
+
+## Addendum: the Harford flyer changes the picture
+
+Reviewed later than the others, and it is the outlier worth learning from.
+
+It has **none of the furniture**: no scrim, no chips, no CTA pill, no contact
+strip, no accent colour. One photograph, one idea, three lines of white type.
+It is the most confident piece in the set and the most "brand agency" of them.
+
+That is a distinct archetype, not a variation of `hero-editorial`:
+
+| | `hero-editorial` | `statement` |
+| --- | --- | --- |
+| Scrim | heavy, top and base | none, or barely any |
+| Headline | condensed, tight, one accent word | large geometric sans, all white |
+| Support | accent pill | none |
+| Chips | yes | none |
+| CTA | pill with phone | none |
+| Logo | bottom-right, small | top corner |
+| Best for | service promotion, the workhorse | seasonal, brand, a single joke or idea |
+
+**It only works when the photograph can carry it.** A busy aerial would swallow
+white type with no scrim. `statement` therefore requires an asset with a large
+calm region, which the frame scorer already measures as `negative_space`.
+
+Also worth noting: the headline lines are **horizontally staggered**, each
+starting further right than the last. That is a deliberate device, not
+centring.
 
 ## Shared DNA — this is the house style
 

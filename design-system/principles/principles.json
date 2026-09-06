@@ -222,6 +222,15 @@
       "text_density": "medium",
       "cta": "bottom-center",
       "treatment": "High contrast, restrained. Never fabricate a storm or a deadline"
+    },
+    {
+      "id": "statement",
+      "layout": "statement",
+      "use_case": "Seasonal posts, brand moments, a single idea or joke. Not service promotion.",
+      "image_hierarchy": "Photograph completely unobstructed, no scrim",
+      "text_density": "low",
+      "cta": "none - this archetype deliberately has no call to action",
+      "treatment": "One enormous white headline over staggered lines, mark in a top corner, nothing else. Requires a photograph with a genuinely calm region; a busy aerial will swallow the type."
     }
   ],
   "typography": [

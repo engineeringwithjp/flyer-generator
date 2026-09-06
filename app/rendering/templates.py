@@ -415,7 +415,52 @@ def build_hero_editorial(r: FlyerRenderer) -> None:
         r.bullets(copy.bullets, x, y, width, on_dark=True, align="left")
 
 
+def build_statement(r: FlyerRenderer) -> None:
+    """One photograph, one idea, three lines of white type. Nothing else.
+
+    Modelled on the Harford reference, the most confident piece in the operator's
+    set. It has no scrim, no chips, no CTA and no accent colour, which is exactly
+    why it works: the photograph is completely unobstructed.
+
+    It only holds up when the image has somewhere calm for the type, so the
+    layout leans on a soft shadow rather than a scrim, and the selector should
+    be given an asset with real negative space.
+    """
+    copy = r.spec.text
+
+    r.photo_panel(
+        (0, 0, r.width, r.height),
+        r.spec.image.asset_id,
+        r.spec.image.crop,
+        r.spec.image.grayscale,
+    )
+    # A whisper of a scrim only. Anything heavier and it stops being this layout.
+    if r.spec.image.overlay != "none":
+        r.overlay_panel(
+            (0, 0, r.width, r.height), "dark_flat", min(r.spec.image.overlay_strength, 0.22)
+        )
+
+    r.logo("top-right")
+
+    x, width = r.grid.left, r.grid.content_width
+    y = r.grid.y(0.22)
+    y = r.headline_staggered(copy.headline, x, y, width, r.s(620))
+
+    # A single quiet line at the base, if there is one. No pill, no bar.
+    if copy.support:
+        r.support(
+            copy.support,
+            x,
+            r.grid.bottom - r.s(70),
+            width,
+            r.s(70),
+            on_dark=True,
+            align="left",
+        )
+
+
 LAYOUT_BUILDERS: dict[str, Builder] = {
+    "statement": build_statement,
     "hero-editorial": build_hero_editorial,
     "hero-full": build_hero_full,
     "banner-lower-third": build_banner_lower_third,

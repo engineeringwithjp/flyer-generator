@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 from ..config import get_settings
 from ..errors import RenderError
@@ -720,6 +720,63 @@ class FlyerRenderer:
         box = (x, y, x + bar_width, y + bar_height)
         self.reserve(box)
         return box
+
+    def headline_staggered(
+        self,
+        text: str,
+        x: int,
+        y: int,
+        width: int,
+        max_height: int,
+        max_size: int | None = None,
+        stagger: float = 0.16,
+    ) -> int:
+        """Large white headline whose lines step progressively to the right.
+
+        The device in the Harford reference. Each line starts further in than
+        the last, which gives a plain white headline movement without needing a
+        scrim, an accent or any other furniture.
+        """
+        # The stagger eats into the usable width: the last line starts furthest
+        # right, so fit the type to what is left or it runs off the edge.
+        usable = int(width * (1.0 - stagger))
+        fitted = fit_text(
+            text.upper(),
+            self.fonts,
+            "display",
+            usable,
+            max_height,
+            max_size or self.s(150),
+            self.s(56),
+            line_spacing=1.02,
+            max_lines=3,
+        )
+        if not fitted.lines:
+            return y
+
+        step = int(width * stagger / max(len(fitted.lines) - 1, 1))
+        cursor = y
+        for index, line in enumerate(fitted.lines):
+            self._draw_soft_shadow(line, x + step * index, cursor, fitted.font)
+            self.draw.text((x + step * index, cursor), line, font=fitted.font, fill=self.on_image)
+            cursor += fitted.line_height
+
+        self.reserve((x, y, x + width, cursor))
+        return cursor
+
+    def _draw_soft_shadow(self, text: str, x: int, y: int, font) -> None:
+        """A faint drop shadow so white type survives an unscrimmed photo.
+
+        The `statement` layout deliberately has no scrim, so the type needs its
+        own separation from whatever is behind it.
+        """
+        offset = max(self.s(3), 1)
+        shadow = Image.new("RGBA", (self.width, self.height), (0, 0, 0, 0))
+        ImageDraw.Draw(shadow).text((x + offset, y + offset), text, font=font, fill=(0, 0, 0, 90))
+        shadow = shadow.filter(ImageFilter.GaussianBlur(radius=self.s(6)))
+        self.image.paste(
+            Image.alpha_composite(self.image.convert("RGBA"), shadow).convert("RGB"), (0, 0)
+        )
 
     def support(
         self,

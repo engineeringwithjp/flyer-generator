@@ -56,6 +56,14 @@
       "text_density": "low",
       "cta_position": "bottom-center",
       "needs_photo": true
+    },
+    "statement": {
+      "template_family": "minimal",
+      "description": "Full-bleed photography with no scrim. One enormous white headline over staggered lines, the mark in a top corner, and nothing else. For seasonal and brand posts where a single idea carries the flyer.",
+      "image_slots": 1,
+      "text_density": "low",
+      "cta_position": "none",
+      "needs_photo": true
     }
   },
   "canvas_presets": {

@@ -79,7 +79,7 @@ def generate_daily_flyers(
 
         # 4. Select Reference & Asset
         ref = ref_selector.select_reference(plan["service"], preferred_archetype=plan["archetype"])
-        bg_asset = asset_selector.select_background(client_id, plan["service"])
+        bg_asset = asset_selector.select_background(client_id, plan["service"], photo_index=i - 1)
         logo_path = client_mgr.get_client_logo(client_id)
 
         print(f"[Reference] Selected: {ref.id} ({ref.name}) - Archetype: {ref.archetype}")

@@ -46,12 +46,12 @@ class ClientManager:
         return None
 
     def get_client_photos(self, client_id: str) -> List[str]:
-        """Finds all uploaded property photos for a client."""
+        """Finds all uploaded property photos for a client recursively."""
         photos_dir = self.clients_dir / client_id / "photos"
         if not photos_dir.exists():
             return []
 
         photos = []
-        for ext in ["*.jpg", "*.jpeg", "*.png"]:
-            photos.extend([str(p) for p in photos_dir.glob(ext)])
-        return sorted(photos)
+        for ext in ["*.jpg", "*.jpeg", "*.png", "*.JPG", "*.PNG"]:
+            photos.extend([str(p) for p in photos_dir.rglob(ext)])
+        return sorted(list(set(photos)))

@@ -23,7 +23,8 @@ class AssetSelector:
         self,
         client_id: str,
         category: str,
-        allow_stock: bool = False
+        allow_stock: bool = False,
+        photo_index: int = 0
     ) -> AssetMetadata:
         """Selects the best available background photo adhering to Tier 1 -> Tier 5 priority."""
         # Tier 1: Client-provided project photography
@@ -32,7 +33,8 @@ class AssetSelector:
             # Check for category keyword match in filename
             cat_lower = category.lower()
             matching_photos = [p for p in client_photos if cat_lower in Path(p).name.lower()]
-            selected_path = matching_photos[0] if matching_photos else client_photos[0]
+            candidates = matching_photos if matching_photos else client_photos
+            selected_path = candidates[photo_index % len(candidates)]
             return AssetMetadata(
                 asset_id=f"client_{Path(selected_path).stem}",
                 category=category,

@@ -33,6 +33,9 @@ Thumbs.db
 .vscode/
 *.swp
 
+# Raw drone media extractions (keep repo lightweight)
+clients/*/photos/drone_media/
+
 # Output Artifacts (Keep directory structure via .gitkeep)
 output/202*/*
 !output/202*/.gitkeep

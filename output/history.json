@@ -1,6 +1,6 @@
 {
-  "total_generated": 10,
-  "last_updated": "2026-09-06T03:10:16.450773+00:00",
+  "total_generated": 16,
+  "last_updated": "2026-09-06T03:27:35.326550+00:00",
   "records": [
     {
       "generation_id": "all-elite_composite_siding_20260905_230306_1",
@@ -231,6 +231,144 @@
       "qa_score": 100,
       "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_231016_2.png",
       "drive_file_id": "gdrive_mock_all-elite_roof_replacement_20260905_231016_2"
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_232516_1",
+      "timestamp": "2026-09-05T23:25:16.883093",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_roof_all_elite_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_232516_1.png",
+      "drive_file_id": "gdrive_mock_all-elite_roof_replacement_20260905_232516_1"
+    },
+    {
+      "generation_id": "all-elite_composite_siding_20260905_232516_2",
+      "timestamp": "2026-09-05T23:25:16.920441",
+      "client_id": "all-elite",
+      "campaign": "Composite Siding",
+      "service": "Composite Siding",
+      "archetype": "product_education",
+      "headline": "TRANSFORM YOUR HOME EXTERIOR.",
+      "reference_ids": [
+        "ref_siding_001"
+      ],
+      "asset_ids": [
+        "client_roof_all_elite_001"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_composite_siding_20260905_232516_2.png",
+      "drive_file_id": "gdrive_mock_all-elite_composite_siding_20260905_232516_2"
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_232558_1",
+      "timestamp": "2026-09-05T23:25:58.268613",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_DJI_0001_frame_1"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_232558_1.png",
+      "drive_file_id": "gdrive_mock_all-elite_roof_replacement_20260905_232558_1"
+    },
+    {
+      "generation_id": "all-elite_composite_siding_20260905_232558_2",
+      "timestamp": "2026-09-05T23:25:58.463860",
+      "client_id": "all-elite",
+      "campaign": "Composite Siding",
+      "service": "Composite Siding",
+      "archetype": "product_education",
+      "headline": "TRANSFORM YOUR HOME EXTERIOR.",
+      "reference_ids": [
+        "ref_siding_001"
+      ],
+      "asset_ids": [
+        "client_DJI_0001_frame_2"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_composite_siding_20260905_232558_2.png",
+      "drive_file_id": "gdrive_mock_all-elite_composite_siding_20260905_232558_2"
+    },
+    {
+      "generation_id": "all-elite_composite_siding_20260905_232734_1",
+      "timestamp": "2026-09-05T23:27:35.143003",
+      "client_id": "all-elite",
+      "campaign": "Composite Siding",
+      "service": "Composite Siding",
+      "archetype": "product_education",
+      "headline": "ENGINEERED COMFORT. TIMELESS BEAUTY.",
+      "reference_ids": [
+        "ref_siding_001"
+      ],
+      "asset_ids": [
+        "client_DJI_0001_frame_1"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_composite_siding_20260905_232734_1.png",
+      "drive_file_id": "gdrive_mock_all-elite_composite_siding_20260905_232734_1"
+    },
+    {
+      "generation_id": "all-elite_roof_replacement_20260905_232735_2",
+      "timestamp": "2026-09-05T23:27:35.326446",
+      "client_id": "all-elite",
+      "campaign": "Roof Replacement",
+      "service": "Roof Replacement",
+      "archetype": "hero_image",
+      "headline": "YOUR ROOF DESERVES BETTER.",
+      "reference_ids": [
+        "ref_roof_001"
+      ],
+      "asset_ids": [
+        "client_DJI_0001_frame_2"
+      ],
+      "tools_used": [
+        "internal_renderer",
+        "claude_skill"
+      ],
+      "renderer": "deterministic_pillow",
+      "qa_score": 100,
+      "output_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026/09-05/all-elite_roof_replacement_20260905_232735_2.png",
+      "drive_file_id": "gdrive_mock_all-elite_roof_replacement_20260905_232735_2"
     }
   ]
 }

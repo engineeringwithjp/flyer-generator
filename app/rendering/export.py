@@ -24,8 +24,17 @@ def export_flyer(
         if fmt == "PNG":
             image.save(path, format="PNG", optimize=True)
         elif fmt in {"JPG", "JPEG"}:
+            # subsampling=0 keeps full chroma resolution. The default 4:2:0
+            # halves it, which is invisible on photographs but puts a coloured
+            # fringe around saturated type - and a flyer is mostly saturated
+            # type on a photograph.
             image.convert("RGB").save(
-                path, format="JPEG", quality=quality, optimize=True, progressive=True
+                path,
+                format="JPEG",
+                quality=quality,
+                optimize=True,
+                progressive=True,
+                subsampling=0,
             )
         else:
             raise RenderError(f"Unsupported output format {fmt!r}; use PNG or JPEG")

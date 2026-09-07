@@ -176,6 +176,7 @@ class Settings:
 
     # --- disk hygiene ---
     asset_max_edge: int
+    photo_grade: str
     output_retention_days: int
     delete_after_upload: bool
 
@@ -268,13 +269,20 @@ def load_settings(env_file: Path | None = None) -> Settings:
         schedule_interval_hours=_int("SCHEDULE_INTERVAL_HOURS", 3),
         schedule_window=_clean("SCHEDULE_WINDOW") or "08:00-20:00",
         schedule_days=(_clean("SCHEDULE_DAYS") or "mon-fri").lower(),
-        output_width=_int("OUTPUT_WIDTH", 1080),
-        output_height=_int("OUTPUT_HEIGHT", 1350),
+        # 2160x2700 is the same 4:5 frame Instagram wants, at twice the linear
+        # resolution of the old 1080x1350. The source photography is 4056px
+        # wide, so this is still a downscale - nothing is being invented - but
+        # the flyer now holds up full-screen on a retina display and prints
+        # cleanly at 7x9in / 300dpi, which the 1080px version did not.
+        output_width=_int("OUTPUT_WIDTH", 2160),
+        output_height=_int("OUTPUT_HEIGHT", 2700),
         output_format=(_clean("OUTPUT_FORMAT") or "PNG").upper(),
-        # A 1080x1350 flyer never needs more than ~2400px on the long edge,
-        # even after a focal crop. Storing 4K originals wastes an order of
-        # magnitude of disk for no visible gain.
-        asset_max_edge=_int("ASSET_MAX_EDGE", 2400),
+        # Must stay above the canvas long edge with room for a focal crop,
+        # otherwise the library becomes the resolution ceiling.
+        asset_max_edge=_int("ASSET_MAX_EDGE", 3600),
+        # Finishing recipe applied to every photograph: "house", "light" or
+        # "none". See app/rendering/finishing.py.
+        photo_grade=(_clean("PHOTO_GRADE") or "house").lower(),
         output_retention_days=_int("OUTPUT_RETENTION_DAYS", 7),
         delete_after_upload=_bool("DELETE_AFTER_UPLOAD"),
         offline=_bool("FLYER_OFFLINE"),

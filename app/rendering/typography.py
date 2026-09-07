@@ -12,10 +12,12 @@ headline degrades gracefully instead of overflowing the canvas.
 
 from __future__ import annotations
 
+import contextlib
 import platform
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 from PIL import ImageDraw, ImageFont
 
@@ -155,7 +157,9 @@ class FontLibrary:
         path = self._resolve_path(role, role in BOLD_ROLES)
         if path:
             try:
-                return ImageFont.truetype(path, size)
+                font = ImageFont.truetype(path, size)
+                _apply_weight(font, path, role)
+                return font
             except OSError as exc:  # pragma: no cover - corrupt font file
                 log.warning("Could not load font %s: %s", path, exc)
         if role not in self._warned:
@@ -174,6 +178,59 @@ class FontLibrary:
         if not self.fonts_dir.exists():
             return []
         return sorted(p.name for p in self.fonts_dir.iterdir() if p.suffix in {".ttf", ".otf"})
+
+
+# Weight to request on a variable font, per role. Without this Pillow renders a
+# variable font at its default instance, which is usually Regular, so a file
+# named "-Bold" would come out thin.
+ROLE_WEIGHT = {
+    "display": 800,
+    "headline": 800,
+    "bold": 700,
+    "subhead": 500,
+    "body": 400,
+}
+
+
+def _apply_weight(font: Font, path: str, role: str) -> None:
+    """Set the weight axis on a variable font. A no-op for static fonts.
+
+    Pillow only exposes the variation API on ``FreeTypeFont``, and even there
+    only when the build has FreeType's multiple-master support, so everything
+    is reached through ``getattr`` and the axis dictionaries are treated as
+    untyped data.
+    """
+    setter = getattr(font, "set_variation_by_axes", None)
+    reader = getattr(font, "get_variation_axes", None)
+    if not callable(setter) or not callable(reader):
+        return
+    try:
+        axes: list[dict[str, Any]] = list(reader())
+    except Exception:
+        return  # static font, or FreeType built without variation support
+    if not axes:
+        return
+
+    target = ROLE_WEIGHT.get(role, 400)
+    values: list[float] = []
+    for axis in axes:
+        raw_name = axis.get("name", "")
+        name = raw_name.decode(errors="ignore") if isinstance(raw_name, bytes) else str(raw_name)
+        minimum = _as_float(axis.get("minimum"), 0.0)
+        maximum = _as_float(axis.get("maximum"), 0.0)
+        if "wght" in name.lower() or "weight" in name.lower():
+            values.append(max(minimum, min(float(target), maximum)))
+        else:
+            values.append(_as_float(axis.get("default"), minimum))
+    with contextlib.suppress(Exception):  # unusual axis layout
+        setter(values)
+
+
+def _as_float(value: object, fallback: float) -> float:
+    """Coerce a FreeType axis bound to a float, falling back when absent."""
+    if isinstance(value, (int, float)):
+        return float(value)
+    return fallback
 
 
 _MEASURE_IMAGE_DRAW: ImageDraw.ImageDraw | None = None
@@ -211,6 +268,7 @@ def wrap_text(text: str, font: Font, max_width: int) -> list[str]:
             lines.append(current)
             current = word
     lines.append(current)
+    lines = _rebalance_last_line(lines, font, max_width)
 
     hard_wrapped: list[str] = []
     for line in lines:
@@ -222,6 +280,30 @@ def wrap_text(text: str, font: Font, max_width: int) -> list[str]:
             line = line[cut:]
         hard_wrapped.append(line)
     return hard_wrapped
+
+
+def _rebalance_last_line(lines: list[str], font: Font, max_width: int) -> list[str]:
+    """Pull a word down so the last line is never a lone orphan.
+
+    Greedy wrapping packs each line as full as it will go, which regularly
+    leaves the final line holding one short word - "THE PUDDLE BY THE
+    FOUNDATION IS A / CLUE". It is not a fitting error, so nothing downstream
+    catches it; it just looks like nobody set the type. Moving the last word
+    of the previous line down costs nothing and fixes it, as long as the
+    previous line still has words to spare and the move does not overflow.
+    """
+    if len(lines) < 2:
+        return lines
+    last = lines[-1].split()
+    previous = lines[-2].split()
+    # Only an orphan: one short word alone on the final line.
+    if len(last) != 1 or len(last[0]) > 6 or len(previous) < 3:
+        return lines
+
+    moved = previous[-1]
+    if measure(f"{moved} {lines[-1]}", font)[0] > max_width:
+        return lines
+    return [*lines[:-2], " ".join(previous[:-1]), f"{moved} {lines[-1]}"]
 
 
 def fit_text(

@@ -30,7 +30,7 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 echo "Running checks before tagging..."
-make check
+./scripts/dev.sh check
 
 git tag -a "$TAG" -m "${MESSAGE:-Release $TAG}"
 echo

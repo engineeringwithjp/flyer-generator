@@ -1,0 +1,442 @@
+{
+  "run_id": "run_2026-09-06_c14879",
+  "client_id": "all-elite",
+  "date": "2026-09-06",
+  "started_at": "2026-09-07T01:37:12+00:00",
+  "finished_at": "2026-09-06T21:37:16-04:00",
+  "requested_count": 4,
+  "model": "offline",
+  "offline": true,
+  "plan": {
+    "client_id": "all-elite",
+    "date": "2026-09-06",
+    "season": "fall",
+    "flyers": [
+      {
+        "slot": 1,
+        "campaign_id": "free-estimate",
+        "service": "general",
+        "angle": "offer",
+        "layout": "offer-badge",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      },
+      {
+        "slot": 2,
+        "campaign_id": "gutter-replacement",
+        "service": "gutters",
+        "angle": "upgrade",
+        "layout": "banner-lower-third",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      },
+      {
+        "slot": 3,
+        "campaign_id": "gutter-seasonal-prep",
+        "service": "gutters",
+        "angle": "education",
+        "layout": "stat-stack",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      },
+      {
+        "slot": 4,
+        "campaign_id": "home-protection",
+        "service": "roofing",
+        "angle": "emotional",
+        "layout": "hero-full",
+        "rationale": "Least-recently-used rotation (deterministic planner).",
+        "offer_id": null,
+        "primary_message": "",
+        "product_id": null,
+        "archetype": ""
+      }
+    ],
+    "strategy_note": "Deterministic rotation (Claude unavailable or disabled)."
+  },
+  "tools_used": [
+    "offline-fallback"
+  ],
+  "renderer": "internal",
+  "results": [
+    {
+      "spec": {
+        "id": "run_2026-09-06_c14879_01",
+        "client_id": "all-elite",
+        "campaign_id": "free-estimate",
+        "service": "general",
+        "style": "urgent-emergency",
+        "canvas": {
+          "width": 2160,
+          "height": 2700
+        },
+        "layout": {
+          "name": "offer-badge",
+          "type_pairing": "impact-promotional",
+          "text_align": "center",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "clients:all-elite:assets:raw:drone:dji_0051",
+          "secondary_asset_id": null,
+          "pair_confirmed": false,
+          "crop": "focal",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.72,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "FREE ESTIMATE",
+          "headline": "Free Estimate. Written Down.",
+          "accent_word": "",
+          "chips": [],
+          "callout_number": "",
+          "callout_lead": "",
+          "callout_body": "",
+          "support": "Itemized, transparent written proposals - you can see every line before anyone touches the house.",
+          "bullets": [
+            "Licensed & insured New Jersey contractor",
+            "NJ HIC #13VH12314700",
+            "GAF Master Elite contractor"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": "",
+          "card_title": "",
+          "looks_like": "",
+          "harmful": ""
+        },
+        "palette": {
+          "primary": "#14181C",
+          "accent": "#DC1F26",
+          "ink": "#14181C",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": false,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "A suitable internal photograph exists, so no stock search.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "a suitable client or internal photograph already exists",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-07T01:37:12+00:00"
+      },
+      "image_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-01.jpg",
+      "metadata_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-01.json",
+      "width": 2160,
+      "height": 2700,
+      "bytes": 1250125,
+      "rendered_at": "2026-09-07T01:37:13+00:00",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 1,
+      "approved": null,
+      "rejection_reasons": []
+    },
+    {
+      "spec": {
+        "id": "run_2026-09-06_c14879_02",
+        "client_id": "all-elite",
+        "campaign_id": "gutter-replacement",
+        "service": "gutters",
+        "style": "corporate-trust",
+        "canvas": {
+          "width": 2160,
+          "height": 2700
+        },
+        "layout": {
+          "name": "banner-lower-third",
+          "type_pairing": "condensed-editorial",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "clients:all-elite:assets:raw:drone:dji_0168",
+          "secondary_asset_id": null,
+          "pair_confirmed": false,
+          "crop": "focal",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.45,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "GUTTERS",
+          "headline": "Water Belongs Away From The Foundation",
+          "accent_word": "",
+          "chips": [],
+          "callout_number": "",
+          "callout_lead": "",
+          "callout_body": "",
+          "support": "Seamless gutters, sized and pitched to the roof they are actually carrying.",
+          "bullets": [
+            "25+ years of experience",
+            "2,500+ customers served"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": "",
+          "card_title": "",
+          "looks_like": "",
+          "harmful": ""
+        },
+        "palette": {
+          "primary": "#14181C",
+          "accent": "#DC1F26",
+          "ink": "#14181C",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": false,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "A suitable internal photograph exists, so no stock search.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "a suitable client or internal photograph already exists",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-07T01:37:13+00:00"
+      },
+      "image_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-02-retry2.jpg",
+      "metadata_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-02-retry2.json",
+      "width": 2160,
+      "height": 2700,
+      "bytes": 1347292,
+      "rendered_at": "2026-09-07T01:37:14+00:00",
+      "qa_passed": false,
+      "qa_score": 65,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 2,
+      "approved": null,
+      "rejection_reasons": []
+    },
+    {
+      "spec": {
+        "id": "run_2026-09-06_c14879_03",
+        "client_id": "all-elite",
+        "campaign_id": "gutter-seasonal-prep",
+        "service": "gutters",
+        "style": "clean-minimal",
+        "canvas": {
+          "width": 2160,
+          "height": 2700
+        },
+        "layout": {
+          "name": "stat-stack",
+          "type_pairing": "grotesque-corporate",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "clients:all-elite:assets:approved:roof_washington_township_curb_appeal_001",
+          "secondary_asset_id": null,
+          "pair_confirmed": false,
+          "crop": "focal",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.88,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "SEASONAL",
+          "headline": "Ice Dams Begin In A Blocked Gutter",
+          "accent_word": "",
+          "chips": [],
+          "callout_number": "",
+          "callout_lead": "",
+          "callout_body": "",
+          "support": "A blocked gutter freezes, backs water under the shingles, and finds the ceiling.",
+          "bullets": [
+            "Full tarping and protection of landscaping",
+            "Daily clean-up, even on multi-day projects"
+          ],
+          "cta": "Book A Seasonal Check",
+          "offer_badge": "",
+          "disclaimer": "",
+          "card_title": "",
+          "looks_like": "",
+          "harmful": ""
+        },
+        "palette": {
+          "primary": "#14181C",
+          "accent": "#DC1F26",
+          "ink": "#14181C",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": false,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "A suitable internal photograph exists, so no stock search.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "a suitable client or internal photograph already exists",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-07T01:37:14+00:00"
+      },
+      "image_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-03-retry2.jpg",
+      "metadata_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-03-retry2.json",
+      "width": 2160,
+      "height": 2700,
+      "bytes": 783204,
+      "rendered_at": "2026-09-07T01:37:15+00:00",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 2,
+      "approved": null,
+      "rejection_reasons": []
+    },
+    {
+      "spec": {
+        "id": "run_2026-09-06_c14879_04",
+        "client_id": "all-elite",
+        "campaign_id": "home-protection",
+        "service": "roofing",
+        "style": "premium-modern",
+        "canvas": {
+          "width": 2160,
+          "height": 2700
+        },
+        "layout": {
+          "name": "hero-full",
+          "type_pairing": "serif-editorial",
+          "text_align": "left",
+          "accent_shape": true,
+          "logo_position": "top-left",
+          "show_contact_bar": true
+        },
+        "image": {
+          "asset_id": "clients:all-elite:assets:approved:roof_forestpl_aerial_contrast_001",
+          "secondary_asset_id": null,
+          "pair_confirmed": false,
+          "crop": "focal",
+          "overlay": "dark_flat",
+          "overlay_strength": 0.8200000000000001,
+          "grayscale": false
+        },
+        "text": {
+          "eyebrow": "EVERYTHING UNDER IT",
+          "headline": "One Layer Between You And The Weather",
+          "accent_word": "",
+          "chips": [],
+          "callout_number": "",
+          "callout_lead": "",
+          "callout_body": "",
+          "support": "Full tarping, landscaping protection and daily clean-up - because the job is your home, not a worksite.",
+          "bullets": [
+            "24/7 emergency availability",
+            "Itemized, transparent written proposals"
+          ],
+          "cta": "Get A Free Estimate",
+          "offer_badge": "",
+          "disclaimer": "",
+          "card_title": "",
+          "looks_like": "",
+          "harmful": ""
+        },
+        "palette": {
+          "primary": "#14181C",
+          "accent": "#DC1F26",
+          "ink": "#14181C",
+          "paper": "#FFFFFF",
+          "on_image": "#FFFFFF"
+        },
+        "reference_ids": [],
+        "designer_notes": "",
+        "tool_decision": {
+          "need_stock_photo": false,
+          "need_external_reference": true,
+          "use_unsplash": false,
+          "use_mobbin": false,
+          "use_figma": false,
+          "use_canva": false,
+          "reasons": [
+            "A suitable internal photograph exists, so no stock search.",
+            "Would seek external inspiration (the internal reference library is thin) but Mobbin is unavailable; using the design system defaults."
+          ],
+          "skipped": {
+            "unsplash": "a suitable client or internal photograph already exists",
+            "mobbin": "it is not connected in this environment",
+            "canva": "deterministic rendering already produces the deliverable",
+            "figma": "no template work is required for a routine daily flyer"
+          },
+          "overrides_applied": []
+        },
+        "created_at": "2026-09-07T01:37:15+00:00"
+      },
+      "image_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-04-retry2.jpg",
+      "metadata_path": "/Users/johnpineda/Documents/Projects/flyer-generator/output/2026-09-06/all-elite/flyer-04-retry2.json",
+      "width": 2160,
+      "height": 2700,
+      "bytes": 794491,
+      "rendered_at": "2026-09-07T01:37:16+00:00",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "drive_url": "",
+      "attempts": 2,
+      "approved": null,
+      "rejection_reasons": []
+    }
+  ],
+  "errors": []
+}

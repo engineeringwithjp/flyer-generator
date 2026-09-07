@@ -26,7 +26,7 @@ flowchart LR
     D --> F["Best frames scored<br/>and extracted"]
     E --> G["Claude designs<br/>an original flyer"]
     F --> G
-    G --> H["Renderer<br/>1080x1350"]
+    G --> H["Renderer<br/>2160x2700"]
     H --> I["Quality control"]
     I --> J["Google Drive"]
 
@@ -226,13 +226,31 @@ This is enforced in the data model itself: marking a synthetic image "approved"
 silently downgrades it. A generated picture of a beautiful roof can never be
 presented to a homeowner as your work.
 
-**Nothing that fails QA is uploaded.** Twenty-plus automatic checks: dimensions,
-blank renders, clipped text, placeholder text, em dashes, emoji, generic AI
-filler, unverified numbers, unauthorised offers, and risky insurance claims
-("free roof", "guaranteed approval") that get contractors reported.
+**Nothing that fails QA reaches Drive.** Flyers render into a local staging
+folder and a separate step promotes only what passed. Thirty-plus automatic
+checks: dimensions, blank renders, clipped text, placeholder text, em dashes,
+emoji, generic AI filler, unverified numbers, unauthorised offers, risky
+insurance claims ("free roof", "guaranteed approval") that get contractors
+reported — plus two that came from flyers which shipped looking broken:
 
-**Before/after uses one house.** Pairs are matched by project, so a flyer never
-shows one home's "before" beside another's "after".
+* **copy drawn over copy.** The renderer records where every block of text
+  lands and compares them. Two layouts were printing the CTA button on top of
+  the body copy, and every pixel-level check passed them.
+* **type that does not read.** Contrast is sampled across the box the text will
+  occupy, not averaged — a busy aerial averages to a comfortable mid-grey while
+  half of it is bright sky. Headlines are held to 3:1, small copy to 4.5:1.
+
+**Before/after needs a person.** Pairs are matched by project, but two folders
+both named `bergenfield` turned out to hold two different houses, so a matching
+label is not proof. A comparison flyer does not ship until `pair_confirmed` is
+set by hand.
+
+**A photograph can be held for reasons no check can see.** Put the reason in
+`provenance.hold_reason` — "worker at the roof edge with no visible harness" —
+and the asset stops being production-eligible.
+
+See **[QUALITY-GATE.md](QUALITY-GATE.md)** for the full list and why each rule
+exists.
 
 ---
 
@@ -264,8 +282,13 @@ flyer feedback <flyer_id> approve
 flyer feedback <flyer_id> reject --reason "headline too small"
 flyer history --limit 20
 
+# Delivering
+flyer generate --no-upload                        # stage locally, look first
+flyer deliver                                     # promote what passed to Drive
+
 # Checking things
 flyer validate                                    # config, clients, libraries
+flyer coverage                                    # which services have photography
 flyer schedule-check                              # is now a run slot?
 flyer layouts                                     # the seven layouts
 flyer design-system                               # the compiled rules
@@ -280,16 +303,16 @@ flyer distill                                     # prompts -> design rules
 ```bash
 git clone https://github.com/engineeringwithjp/flyer-generator.git
 cd flyer-generator
-make install
-make preview        # two flyers, no API key needed
+./scripts/dev.sh install
+./scripts/dev.sh preview        # two flyers, no API key needed
 ```
 
-`make preview` works with **no credentials and no photos** — procedural
+`./scripts/dev.sh preview` works with **no credentials and no photos** — procedural
 backgrounds and a deliberately conservative copywriter that cannot make a
 claim. Then add `ANTHROPIC_API_KEY` to `.env` for real copy and art direction.
 
 For the 10:07 automation you need five GitHub secrets. Full walkthrough:
-**[docs/SETUP.md](docs/SETUP.md)**.
+**[docs/SETUP.md](SETUP.md)**.
 
 ---
 
@@ -322,9 +345,10 @@ flyer generate --client second-co --count 2
 | | |
 |:--|:--|
 | **[GETTING-STARTED.md](GETTING-STARTED.md)** | **Never used a terminal? Start here** |
-| [docs/SETUP.md](docs/SETUP.md) | Local → Claude → full automation |
-| [docs/TESTING.md](docs/TESTING.md) | Four levels of verification |
-| [docs/VERSIONING.md](docs/VERSIONING.md) | Tags, branches, rollback |
+| [docs/SETUP.md](SETUP.md) | Local → Claude → full automation |
+| [docs/TESTING.md](TESTING.md) | Four levels of verification |
+| [docs/QUALITY-GATE.md](QUALITY-GATE.md) | What blocks a flyer, and why |
+| [docs/VERSIONING.md](VERSIONING.md) | Tags, branches, rollback |
 | [design-system/CONFLICTS.md](design-system/CONFLICTS.md) | Contradictions, resolved explicitly |
 | [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) | Conventions · secrets and privacy |
 

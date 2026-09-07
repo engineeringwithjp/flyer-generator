@@ -8,11 +8,11 @@ no API key and no Google account.
 ## Level 1 — Does it run at all? (30 seconds, no credentials)
 
 ```bash
-make install
-make preview
+./scripts/dev.sh install
+./scripts/dev.sh preview
 ```
 
-`make preview` sets `FLYER_OFFLINE=1`, which disables every Claude call and uses
+`./scripts/dev.sh preview` sets `FLYER_OFFLINE=1`, which disables every Claude call and uses
 the deterministic planner and copywriter. You should see two flyers written to
 `output/<today>/all-elite/`.
 
@@ -37,7 +37,7 @@ is misconfigured.
 ## Level 2 — Is every part sound? (20 seconds)
 
 ```bash
-make check      # ruff + 260 tests
+./scripts/dev.sh check      # ruff + 260 tests
 mypy app        # type checking
 flyer validate  # configuration, clients, libraries, fonts
 ```

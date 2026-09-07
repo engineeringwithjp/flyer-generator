@@ -39,7 +39,7 @@ git checkout v0.3.0 -- app/rendering/templates.py
 git checkout v0.3.0 -- .claude/skills/construction-flyer/copywriting-rules.md
 ```
 
-Then `make preview`, look at the PNGs, and commit if it is better.
+Then `./scripts/dev.sh preview`, look at the PNGs, and commit if it is better.
 
 ## Branch layout
 
@@ -69,7 +69,7 @@ design-system/proposal-N  opened by the distillation workflow
 git push origin v0.4.0
 ```
 
-The script refuses to tag a dirty tree and runs `make check` first.
+The script refuses to tag a dirty tree and runs `./scripts/dev.sh check` first.
 
 ## Reproducing an old flyer exactly
 

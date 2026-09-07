@@ -32,6 +32,15 @@ FONTS: dict[str, str] = {
     "Archivo-Black.ttf": f"{BASE}/ofl/archivoblack/ArchivoBlack-Regular.ttf",
     "Inter-Regular.ttf": f"{BASE}/ofl/inter/Inter%5Bopsz,wght%5D.ttf",
     "PlayfairDisplay-Bold.ttf": f"{BASE}/ofl/playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf",
+    # Display faces with actual character. Lato and Inter are competent but
+    # generic; these are what give a flyer a point of view.
+    "BebasNeue-Regular.ttf": f"{BASE}/ofl/bebasneue/BebasNeue-Regular.ttf",
+    "Teko-Bold.ttf": f"{BASE}/ofl/teko/Teko%5Bwght%5D.ttf",
+    "SpaceGrotesk-Bold.ttf": f"{BASE}/ofl/spacegrotesk/SpaceGrotesk%5Bwght%5D.ttf",
+    "Fraunces-Bold.ttf": f"{BASE}/ofl/fraunces/Fraunces%5BSOFT,WONK,opsz,wght%5D.ttf",
+    "InstrumentSerif-Regular.ttf": f"{BASE}/ofl/instrumentserif/InstrumentSerif-Regular.ttf",
+    "Sora-SemiBold.ttf": f"{BASE}/ofl/sora/Sora%5Bwght%5D.ttf",
+    "Chivo-Black.ttf": f"{BASE}/ofl/chivo/Chivo%5Bwght%5D.ttf",
 }
 
 TIMEOUT = 30

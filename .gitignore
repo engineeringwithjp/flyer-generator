@@ -36,3 +36,9 @@ clients/*/assets/raw/**
 
 # Claude Code worktrees are scratch checkouts, never part of the repo.
 .claude/worktrees/
+
+# Setuptools build metadata
+*.egg-info/
+
+# Locally staged flyers withdrawn from Drive for review
+output/withdrawn/

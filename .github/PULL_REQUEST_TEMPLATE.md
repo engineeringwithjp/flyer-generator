@@ -15,10 +15,10 @@
 
 ## Checks
 
-- [ ] `make check` passes (`ruff`, `pytest`)
+- [ ] `./scripts/dev.sh check` passes (`ruff`, `pytest`)
 - [ ] `mypy app` is clean
 - [ ] `flyer validate` passes
-- [ ] If rendering changed: `make preview` and a rendered flyer is attached below
+- [ ] If rendering changed: `./scripts/dev.sh preview` and a rendered flyer is attached below
 
 ## Visual evidence
 

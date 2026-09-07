@@ -7,6 +7,7 @@ re-validated by ``FlyerCopy`` before it can reach the renderer.
 
 from __future__ import annotations
 
+import hashlib
 import re
 
 from ..copy_rules import AI_FILLER as BANNED_PHRASES
@@ -18,6 +19,9 @@ from .claude_client import ClaudeClient, compact_json, get_claude
 from .skill import system_prompt
 
 log = get_logger(__name__)
+
+#: Longest a proof point may be and still fit a bullet line at flyer scale.
+BULLET_LIMIT = 44
 
 COPY_SCHEMA = {
     "type": "object",
@@ -204,11 +208,52 @@ def _warn_on_filler(copy: FlyerCopy) -> None:
         log.warning("Copy contains generic marketing filler: %s", ", ".join(hits))
 
 
-def _fallback_copy(client, planned, campaign, offer, product=None) -> FlyerCopy:
-    """Deterministic, honest copy used when Claude is unavailable.
+def _copy_bank() -> dict:
+    """Written copy keyed by campaign, from ``config/copy-bank.json``."""
+    from ..config import load_json_config
 
-    Deliberately plain: it must never fabricate a claim, so it says only what
-    the client profile already asserts.
+    try:
+        return load_json_config("copy-bank.json")
+    except Exception as exc:  # a malformed bank must not stop a run
+        log.warning("copy-bank.json unavailable (%s); using the generic writer", exc)
+        return {}
+
+
+def _pick(options: list[str], seed: str) -> str:
+    """Choose one variant, deterministically but differently per flyer.
+
+    Hashing the seed rather than cycling an index means two flyers in the same
+    batch get different lines, the same flyer re-rendered gets the same line,
+    and the choice does not drift as the bank grows.
+    """
+    if not options:
+        return ""
+    digest = hashlib.sha256(seed.encode("utf-8")).digest()
+    return options[digest[0] % len(options)]
+
+
+def _banked_copy(client, planned, campaign) -> dict[str, str]:
+    """The written lines for this campaign, falling back to its angle."""
+    bank = _copy_bank()
+    entry = bank.get("by_campaign", {}).get(campaign.id) or {}
+    angle_entry = bank.get("by_angle", {}).get(planned.angle) or {}
+
+    seed_base = f"{campaign.id}|{planned.slot}|{planned.layout}"
+    chosen: dict[str, str] = {}
+    for field in ("eyebrow", "headline", "support", "cta"):
+        options = entry.get(field) or angle_entry.get(field) or []
+        chosen[field] = _pick(list(options), f"{seed_base}|{field}")
+    return chosen
+
+
+def _fallback_copy(client, planned, campaign, offer, product=None) -> FlyerCopy:
+    """Copy used when Claude is unavailable - which is every scheduled run
+    unless an API key is configured.
+
+    Two sources, in order. ``config/copy-bank.json`` holds lines written for
+    each campaign; anything it does not cover falls through to the generic
+    constructions below. Neither may assert something the client profile does
+    not already contain - the bank is written copy, not a licence to invent.
     """
     area = client.service_area[0] if client.service_area else client.location
     service_word = campaign.service.replace("-", " ").title()
@@ -266,11 +311,34 @@ def _fallback_copy(client, planned, campaign, offer, product=None) -> FlyerCopy:
     }
     cta = cta_map.get(client.primary_goal, "Get A Free Estimate")
 
+    banked = _banked_copy(client, planned, campaign)
+    # The operator's own brief still outranks the bank.
+    if banked.get("headline") and not planned.primary_message:
+        headline = _clip_words(banked["headline"], 60)
+    if banked.get("support"):
+        support = banked["support"]
+    if banked.get("cta"):
+        cta = banked["cta"]
+    eyebrow = banked.get("eyebrow") or area or client.location or ""
+
+    # Rotate which proof points appear, so four flyers in a batch do not carry
+    # the same three lines. The set is fixed; the window into it moves.
+    #
+    # A proof point longer than the bullet budget is skipped, not clipped. A
+    # clipped bullet reads as a bug - "A dedicated project manager as your
+    # single" - and it is better to show two whole claims than three broken
+    # ones.
+    points = [p for p in (client.proof_points or []) if len(p) <= BULLET_LIMIT]
+    bullets: list[str] = []
+    if points:
+        offset = (planned.slot - 1) * 3 % len(points)
+        bullets = [points[(offset + i) % len(points)] for i in range(min(3, len(points)))]
+
     return FlyerCopy(
-        eyebrow=_clip_words(area or client.location or "", 34),
+        eyebrow=_clip_words(eyebrow, 34),
         headline=headline,
         support=_clip_words(support, 110),
-        bullets=[_clip_words(p, 44) for p in client.proof_points[:3]],
+        bullets=bullets,
         cta=cta,
         offer_badge=_clip_words(offer.text, 26) if offer else "",
         disclaimer=_clip_words(offer.fine_print, 120) if offer else "",

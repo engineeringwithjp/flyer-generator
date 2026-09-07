@@ -38,13 +38,21 @@ def qa_flyer(
     spec: FlyerSpecification,
     client: Client,
     renderer_warnings: list[str] | None = None,
+    asset_stage: str = "",
 ) -> QAResult:
     """Every check that can be made without a model."""
+    from ..house_rules import check as house_rules
+
     issues: list[QAIssue] = []
     technical = _technical_checks(image_path, spec)
     issues += technical
     issues += _text_checks(spec, client)
     issues += _branding_checks(spec, client)
+
+    # The account owner's standing instructions. These are the checks that
+    # encode "what I intended", as opposed to "this file is a valid image".
+    logo_drawn = not any("no client mark was drawn" in w.lower() for w in (renderer_warnings or []))
+    issues += house_rules(spec, client, asset_stage=asset_stage, logo_drawn=logo_drawn)
 
     # Pixel checks only make sense on a file that decoded. Running them on a
     # rejected file turns a clean QA failure into a crash.
@@ -61,7 +69,7 @@ def qa_flyer(
             )
 
     for warning in renderer_warnings or []:
-        issues.append(_issue("renderer", Severity.WARNING, warning))
+        issues.append(_issue("renderer", _renderer_severity(warning), warning))
 
     result = QAResult.from_issues(issues)
     log.info(
@@ -73,6 +81,28 @@ def qa_flyer(
         len(result.warnings),
     )
     return result
+
+
+BLOCKING_RENDERER_WARNINGS = (
+    "no client mark was drawn",
+    "logo unreadable",
+    "overflowed",
+    "overlap by",
+    "does not read against",
+)
+
+
+def _renderer_severity(warning: str) -> Severity:
+    """A flyer without the logo cannot ship; a soft logo can.
+
+    Matching on the substring "logo" alone was too blunt - it promoted the
+    advisory "logo upscaled 2.3x" note to a blocking error and held back every
+    flyer in the batch. Only the specific failures listed above block.
+    """
+    lowered = warning.lower()
+    if any(phrase in lowered for phrase in BLOCKING_RENDERER_WARNINGS):
+        return Severity.ERROR
+    return Severity.WARNING
 
 
 def _technical_checks(path: Path, spec: FlyerSpecification) -> list[QAIssue]:

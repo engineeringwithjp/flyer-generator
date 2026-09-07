@@ -87,8 +87,35 @@ def build_hero_full(r: FlyerRenderer) -> None:
 
 
 def build_banner_lower_third(r: FlyerRenderer) -> None:
-    """Photo on top, solid brand band carrying the copy below."""
-    split = r.grid.y(0.52)
+    """Photo on top, solid brand band carrying the copy below.
+
+    The band is measured from the bottom up and the photograph takes the rest,
+    for the same reason as ``before-after``: a fixed split plus a minimum
+    headline height is not a budget, and when the copy is long the bullets end
+    up printed through the CTA button.
+    """
+    copy = r.spec.text
+    bar = r.s(86) if r.spec.layout.show_contact_bar and r.client.contact.has_any else 0
+    pad_top, pad_bottom = r.s(52), r.s(56)
+    eyebrow_h = r.s(56) if copy.eyebrow else 0
+    headline_h = r.s(170)
+    support_h = r.s(110) if copy.support else 0
+    bullet_h = r.s(50) * len(copy.bullets)
+    cta_h = r.s(86)
+    band = pad_top + eyebrow_h + headline_h + support_h + bullet_h + r.s(34) + pad_bottom + cta_h
+
+    split = min(r.height - bar - band, r.grid.y(0.62))
+    # Below this the photograph stops being a photograph, so the copy sheds its
+    # bullets rather than the image losing the whole frame.
+    if split < r.grid.y(0.34) and copy.bullets:
+        copy.bullets = copy.bullets[:1]
+        bullet_h = r.s(50) * len(copy.bullets)
+        band = (
+            pad_top + eyebrow_h + headline_h + support_h + bullet_h + r.s(34) + pad_bottom + cta_h
+        )
+        split = min(r.height - bar - band, r.grid.y(0.62))
+    split = max(split, r.grid.y(0.30))
+
     r.photo_panel(
         (0, 0, r.width, split), r.spec.image.asset_id, r.spec.image.crop, r.spec.image.grayscale
     )
@@ -97,7 +124,6 @@ def build_banner_lower_third(r: FlyerRenderer) -> None:
             (0, 0, r.width, split), r.spec.image.overlay, min(r.spec.image.overlay_strength, 0.45)
         )
 
-    bar = r.s(86) if r.spec.layout.show_contact_bar and r.client.contact.has_any else 0
     r.solid_band((0, split, r.width, r.height), r.primary)
 
     align = r.spec.layout.text_align
@@ -106,29 +132,36 @@ def build_banner_lower_third(r: FlyerRenderer) -> None:
     if r.spec.layout.accent_shape:
         r.solid_band((0, split, r.width, split + r.s(12)), r.accent)
 
-    y = split + r.s(52)
-    copy = r.spec.text
-    cta_y = r.height - bar - r.s(56) - r.s(86)
+    y = split + pad_top
+    cta_y = r.height - bar - pad_bottom - cta_h
 
     if copy.eyebrow:
         y = r.eyebrow(copy.eyebrow, x, y, width, on_dark=True, align=align)
-    headline_space = (
-        cta_y - y - (r.s(110) if copy.support else 0) - r.s(96) * len(copy.bullets) - r.s(40)
-    )
+    # What is left after everything below the headline has been reserved. No
+    # floor: an oversized headline is set smaller, never drawn over the rest.
+    headline_space = max(cta_y - y - support_h - bullet_h - r.s(34), r.s(70))
     y = r.headline(
         copy.headline,
         x,
         y,
         width,
-        max(headline_space, r.s(140)),
+        headline_space,
         on_dark=True,
         align=align,
         max_size=r.s(96),
     )
     y += r.s(20)
     if copy.support:
-        y = r.support(copy.support, x, y, width, r.s(110), on_dark=True, align=align) + r.s(14)
-    if copy.bullets:
+        y = r.support(
+            copy.support,
+            x,
+            y,
+            width,
+            min(support_h, max(cta_y - y, r.s(30))),
+            on_dark=True,
+            align=align,
+        ) + r.s(14)
+    if copy.bullets and y + bullet_h <= cta_y:
         r.bullets(copy.bullets, x, y, width, on_dark=True, align=align)
 
     r.cta_button(copy.cta, x, cta_y, width, align=align)
@@ -243,11 +276,36 @@ def build_offer_badge(r: FlyerRenderer) -> None:
 
 
 def build_before_after(r: FlyerRenderer) -> None:
-    """Two stacked panels labelled BEFORE / AFTER with the copy beneath."""
+    """Two stacked panels labelled BEFORE / AFTER with the copy beneath.
+
+    The copy block is measured from the bottom of the canvas upwards and the
+    photographs take what is left. Sizing the panels first and hoping the copy
+    fit underneath is what put the CTA button on top of the support line: the
+    headline had a minimum height that was larger than the space remaining, so
+    every element after it was pushed into the button.
+    """
     bar = r.s(86) if r.spec.layout.show_contact_bar and r.client.contact.has_any else 0
     header = r.grid.y(0.14)
-    panels_bottom = r.grid.y(0.66)
     gutter = r.s(10)
+
+    copy = r.spec.text
+    pad_top, pad_bottom = r.s(46), r.s(48)
+    eyebrow_h = r.s(56) if copy.eyebrow else 0
+    headline_h = r.s(150)
+    support_h = r.s(96) if copy.support else 0
+    cta_h = r.s(86)
+    copy_block = pad_top + eyebrow_h + headline_h + support_h + r.s(28) + pad_bottom + cta_h
+
+    panels_bottom = r.height - bar - copy_block
+    # Never let the copy squeeze the photographs below half the canvas; if it
+    # would, the copy loses its support line instead.
+    floor = r.grid.y(0.52)
+    if panels_bottom < floor and support_h:
+        support_h = 0
+        copy_block = pad_top + eyebrow_h + headline_h + r.s(28) + pad_bottom + cta_h
+        panels_bottom = r.height - bar - copy_block
+    panels_bottom = max(panels_bottom, floor)
+
     panel_height = (panels_bottom - header - gutter) // 2
 
     r.solid_band((0, 0, r.width, header), r.primary)
@@ -269,26 +327,30 @@ def build_before_after(r: FlyerRenderer) -> None:
         r.solid_band((0, panels_bottom, r.width, panels_bottom + r.s(10)), r.accent)
 
     x, width = r.grid.left, r.grid.content_width
-    copy = r.spec.text
-    y = panels_bottom + r.s(46)
-    cta_y = r.height - bar - r.s(48) - r.s(86)
+    y = panels_bottom + pad_top
+    cta_y = r.height - bar - pad_bottom - cta_h
 
     if copy.eyebrow:
         y = r.eyebrow(copy.eyebrow, x, y, width, on_dark=False, align="center")
-    headline_space = cta_y - y - (r.s(90) if copy.support else 0) - r.s(36)
+    # The headline gets what is actually left after the support line and the
+    # button, and no more. There is no minimum: a headline too big for its box
+    # is set smaller, never drawn over what comes next.
+    headline_space = max(cta_y - y - support_h - r.s(28), r.s(60))
     y = r.headline(
         copy.headline,
         x,
         y,
         width,
-        max(headline_space, r.s(110)),
+        headline_space,
         on_dark=False,
         align="center",
         max_size=r.s(84),
     )
-    y += r.s(14)
-    if copy.support:
-        r.support(copy.support, x, y, width, r.s(90), on_dark=False, align="center")
+    if support_h and copy.support:
+        y += r.s(14)
+        r.support(
+            copy.support, x, y, width, min(support_h, cta_y - y), on_dark=False, align="center"
+        )
 
     r.cta_button(copy.cta, x, cta_y, width, align="center")
     if bar:
@@ -459,7 +521,88 @@ def build_statement(r: FlyerRenderer) -> None:
         )
 
 
+def build_house_approved(r: FlyerRenderer) -> None:
+    """The client's own approved style, taken from their finalised flyers.
+
+    The distinguishing move: the headline sits on solid maroon blocks rather than
+    over a scrim, so the photograph underneath keeps its full brightness. The
+    blocks hug each line, which gives the ragged right edge the approved set has.
+
+    No CTA pill and no contact strip: in the approved series those live on a
+    dedicated closing card rather than on every flyer.
+    """
+    copy = r.spec.text
+
+    r.photo_panel(
+        (0, 0, r.width, r.height),
+        r.spec.image.asset_id,
+        r.spec.image.crop,
+        r.spec.image.grayscale,
+    )
+    # Only a whisper, and only at the very top, so the brand line reads.
+    r.overlay_panel((0, 0, r.width, r.grid.y(0.10)), "dark_gradient", 0.30)
+
+    x, width = r.grid.left, r.grid.content_width
+
+    y = r.brand_eyebrow(x, r.grid.y(0.038))
+    y = r.headline_blocks(
+        copy.headline,
+        x - r.s(12),  # blocks bleed slightly past the type margin
+        y,
+        width + r.s(24),
+        r.s(430),
+        block_color=r.primary,
+        max_size=r.s(108),
+    )
+
+    # The callout sits below the headline blocks, never overlapping them. The
+    # headline height varies with the number of lines, so anchor to where the
+    # blocks actually finished rather than to a fixed fraction.
+    if copy.callout_number or copy.callout_lead:
+        callout_y = max(y + r.s(40), r.grid.y(0.56))
+        r.numbered_callout(
+            copy.callout_number,
+            copy.callout_lead,
+            copy.callout_body,
+            x,
+            callout_y,
+            width,
+        )
+    elif copy.support:
+        r.support(copy.support, x, r.grid.y(0.60), width, r.s(150), on_dark=True, align="left")
+
+    r.mark_centered(r.grid.bottom, max_width=r.s(360))
+
+
+def build_house_educational(r: FlyerRenderer) -> None:
+    """The approved carousel card: detail strip, brand band, two paragraphs.
+
+    This is the template most of the client's finalised flyers use, and the
+    reason they read as substantial rather than sparse. The band carries real
+    information, so this is the one layout where high text density is correct.
+
+    The blurred backdrop is the same photograph, which lets a 16:9 frame sit in
+    a 4:5 canvas without letterboxing or an aggressive crop.
+    """
+    copy = r.spec.text
+
+    r.blurred_backdrop(r.spec.image.asset_id, r.spec.image.crop)
+    r.detail_strip(r.spec.image.asset_id, 0.0, 0.52)
+
+    blocks = [
+        ("What it looks like", copy.looks_like),
+        ("Why is it harmful", copy.harmful),
+    ]
+    r.body_band(copy.card_title or copy.headline, blocks, top=0.56, bottom=0.90)
+
+    r.tagline()
+    # The mark goes on every flyer; bottom-left keeps it clear of the tagline.
+    r.logo("bottom-left", force=True)
+
+
 LAYOUT_BUILDERS: dict[str, Builder] = {
+    "house-educational": build_house_educational,
+    "house-approved": build_house_approved,
     "statement": build_statement,
     "hero-editorial": build_hero_editorial,
     "hero-full": build_hero_full,

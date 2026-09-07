@@ -173,3 +173,100 @@ def test_an_invalid_stage_is_rejected(repo):
     target = next(a for a in catalog.index.assets if a.production_eligible)
     with pytest.raises(AssetError, match="stage must be one of"):
         set_stage(catalog, [target.id], "finished")
+
+
+# --------------------------------------------------------------- logo always
+
+
+def test_a_flyer_without_a_mark_fails_qa(repo, client, tmp_path):
+    """Every flyer carries the logo. A flyer nobody can trace back is wasted spend."""
+    from app.models import CanvasSpec, FlyerCopy, FlyerSpecification, ImageSpec, LayoutSpec
+    from app.pipeline.validate import qa_flyer
+    from app.rendering.export import export_flyer
+    from app.rendering.renderer import RenderContext, render_flyer
+    from app.rendering.typography import FontLibrary
+
+    spec = FlyerSpecification(
+        id="nologo",
+        client_id="testco",
+        campaign_id="roof-replacement",
+        service="roofing",
+        canvas=CanvasSpec(),
+        layout=LayoutSpec(name="hero-full", logo_position="none"),
+        image=ImageSpec(),
+        text=FlyerCopy(headline="A Perfectly Fine Headline", cta="Call Us"),
+        palette={
+            "primary": "#12243A",
+            "accent": "#E0A62F",
+            "ink": "#111111",
+            "paper": "#FFFFFF",
+            "on_image": "#FFFFFF",
+        },
+    )
+    context = RenderContext(client=client, asset_paths={}, logo_path=None, fonts=FontLibrary())
+    image, warnings = render_flyer(spec, context)
+    path = export_flyer(image, tmp_path / "nologo.png", "PNG")
+
+    result = qa_flyer(path, spec, client, warnings)
+    assert not result.passed
+    assert any("logo" in issue.message.lower() for issue in result.issues)
+
+
+def test_a_flyer_with_a_mark_passes(repo, client, tmp_path):
+    from app.models import CanvasSpec, FlyerCopy, FlyerSpecification, ImageSpec, LayoutSpec
+    from app.pipeline.validate import qa_flyer
+    from app.rendering.export import export_flyer
+    from app.rendering.renderer import render_flyer, resolve_render_context
+
+    spec = FlyerSpecification(
+        id="withlogo",
+        client_id="testco",
+        campaign_id="roof-replacement",
+        service="roofing",
+        canvas=CanvasSpec(),
+        layout=LayoutSpec(name="hero-full", logo_position="top-left"),
+        image=ImageSpec(),
+        text=FlyerCopy(headline="A Perfectly Fine Headline", cta="Call Us"),
+        palette={
+            "primary": "#12243A",
+            "accent": "#E0A62F",
+            "ink": "#111111",
+            "paper": "#FFFFFF",
+            "on_image": "#FFFFFF",
+        },
+    )
+    image, warnings = render_flyer(spec, resolve_render_context(client, {}))
+    path = export_flyer(image, tmp_path / "withlogo.png", "PNG")
+    assert not any("logo" in w.lower() for w in warnings)
+    assert qa_flyer(path, spec, client, warnings).passed
+
+
+def test_the_house_layout_places_the_mark(repo, client, tmp_path):
+    from app.models import CanvasSpec, FlyerCopy, FlyerSpecification, ImageSpec, LayoutSpec
+    from app.rendering.renderer import render_flyer, resolve_render_context
+
+    spec = FlyerSpecification(
+        id="house",
+        client_id="testco",
+        campaign_id="aging-roof",
+        service="roofing",
+        canvas=CanvasSpec(),
+        layout=LayoutSpec(name="house-approved"),
+        image=ImageSpec(overlay="none"),
+        text=FlyerCopy(
+            headline="Is Your Roof Crying For Help",
+            callout_number="3",
+            callout_lead="Look out for these",
+            callout_body="signs to prevent a total structural meltdown",
+            cta="Free Estimate",
+        ),
+        palette={
+            "primary": "#8C2230",
+            "accent": "#C9952A",
+            "ink": "#14181C",
+            "paper": "#FFFFFF",
+            "on_image": "#FFFFFF",
+        },
+    )
+    _, warnings = render_flyer(spec, resolve_render_context(client, {}))
+    assert not any("logo" in w.lower() for w in warnings)

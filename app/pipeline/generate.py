@@ -169,18 +169,26 @@ def generate_flyers(
         | {tool for r in run.results for tool in r.spec.tool_decision.get("tools_used", [])}
     )
 
+    # Nothing has reached the client yet: every flyer is still in staging.
+    # Delivery applies the batch checks and moves only what passed.
+    delivery = None
     if upload and run.results:
-        _upload(run, client, when, settings)
+        from .deliver import deliver
+
+        delivery = deliver(run, client, when, settings)
+        if delivery.destination is None:
+            _upload(run, client, when, settings)  # API fallback when no mount
 
     run.finished_at = datetime.now().astimezone().isoformat(timespec="seconds")
     history.record_run(run)
     _write_run_summary(run, base_dir)
 
     log.info(
-        "Run %s complete: %d/%d flyer(s) passed QA",
+        "Run %s complete: %d/%d flyer(s) passed QA%s",
         run_id,
         run.succeeded,
         len(run.results),
+        f"; {delivery.summary()}" if delivery else "",
     )
     return run
 
@@ -189,23 +197,17 @@ def generate_flyers(
 
 
 def _resolve_output_dir(client: Client, when: date, settings: Settings) -> Path:
-    """Where today's flyers are written.
+    """Where today's flyers are *rendered*, which is not where they end up.
 
-    Prefers the mounted Google Drive folder when one is configured, so nothing
-    accumulates in the project directory. Falls back to ``output/`` when Drive
-    for Desktop is not running or not set up.
+    This is deliberately always local. Rendering directly into the mounted
+    Drive folder put unreviewed flyers in front of the client, because QA runs
+    after the file is written and a failure could only be reported, not
+    withdrawn. Staging locally makes the quality gate meaningful: see
+    ``app/pipeline/deliver.py`` for the step that promotes a flyer into Drive.
     """
-    from ..drive.local import resolve_output_dir
+    from .deliver import staging_dir
 
-    try:
-        drive_dir = resolve_output_dir(client.company_name, when, settings)
-    except Exception as exc:
-        log.warning("Drive folder unavailable (%s); writing locally instead", exc)
-        drive_dir = None
-
-    if drive_dir is not None:
-        return drive_dir
-    return settings.paths.output / when.isoformat() / client.id
+    return staging_dir(client, when, settings)
 
 
 def _produce_flyer(
@@ -363,7 +365,14 @@ def _render_and_check(
     except Exception as exc:  # never fail a run over a preview
         log.debug("Thumbnail generation skipped: %s", exc)
 
-    qa = qa_flyer(image_path, spec, client, warnings)
+    primary = assets.index.by_id(spec.image.asset_id) if spec.image.asset_id else None
+    qa = qa_flyer(
+        image_path,
+        spec,
+        client,
+        warnings,
+        asset_stage=(primary.provenance.stage if primary else ""),
+    )
     vision = vision_qa(image_path, spec, client) if get_claude().enabled else None
     if vision:
         qa = qa.merge(vision)

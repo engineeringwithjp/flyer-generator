@@ -43,6 +43,15 @@ class ImageSpec(BaseModel):
     secondary_asset_id: str | None = Field(
         default=None, description="Second panel for before-after layouts"
     )
+    pair_confirmed: bool = Field(
+        default=False,
+        description=(
+            "A person has confirmed the before and after photographs are the same "
+            "property. Nothing can establish this automatically - matching project "
+            "labels only prove the two files were filed together, and they have been "
+            "wrong. Until this is set, before/after flyers do not ship."
+        ),
+    )
     crop: Crop = "focal"
     overlay: Overlay = "dark_gradient"
     overlay_strength: float = Field(default=0.55, ge=0.0, le=1.0)
@@ -67,11 +76,44 @@ class FlyerCopy(BaseModel):
         description="Short pill labels, e.g. process steps or service names. "
         "2-4 words each. Replaces bullets in editorial layouts.",
     )
+    callout_number: str = Field(
+        default="",
+        max_length=2,
+        description="Oversized numeral for a carousel card, e.g. '3'. Empty for none.",
+    )
+    callout_lead: str = Field(
+        default="",
+        max_length=30,
+        description="Bold line beside the numeral, e.g. 'Look out for these'.",
+    )
+    callout_body: str = Field(
+        default="",
+        max_length=90,
+        description="Smaller line under the lead, e.g. 'signs to prevent a total "
+        "structural meltdown'.",
+    )
     support: str = Field(default="", max_length=110)
     bullets: list[str] = Field(default_factory=list, max_length=3)
     cta: str = Field(min_length=3, max_length=32)
     offer_badge: str = Field(default="", max_length=26)
     disclaimer: str = Field(default="", max_length=120)
+
+    # --- educational card, matching the client's approved carousel template ---
+    card_title: str = Field(
+        default="",
+        max_length=44,
+        description="Centred title on the body band, e.g. 'CRACKING & WARPING'.",
+    )
+    looks_like: str = Field(
+        default="",
+        max_length=190,
+        description="What the homeowner can see. Concrete and checkable.",
+    )
+    harmful: str = Field(
+        default="",
+        max_length=210,
+        description="Why it matters. Consequence, not scare tactics.",
+    )
 
     @field_validator("headline")
     @classmethod

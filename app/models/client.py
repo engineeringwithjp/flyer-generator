@@ -111,6 +111,16 @@ class Client(BaseModel):
         "Copy may cite these verbatim and may cite nothing else.",
     )
     forbidden_claims: list[str] = Field(default_factory=list)
+    campaigns_disabled: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Campaign ids this client must never run. The shared catalogue in "
+            "config/campaigns.json is generic, so it offers angles a given client "
+            "cannot honour - a financing campaign for a business that does not "
+            "offer financing writes a promise nobody agreed to. Listing the id "
+            "here removes it from planning entirely."
+        ),
+    )
     preferred_reference_styles: list[str] = Field(default_factory=list)
     enabled: bool = True
 

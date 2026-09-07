@@ -16,6 +16,7 @@ import pytest
 from PIL import Image
 
 from app.ai.campaign_planner import load_catalog, plan_campaigns, season_for
+from app.config import get_settings
 from app.models import Brief
 from app.pipeline import history
 from app.pipeline.generate import generate_flyers, today_in
@@ -110,8 +111,12 @@ def test_two_flyers_from_one_short_instruction(repo):
     run = generate_flyers(client_id="testco", count=2, upload=False)
     assert len(run.results) == 2
     assert run.succeeded == 2, run.errors
+    settings = get_settings()
     for result in run.results:
-        assert Image.open(result.image_path).size == (1080, 1350)
+        assert Image.open(result.image_path).size == (
+            settings.output_width,
+            settings.output_height,
+        )
 
 
 def test_the_two_flyers_in_a_batch_differ(repo):
@@ -129,7 +134,7 @@ def test_metadata_sidecar_is_written_and_complete(repo):
     payload = json.loads(Path(run.results[0].metadata_path).read_text())
     assert payload["spec"]["text"]["headline"]
     assert payload["qa"]["score"] >= 0
-    assert payload["width"] == 1080
+    assert payload["width"] == get_settings().output_width
 
 
 def test_a_run_summary_is_written(repo):

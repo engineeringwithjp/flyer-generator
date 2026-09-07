@@ -581,6 +581,24 @@ def cmd_design_system(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_intake(args: argparse.Namespace) -> int:
+    """Import whatever is sitting in the DROP HERE folders."""
+    from .intake import DROP_ROOT, run_intake
+
+    report = run_intake(client_id=args.client)
+    print(f"{BOLD}Intake{RESET}  {report.summary()}")
+    if report.converted:
+        print(f"  {DIM}converted {report.converted} HEIC file(s) to JPEG{RESET}")
+    for note in report.notes:
+        print(f"  {DIM}{note}{RESET}")
+    for skipped in report.skipped:
+        print(f"  {YELLOW}skipped{RESET} {skipped}")
+    if not report.total:
+        print(f"  {DIM}Drop files into '{DROP_ROOT}' and run this again.{RESET}")
+    _set_output("imported", str(report.total))
+    return 0
+
+
 def cmd_drive_setup(args: argparse.Namespace) -> int:
     """Point the flyer output at your Google Drive folder.
 
@@ -629,6 +647,115 @@ def cmd_drive_setup(args: argparse.Namespace) -> int:
         print(f"  {DIM}Or re-run with --write to do it automatically.{RESET}")
 
     print(f"\n  {DIM}{info['streaming_hint']}{RESET}")
+    return 0
+
+
+def cmd_deliver(args: argparse.Namespace) -> int:
+    """Promote an already-rendered, already-reviewed batch into Google Drive.
+
+    ``flyer generate --no-upload`` leaves the batch in ``output/`` so it can be
+    looked at. This is the second half: it re-reads the QA sidecars, applies the
+    batch checks, and moves only what passed. It exists because reviewing one
+    batch and then re-running ``generate`` delivers a *different* batch - the
+    planner picks fresh campaigns every run - so the flyers that reach the
+    client are not the ones anybody looked at.
+    """
+    import json
+    from datetime import date as date_type
+
+    from .clients.loader import load_client
+    from .models import FlyerResult, GenerationRun
+    from .pipeline.deliver import deliver
+    from .pipeline.generate import today_in
+
+    settings = get_settings()
+    client = load_client(args.client or settings.default_client)
+    when = date_type.fromisoformat(args.date) if args.date else today_in(settings.schedule_timezone)
+
+    staged = settings.paths.output / when.isoformat() / client.id
+    sidecars = sorted(staged.glob("flyer-*.json"))
+    if not sidecars:
+        print(f"{YELLOW}Nothing staged for {when} - run `flyer generate --no-upload` first.{RESET}")
+        return 1
+
+    # A retried flyer leaves two sidecars behind - flyer-02.json and
+    # flyer-02-retry2.json - for the same flyer. Loading both makes the batch
+    # check see a flyer as a duplicate of itself and hold the pair. Keep the
+    # last attempt per flyer id, which is the one the run actually kept.
+    by_id: dict[str, FlyerResult] = {}
+    skipped = 0
+    for sidecar in sidecars:
+        payload = json.loads(sidecar.read_text(encoding="utf-8"))
+        if payload.get("delivered_path"):
+            skipped += 1
+            continue
+        result = FlyerResult.model_validate(
+            {k: v for k, v in payload.items() if k in FlyerResult.model_fields}
+        )
+        result.metadata_path = str(sidecar)
+        previous = by_id.get(result.spec.id)
+        if previous is None or result.attempts >= previous.attempts:
+            by_id[result.spec.id] = result
+    results = sorted(by_id.values(), key=lambda r: r.spec.id)
+
+    if not results:
+        print(f"{DIM}Everything staged for {when} has already been delivered.{RESET}")
+        return 0
+
+    run = GenerationRun(
+        run_id=f"deliver_{when.isoformat()}",
+        client_id=client.id,
+        date=when.isoformat(),
+        results=results,
+    )
+    report = deliver(run, client, when, settings)
+
+    for flyer_id in report.delivered:
+        print(f"  {GREEN}delivered{RESET}  {flyer_id}")
+    for flyer_id, reason in report.held:
+        print(f"  {RED}held{RESET}       {flyer_id}  {DIM}{reason}{RESET}")
+    if skipped:
+        print(f"  {DIM}{skipped} already delivered, left alone{RESET}")
+    print(f"\n{report.summary()}")
+    return 0 if report.delivered else 1
+
+
+def cmd_coverage(args: argparse.Namespace) -> int:
+    """Which services actually have photography behind them.
+
+    A campaign for a service with no photographs still renders - it just gets
+    a generic exterior aerial, and the reader sees a roof under a headline
+    about gutters. This is the report that surfaces that before the flyer does.
+    """
+    from .assets.catalog import AssetCatalog
+    from .assets.selector import photo_coverage
+    from .clients.loader import load_client
+
+    client = load_client(args.client or get_settings().default_client)
+    counts = photo_coverage(AssetCatalog.load(), client.id, client.services)
+    general = counts.pop("general", 0)
+
+    print(f"{BOLD}Photo coverage{RESET}  {client.company_name}\n")
+    thin = []
+    for service in client.services:
+        count = counts.get(service.lower(), 0)
+        if count == 0:
+            mark, note = f"{RED}none{RESET}", "campaigns fall back to a generic exterior"
+            thin.append(service)
+        elif count < 3:
+            mark, note = f"{YELLOW}{count}{RESET}", "every flyer reuses the same shot"
+            thin.append(service)
+        else:
+            mark, note = f"{GREEN}{count}{RESET}", ""
+        print(f"  {service:<12} {mark:>16}  {DIM}{note}{RESET}")
+    print(f"  {'general':<12} {general:>7}  {DIM}exterior aerials, usable by any campaign{RESET}")
+
+    if thin:
+        print(
+            f"\n{YELLOW}Thin:{RESET} {', '.join(thin)}. Drop photographs into "
+            f"{DIM}'DROP HERE/2 client photos'{RESET} named for the service "
+            f"({DIM}gutters-guards-hillsdale-01.jpg{RESET}) and run {DIM}flyer intake{RESET}."
+        )
     return 0
 
 
@@ -867,12 +994,28 @@ def build_parser() -> argparse.ArgumentParser:
     dsy.add_argument("--json", action="store_true")
     dsy.set_defaults(func=cmd_design_system)
 
+    itk = subparsers.add_parser("intake", help="import pictures from the DROP HERE folders")
+    itk.add_argument("--client", help="client slug (default: DEFAULT_CLIENT)")
+    itk.set_defaults(func=cmd_intake)
+
     drv = subparsers.add_parser(
         "drive-setup", help="write flyers straight into your Google Drive folder"
     )
     drv.add_argument("--folder", default="Client Flyers", help="folder name to look for in Drive")
     drv.add_argument("--write", action="store_true", help="append the setting to .env")
     drv.set_defaults(func=cmd_drive_setup)
+
+    dlv = subparsers.add_parser(
+        "deliver",
+        help="move an already-reviewed staged batch into Google Drive",
+    )
+    dlv.add_argument("--client", help="client slug (default: DEFAULT_CLIENT)")
+    dlv.add_argument("--date", help="ISO date of the staged batch (default: today)")
+    dlv.set_defaults(func=cmd_deliver)
+
+    cov = subparsers.add_parser("coverage", help="which services have photography and which do not")
+    cov.add_argument("--client", help="client slug (default: DEFAULT_CLIENT)")
+    cov.set_defaults(func=cmd_coverage)
 
     sto = subparsers.add_parser("storage", help="show where disk space is going")
     sto.set_defaults(func=cmd_storage)

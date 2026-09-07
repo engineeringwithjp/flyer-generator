@@ -186,3 +186,31 @@ def test_usage_reports_every_area(repo):
     ):
         assert key in areas
         assert areas[key] >= 0
+
+
+def test_original_stills_are_never_pruned(repo):
+    """Regression: `flyer clean` deleted 17 high-res drone originals because
+    they were unreviewed and unscored. Only extracted frames are regenerable."""
+    import json
+
+    from app.assets.catalog import AssetCatalog
+
+    drone = repo / "clients" / "testco" / "assets" / "raw" / "drone"
+    drone.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (4056, 3040), (100, 110, 120)).save(drone / "DJI_0005.JPG")
+
+    frames = repo / "clients" / "testco" / "assets" / "raw" / "frames"
+    frames.mkdir(parents=True, exist_ok=True)
+    for index in range(3):
+        name = f"dji_{index:04d}_frame_10s"
+        Image.new("RGB", (1600, 1200), (100 + index, 110, 120)).save(frames / f"{name}.jpg")
+        (frames / f"{name}.json").write_text(
+            json.dumps({"quality_score": index / 10}), encoding="utf-8"
+        )
+
+    (repo / "data" / "assets" / "index.json").unlink(missing_ok=True)
+    AssetCatalog.load(refresh=True)
+
+    prune_unreviewed_frames(keep_top=0)
+    assert (drone / "DJI_0005.JPG").exists(), "an original still must survive"
+    assert not list(frames.glob("*.jpg")), "extracted frames are regenerable and may go"

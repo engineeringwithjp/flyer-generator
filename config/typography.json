@@ -4,63 +4,298 @@
   "pairings": {
     "condensed-editorial": {
       "description": "Barlow Condensed display over Lato. The house voice, matching the website.",
-      "suits": ["premium-modern", "corporate-trust", "warm-residential"],
+      "suits": [
+        "premium-modern",
+        "corporate-trust",
+        "warm-residential"
+      ],
       "roles": {
-        "display":  ["BarlowCondensed-Bold", "Anton-Regular", "Oswald-Bold"],
-        "headline": ["BarlowCondensed-Bold", "Anton-Regular"],
-        "subhead":  ["Lato-Regular", "Inter-Regular"],
-        "body":     ["Lato-Regular", "Inter-Regular"],
-        "bold":     ["Lato-Bold", "Lato-Black", "Inter-Bold"]
+        "display": [
+          "BarlowCondensed-Bold",
+          "Anton-Regular",
+          "Oswald-Bold"
+        ],
+        "headline": [
+          "BarlowCondensed-Bold",
+          "Anton-Regular"
+        ],
+        "subhead": [
+          "Lato-Regular",
+          "Inter-Regular"
+        ],
+        "body": [
+          "Lato-Regular",
+          "Inter-Regular"
+        ],
+        "bold": [
+          "Lato-Bold",
+          "Lato-Black",
+          "Inter-Bold"
+        ]
       },
       "tracking_scale": 1.0
     },
     "impact-promotional": {
       "description": "Anton display, tight and loud. For offers and urgency.",
-      "suits": ["bold-promotional", "urgent-emergency"],
+      "suits": [
+        "bold-promotional",
+        "urgent-emergency"
+      ],
       "roles": {
-        "display":  ["Anton-Regular", "Archivo-Black", "BarlowCondensed-Bold"],
-        "headline": ["Anton-Regular", "Archivo-Black"],
-        "subhead":  ["Lato-Bold", "Inter-SemiBold", "Lato-Regular"],
-        "body":     ["Lato-Regular", "Inter-Regular"],
-        "bold":     ["Lato-Black", "Archivo-Black", "Lato-Bold"]
+        "display": [
+          "Anton-Regular",
+          "Archivo-Black",
+          "BarlowCondensed-Bold"
+        ],
+        "headline": [
+          "Anton-Regular",
+          "Archivo-Black"
+        ],
+        "subhead": [
+          "Lato-Bold",
+          "Inter-SemiBold",
+          "Lato-Regular"
+        ],
+        "body": [
+          "Lato-Regular",
+          "Inter-Regular"
+        ],
+        "bold": [
+          "Lato-Black",
+          "Archivo-Black",
+          "Lato-Bold"
+        ]
       },
       "tracking_scale": 0.8
     },
     "grotesque-corporate": {
       "description": "Heavy grotesque throughout. Clean, corporate, no condensed drama.",
-      "suits": ["corporate-trust", "clean-minimal"],
+      "suits": [
+        "corporate-trust",
+        "clean-minimal"
+      ],
       "roles": {
-        "display":  ["Archivo-Black", "Lato-Black", "Inter-Bold"],
-        "headline": ["Archivo-Black", "Lato-Black"],
-        "subhead":  ["Inter-Regular", "Lato-Regular"],
-        "body":     ["Inter-Regular", "Lato-Regular"],
-        "bold":     ["Inter-Bold", "Lato-Bold"]
+        "display": [
+          "Archivo-Black",
+          "Lato-Black",
+          "Inter-Bold"
+        ],
+        "headline": [
+          "Archivo-Black",
+          "Lato-Black"
+        ],
+        "subhead": [
+          "Inter-Regular",
+          "Lato-Regular"
+        ],
+        "body": [
+          "Inter-Regular",
+          "Lato-Regular"
+        ],
+        "bold": [
+          "Inter-Bold",
+          "Lato-Bold"
+        ]
       },
       "tracking_scale": 1.15
     },
     "serif-editorial": {
       "description": "Serif display over a clean sans. Premium, architectural, magazine-like.",
-      "suits": ["premium-modern", "clean-minimal", "warm-residential"],
+      "suits": [
+        "premium-modern",
+        "clean-minimal",
+        "warm-residential"
+      ],
       "roles": {
-        "display":  ["PlayfairDisplay-Bold", "SourceSerif4-Bold", "BarlowCondensed-Bold"],
-        "headline": ["PlayfairDisplay-Bold", "SourceSerif4-Bold"],
-        "subhead":  ["Inter-Regular", "Lato-Regular"],
-        "body":     ["Inter-Regular", "Lato-Regular"],
-        "bold":     ["Inter-SemiBold", "Lato-Bold"]
+        "display": [
+          "PlayfairDisplay-Bold",
+          "SourceSerif4-Bold",
+          "BarlowCondensed-Bold"
+        ],
+        "headline": [
+          "PlayfairDisplay-Bold",
+          "SourceSerif4-Bold"
+        ],
+        "subhead": [
+          "Inter-Regular",
+          "Lato-Regular"
+        ],
+        "body": [
+          "Inter-Regular",
+          "Lato-Regular"
+        ],
+        "bold": [
+          "Inter-SemiBold",
+          "Lato-Bold"
+        ]
       },
       "tracking_scale": 1.05
     },
     "condensed-industrial": {
       "description": "Oswald display, squared and technical. Trades and workmanship.",
-      "suits": ["industrial", "corporate-trust", "urgent-emergency"],
+      "suits": [
+        "industrial",
+        "corporate-trust",
+        "urgent-emergency"
+      ],
       "roles": {
-        "display":  ["Oswald-Bold", "BarlowCondensed-Bold", "Anton-Regular"],
-        "headline": ["Oswald-Bold", "BarlowCondensed-Bold"],
-        "subhead":  ["Inter-Regular", "Lato-Regular"],
-        "body":     ["Inter-Regular", "Lato-Regular"],
-        "bold":     ["Oswald-SemiBold", "Inter-Bold", "Lato-Bold"]
+        "display": [
+          "Oswald-Bold",
+          "BarlowCondensed-Bold",
+          "Anton-Regular"
+        ],
+        "headline": [
+          "Oswald-Bold",
+          "BarlowCondensed-Bold"
+        ],
+        "subhead": [
+          "Inter-Regular",
+          "Lato-Regular"
+        ],
+        "body": [
+          "Inter-Regular",
+          "Lato-Regular"
+        ],
+        "bold": [
+          "Oswald-SemiBold",
+          "Inter-Bold",
+          "Lato-Bold"
+        ]
       },
       "tracking_scale": 1.1
+    },
+    "bebas-editorial": {
+      "description": "Bebas Neue display over Space Grotesk. Tall, confident, modern. The most 'agency' pairing.",
+      "suits": [
+        "premium-modern",
+        "bold-promotional",
+        "corporate-trust"
+      ],
+      "roles": {
+        "display": [
+          "BebasNeue-Regular",
+          "Anton-Regular",
+          "Oswald-Bold"
+        ],
+        "headline": [
+          "BebasNeue-Regular",
+          "Anton-Regular"
+        ],
+        "subhead": [
+          "SpaceGrotesk-Bold",
+          "Sora-SemiBold",
+          "Lato-Bold"
+        ],
+        "body": [
+          "SpaceGrotesk-Bold",
+          "Sora-SemiBold",
+          "Lato-Regular"
+        ],
+        "bold": [
+          "SpaceGrotesk-Bold",
+          "Chivo-Black",
+          "Lato-Bold"
+        ]
+      },
+      "tracking_scale": 1.25
+    },
+    "teko-technical": {
+      "description": "Teko display over Sora. Squared and engineered, suits trades and workmanship.",
+      "suits": [
+        "industrial",
+        "corporate-trust",
+        "urgent-emergency"
+      ],
+      "roles": {
+        "display": [
+          "Teko-Bold",
+          "Oswald-Bold",
+          "BarlowCondensed-Bold"
+        ],
+        "headline": [
+          "Teko-Bold",
+          "Oswald-Bold"
+        ],
+        "subhead": [
+          "Sora-SemiBold",
+          "SpaceGrotesk-Bold",
+          "Inter-Regular"
+        ],
+        "body": [
+          "Sora-SemiBold",
+          "Inter-Regular"
+        ],
+        "bold": [
+          "Chivo-Black",
+          "Sora-SemiBold",
+          "Lato-Bold"
+        ]
+      },
+      "tracking_scale": 1.1
+    },
+    "fraunces-premium": {
+      "description": "Fraunces serif display over Space Grotesk. Characterful, warm, high-end residential.",
+      "suits": [
+        "premium-modern",
+        "warm-residential",
+        "clean-minimal"
+      ],
+      "roles": {
+        "display": [
+          "Fraunces-Bold",
+          "InstrumentSerif-Regular",
+          "PlayfairDisplay-Bold"
+        ],
+        "headline": [
+          "Fraunces-Bold",
+          "PlayfairDisplay-Bold"
+        ],
+        "subhead": [
+          "SpaceGrotesk-Bold",
+          "Sora-SemiBold"
+        ],
+        "body": [
+          "SpaceGrotesk-Bold",
+          "Inter-Regular"
+        ],
+        "bold": [
+          "Chivo-Black",
+          "SpaceGrotesk-Bold"
+        ]
+      },
+      "tracking_scale": 1.0
+    },
+    "chivo-heavy": {
+      "description": "Chivo Black throughout. Blunt, loud, unmissable at thumbnail size.",
+      "suits": [
+        "bold-promotional",
+        "urgent-emergency",
+        "industrial"
+      ],
+      "roles": {
+        "display": [
+          "Chivo-Black",
+          "Archivo-Black",
+          "Anton-Regular"
+        ],
+        "headline": [
+          "Chivo-Black",
+          "Archivo-Black"
+        ],
+        "subhead": [
+          "Sora-SemiBold",
+          "SpaceGrotesk-Bold"
+        ],
+        "body": [
+          "Sora-SemiBold",
+          "Inter-Regular"
+        ],
+        "bold": [
+          "Chivo-Black",
+          "Archivo-Black"
+        ]
+      },
+      "tracking_scale": 0.9
     }
   }
 }

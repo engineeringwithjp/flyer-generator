@@ -64,6 +64,22 @@
       "text_density": "low",
       "cta_position": "none",
       "needs_photo": true
+    },
+    "house-approved": {
+      "template_family": "premium",
+      "description": "All Elite's approved house style. Full-bleed job-site photography at full brightness, brand eyebrow, headline set on maroon blocks that hug each line, optional numbered callout, logo lockup centred at the base.",
+      "image_slots": 1,
+      "text_density": "low",
+      "cta_position": "none",
+      "needs_photo": true
+    },
+    "house-educational": {
+      "template_family": "premium",
+      "description": "The client's approved carousel card. A sharp detail strip of the photograph floats over a blurred copy of itself, with a translucent brand band carrying a centred title and two labelled paragraphs, and the STAY ELITE tagline.",
+      "image_slots": 1,
+      "text_density": "high",
+      "cta_position": "none",
+      "needs_photo": true
     }
   },
   "canvas_presets": {

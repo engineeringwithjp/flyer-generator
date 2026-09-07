@@ -8,7 +8,8 @@
     "frame_time_s": 34.677,
     "verified_by": "human-review",
     "notes": "Extracted from 3840x2160 footage. Quality 0.76.",
-    "stage": "after"
+    "stage": "after",
+    "hold_reason": "A worker is standing near the roof edge with no visible harness or hard hat. Publishing it as marketing for a licensed contractor invites exactly the wrong question. Clear this only if the crew confirms fall protection was in use and is visible in the frame."
   },
   "quality_score": 0.7584,
   "client_id": "all-elite"

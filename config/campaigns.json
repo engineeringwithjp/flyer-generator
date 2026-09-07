@@ -12,7 +12,7 @@
     {"id": "seasonal-maintenance",   "service": "roofing",     "name": "Seasonal Maintenance",    "angle": "education",   "objective": "trust",           "seasons": ["fall","spring"],          "preferred_layouts": ["banner-lower-third","stat-stack"]},
     {"id": "aging-roof",             "service": "roofing",     "name": "Is Your Roof Aging?",     "angle": "problem",     "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["hero-full","split-diagonal"]},
     {"id": "home-protection",        "service": "roofing",     "name": "Home Protection",         "angle": "emotional",   "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full"]},
-    {"id": "premium-roofing",        "service": "roofing",     "name": "Premium Roofing",         "angle": "premium",     "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full","minimal"]},
+    {"id": "premium-roofing",        "service": "roofing",     "name": "Premium Roofing",         "angle": "premium",     "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full","statement"]},
 
     {"id": "siding-replacement",     "service": "siding",      "name": "Siding Replacement",      "angle": "upgrade",     "objective": "lead_generation", "seasons": ["spring","summer","fall"], "preferred_layouts": ["hero-full","banner-lower-third"]},
     {"id": "curb-appeal",            "service": "siding",      "name": "Curb Appeal",             "angle": "emotional",   "objective": "brand",           "seasons": ["spring","summer"],        "preferred_layouts": ["before-after","hero-full"]},
@@ -43,8 +43,8 @@
 
     {"id": "remodeling-kitchen",     "service": "remodeling",  "name": "Kitchen Remodeling",      "angle": "emotional",   "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["before-after","hero-full"]},
     {"id": "remodeling-bath",        "service": "remodeling",  "name": "Bathroom Remodeling",     "angle": "emotional",   "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["before-after"]},
-    {"id": "general-contracting",    "service": "general",     "name": "Full Service Contracting","angle": "premium",     "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full","minimal"]},
-    {"id": "licensed-insured",       "service": "general",     "name": "Licensed & Insured",      "angle": "trust",       "objective": "trust",           "seasons": ["all"],                    "preferred_layouts": ["stat-stack","minimal"]},
+    {"id": "general-contracting",    "service": "general",     "name": "Full Service Contracting","angle": "premium",     "objective": "brand",           "seasons": ["all"],                    "preferred_layouts": ["hero-full","statement"]},
+    {"id": "licensed-insured",       "service": "general",     "name": "Licensed & Insured",      "angle": "trust",       "objective": "trust",           "seasons": ["all"],                    "preferred_layouts": ["stat-stack","statement"]},
     {"id": "financing-available",    "service": "general",     "name": "Financing Available",     "angle": "offer",       "objective": "lead_generation", "seasons": ["all"],                    "preferred_layouts": ["offer-badge"]}
   ],
   "angles": {

@@ -1,0 +1,12 @@
+{
+  "provenance": {
+    "source_type": "client_drone",
+    "approval_status": "approved",
+    "origin_path": "clients/all-elite/assets/raw/drone/DJI_0075.JPG",
+    "stage": "during",
+    "verified_by": "human-review",
+    "notes": "Large estate mid-install. Crew visible but small and incidental at this altitude."
+  },
+  "client_id": "all-elite",
+  "service": "roofing"
+}

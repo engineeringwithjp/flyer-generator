@@ -79,7 +79,20 @@ def build_asset_index(deep: bool = True) -> AssetIndex:
                     log.warning("Skipping unreadable asset %s: %s", relative, exc)
                     continue
                 record.update(analysis)
-            record.update(load_sidecar(path))
+            # A sidecar overrides what the folder convention derived, but
+            # `provenance` is merged field by field rather than replaced. A
+            # partial override - `{"provenance": {"stage": "after"}}`, which is
+            # the obvious thing to hand-write - otherwise discards the derived
+            # source type and approval and quietly drops the asset out of
+            # production.
+            sidecar = load_sidecar(path)
+            overrides = dict(sidecar)
+            nested = overrides.pop("provenance", None)
+            if isinstance(nested, dict):
+                merged = dict(record.get("provenance") or {})
+                merged.update(nested)
+                record["provenance"] = merged
+            record.update(overrides)
             if isinstance(record.get("focal"), dict):
                 record["focal"] = FocalPoint.model_validate(record["focal"])
             index.upsert(Asset.model_validate(record))

@@ -29,7 +29,7 @@ Nothing visible happens. That's correct — you've just moved into the folder.
 ### Step 3. Install it
 
 ```bash
-make install
+./scripts/dev.sh install
 ```
 
 This takes 2–3 minutes. It downloads the fonts and the code libraries. You'll
@@ -41,7 +41,7 @@ see a lot of scrolling text. Wait for your prompt (`$`) to come back.
 ### Step 4. Make your first flyers
 
 ```bash
-make preview
+./scripts/dev.sh preview
 ```
 
 In about 5 seconds you'll see something like:
@@ -319,7 +319,7 @@ one yourself, and you never have to keep an old one around.
 cd ~/Documents/Projects
 git clone https://github.com/engineeringwithjp/flyer-generator.git
 cd flyer-generator
-make install
+./scripts/dev.sh install
 flyer drive-setup --write
 ```
 

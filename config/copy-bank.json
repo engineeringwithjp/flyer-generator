@@ -1,0 +1,245 @@
+{
+  "_notes": [
+    "Written copy for the offline path - the path that runs when no Claude API key is set,",
+    "which for this account is every scheduled run. The generic fallback in",
+    "app/ai/copywriter.py exists so the system never fabricates a claim; it is safe but it",
+    "is not marketing. These lines are the same guarantee with a writer behind it.",
+    "",
+    "RULES for anything added here:",
+    "  * every factual claim must already be true in the client profile (proof_points,",
+    "    products, service_area). Nothing new is asserted here.",
+    "  * no superlatives, no price promises, no insurance-claim language - see",
+    "    forbidden_claims in the client profile.",
+    "  * headlines are written to be set in condensed caps at 2-4 words per line.",
+    "  * `support` finishes the thought the headline starts; it never restates it.",
+    "",
+    "Selection is deterministic: campaign + date + slot picks the variant, so a batch never",
+    "repeats itself and a week never repeats a day."
+  ],
+
+  "by_campaign": {
+    "roof-replacement": {
+      "eyebrow": ["ROOF REPLACEMENT", "NEW ROOF SYSTEMS", "TEAR-OFF & REBUILD"],
+      "headline": ["A Roof Built To Outlast The Mortgage", "Thirty Years Up There. One Day Down Here.", "Your Last Roof, Not Your Next One"],
+      "support": [
+        "Full tear-off, GAF Timberline HDZ, and a 50-year Master Elite warranty available.",
+        "Complete tear-off and rebuild by a GAF Master Elite contractor - the top 2% of roofers.",
+        "Architectural shingle systems installed by a licensed New Jersey crew of 25+ years."
+      ],
+      "cta": ["Get A Free Estimate", "Book Your Roof Estimate"]
+    },
+    "roof-repair": {
+      "eyebrow": ["ROOF REPAIR", "LEAK DIAGNOSIS"],
+      "headline": ["Small Leak Today. Framing Bill Tomorrow.", "Find The Leak Before The Ceiling Does", "One Missing Shingle Is Enough"],
+      "support": [
+        "We locate the actual entry point, document it with photos, and quote the repair in writing.",
+        "Itemized written proposals, so you can see exactly what is being repaired and why."
+      ],
+      "cta": ["Book An Inspection", "Get A Free Estimate"]
+    },
+    "aging-roof": {
+      "eyebrow": ["ROOF ASSESSMENT", "IS IT TIME?"],
+      "headline": ["Curling. Balding. Streaking. Done.", "Your Roof Is Telling You Something", "Twenty Years Is A Long Shift"],
+      "support": [
+        "Granule loss, cupped shingles and dark streaking are the last warnings a roof gives you.",
+        "A free assessment with photos of what we actually find - not a sales pitch on your doorstep."
+      ],
+      "cta": ["Get A Free Estimate", "Book An Inspection"]
+    },
+    "storm-damage": {
+      "eyebrow": ["STORM RESPONSE", "AFTER THE STORM"],
+      "headline": ["Tarped Today. Repaired Properly.", "Wind Does Not Wait For Business Hours"],
+      "support": [
+        "24/7 emergency availability, full tarping, and a documented assessment of the damage.",
+        "We tarp first and photograph everything, so nothing gets worse while the paperwork moves."
+      ],
+      "cta": ["Call (551) 335-9235", "Call Us Today"]
+    },
+    "emergency-roofing": {
+      "eyebrow": ["24/7 EMERGENCY", "STORM RESPONSE"],
+      "headline": ["Water Is Already Inside. Call.", "Two In The Morning Counts As A Weekday"],
+      "support": ["24/7 emergency availability across northern New Jersey. Tarping, containment, then a proper repair."],
+      "cta": ["Call (551) 335-9235"]
+    },
+    "free-inspection": {
+      "eyebrow": ["FREE INSPECTION", "NO-COST ASSESSMENT"],
+      "headline": ["We Go Up. You Get The Photos.", "A Free Look Beats A Guess"],
+      "support": [
+        "A full roof assessment at no cost, and a final report with photos of exactly what we found.",
+        "No obligation, no pressure - an itemized written proposal only if you want one."
+      ],
+      "cta": ["Book Your Free Inspection"]
+    },
+    "roofing-before-after": {
+      "eyebrow": ["COMPLETED WORK", "BERGEN COUNTY PROJECT"],
+      "headline": ["Same House. Different Decade.", "The Difference One Weekend Makes"],
+      "support": ["A real northern New Jersey project, finished and photographed at the walkthrough."],
+      "cta": ["See Our Work", "Get A Free Estimate"]
+    },
+    "seasonal-maintenance": {
+      "eyebrow": ["SEASONAL CHECK", "BEFORE THE WEATHER TURNS"],
+      "headline": ["Three Things To Check Before Winter", "Ice Dams Start In September"],
+      "support": ["Flashing, valleys and gutter pitch are where New Jersey winters get in. A seasonal check finds all three."],
+      "cta": ["Book A Seasonal Check"]
+    },
+    "home-protection": {
+      "eyebrow": ["HOME PROTECTION", "EVERYTHING UNDER IT"],
+      "headline": ["Everything You Own Is Under That Roof", "One Layer Between You And The Weather"],
+      "support": ["Full tarping, landscaping protection and daily clean-up - because the job is your home, not a worksite."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "premium-roofing": {
+      "eyebrow": ["MASTER ELITE", "PREMIUM ROOFING"],
+      "headline": ["Top Two Percent Of Roofers. Nationally.", "The Warranty Is The Whole Point"],
+      "support": ["GAF Master Elite certification puts the 50-year warranty on the table. Under 2% qualify."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "siding-replacement": {
+      "eyebrow": ["SIDING REPLACEMENT", "FULL EXTERIOR"],
+      "headline": ["New Siding Reads As A New House", "Stop Painting It Every Four Years"],
+      "support": [
+        "ASCEND composite siding with built-in continuous insulation, or CertainTeed CertaPlank engineered plank.",
+        "Board-and-batten and plank profiles, installed by a licensed New Jersey crew."
+      ],
+      "cta": ["Get A Free Estimate"]
+    },
+    "curb-appeal": {
+      "eyebrow": ["CURB APPEAL", "FROM THE STREET"],
+      "headline": ["The First Thing Anyone Sees", "Twenty Feet Away Is Where It Counts"],
+      "support": ["Composite siding, clean trim lines and matched gutters - the exterior reads as one deliberate decision."],
+      "cta": ["Get A Free Estimate", "See Our Work"]
+    },
+    "siding-energy": {
+      "eyebrow": ["INSULATED SIDING", "ENERGY"],
+      "headline": ["Insulation That Goes On The Outside", "The Draft Is Coming Through The Wall"],
+      "support": ["ASCEND composite siding is foam-backed - continuous insulation across the wall, not just between the studs."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "siding-storm-damage": {
+      "eyebrow": ["STORM DAMAGE", "SIDING REPAIR"],
+      "headline": ["Wind Finds The Loose Panel First", "Cracked Panels Let Water Walk In"],
+      "support": ["Documented damage assessment and an itemized written proposal for the repair or the replacement."],
+      "cta": ["Call Us Today"]
+    },
+    "siding-before-after": {
+      "eyebrow": ["COMPLETED WORK", "SIDING PROJECT"],
+      "headline": ["Same Footprint. Different House.", "Before Lunch, And After"],
+      "support": ["A finished northern New Jersey siding project, photographed at the final walkthrough."],
+      "cta": ["See Our Work"]
+    },
+    "gutter-replacement": {
+      "eyebrow": ["GUTTERS", "SEAMLESS SYSTEMS"],
+      "headline": ["Water Belongs Away From The Foundation", "Gutters Are A Drainage System, Not Trim"],
+      "support": ["Seamless gutters, sized and pitched to the roof they are actually carrying."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "gutter-protection": {
+      "eyebrow": ["GUTTER GUARDS", "NO MORE LADDERS"],
+      "headline": ["Last Time You Clean Them Out", "Get Off The Ladder For Good"],
+      "support": ["Guard systems fitted to seamless gutters, so autumn stops being a chore with a ladder in it."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "drainage-problems": {
+      "eyebrow": ["DRAINAGE", "OVERFLOW"],
+      "headline": ["If It Overflows, It Is Undersized", "The Puddle By The Foundation Is A Clue"],
+      "support": ["Overflow, sagging and staining under the fascia point at pitch, capacity, or both."],
+      "cta": ["Book An Inspection"]
+    },
+    "gutter-seasonal-prep": {
+      "eyebrow": ["BEFORE THE LEAVES", "SEASONAL"],
+      "headline": ["Clear Now Or Chisel In January", "Ice Dams Begin In A Blocked Gutter"],
+      "support": ["A blocked gutter freezes, backs water under the shingles, and finds the ceiling."],
+      "cta": ["Book A Seasonal Check"]
+    },
+    "window-replacement": {
+      "eyebrow": ["WINDOWS", "REPLACEMENT"],
+      "headline": ["You Can Feel The Old Ones", "Condensation Means The Seal Is Gone"],
+      "support": ["Replacement windows measured, ordered and fitted by the same crew that handles the exterior."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "window-energy": {
+      "eyebrow": ["ENERGY", "WINDOWS"],
+      "headline": ["The Thermostat Is Not The Problem", "Heat Leaves Through The Glass"],
+      "support": ["A failed seal turns a window into a hole with a view of the street."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "exterior-upgrade": {
+      "eyebrow": ["FULL EXTERIOR", "ONE CREW"],
+      "headline": ["Roof, Siding, Gutters. One Crew.", "One Project Manager. One Phone Number."],
+      "support": ["A dedicated project manager as your single point of contact, from the proposal to the final walkthrough."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "licensed-insured": {
+      "eyebrow": ["CREDENTIALS", "NJ HIC #13VH12314700"],
+      "headline": ["Ask Any Contractor For Their Paperwork", "Licensed. Insured. Still Here In Ten Years."],
+      "support": ["Licensed and insured in New Jersey, GAF Master Elite certified, and 2,500+ customers over 25+ years."],
+      "cta": ["Get A Free Estimate", "Learn More"]
+    },
+    "general-contracting": {
+      "eyebrow": ["ALL ELITE", "NORTHERN NEW JERSEY"],
+      "headline": ["Twenty-Five Years On Northern Jersey Roofs", "2,500 Homes And Counting"],
+      "support": ["Roofing, siding, gutters and windows across Bergen, Passaic, Hudson, Essex, Morris and Union counties."],
+      "cta": ["See Our Work", "Get A Free Estimate"]
+    },
+    "free-estimate": {
+      "eyebrow": ["FREE ESTIMATE", "IN WRITING"],
+      "headline": ["An Itemized Number, Not A Ballpark", "Free Estimate. Written Down."],
+      "support": ["Itemized, transparent written proposals - you can see every line before anyone touches the house."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "financing-available": {
+      "eyebrow": ["FINANCING", "PAYMENT OPTIONS"],
+      "headline": ["A New Roof Is Not A Weekend Decision", "Spread It Out. Fix It Now."],
+      "support": ["Financing options are available - ask your project manager when the written proposal comes through."],
+      "cta": ["Ask About Financing"]
+    }
+  },
+
+  "by_angle": {
+    "upgrade": {
+      "headline": ["Done Once, Done Properly", "Worth Doing Once"],
+      "support": ["Licensed New Jersey crew, itemized written proposal, final walkthrough with photos."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "problem": {
+      "headline": ["Catch It While It Is Still Small", "It Does Not Fix Itself"],
+      "support": ["We diagnose it, photograph it, and put the repair in writing before anything starts."],
+      "cta": ["Book An Inspection"]
+    },
+    "urgency": {
+      "headline": ["Today, Not Next Month", "We Answer At Two In The Morning"],
+      "support": ["24/7 emergency availability across northern New Jersey."],
+      "cta": ["Call (551) 335-9235"]
+    },
+    "trust": {
+      "headline": ["Twenty-Five Years. Same Phone Number.", "Licensed, Insured, Still Here"],
+      "support": ["Licensed and insured in New Jersey, GAF Master Elite certified, 2,500+ customers served."],
+      "cta": ["Learn More"]
+    },
+    "emotional": {
+      "headline": ["Everything You Own Is Under It", "A Home First, A Job Second"],
+      "support": ["Full tarping, landscaping protection and daily clean-up, even on multi-day projects."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "education": {
+      "headline": ["What Actually Goes Wrong", "The Part Nobody Explains"],
+      "support": ["Straight answers about what fails, why it fails, and what it costs to put right."],
+      "cta": ["Learn More"]
+    },
+    "proof": {
+      "headline": ["Recently Completed, Northern New Jersey", "Photographed At The Final Walkthrough"],
+      "support": ["Every project ends with a walkthrough and photographs of the completed work."],
+      "cta": ["See Our Work"]
+    },
+    "premium": {
+      "headline": ["Top Two Percent, Nationally", "Certified, Not Just Experienced"],
+      "support": ["GAF Master Elite certification puts the 50-year warranty on the table."],
+      "cta": ["Get A Free Estimate"]
+    },
+    "offer": {
+      "headline": ["Free, And In Writing", "No Cost To Find Out"],
+      "support": ["A no-obligation assessment and an itemized written proposal."],
+      "cta": ["Get A Free Estimate"]
+    }
+  }
+}

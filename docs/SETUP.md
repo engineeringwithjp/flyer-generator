@@ -10,14 +10,14 @@ stage 3.
 ```bash
 git clone https://github.com/engineeringwithjp/flyer-generator.git
 cd flyer-generator
-make install
-make preview
+./scripts/dev.sh install
+./scripts/dev.sh preview
 ```
 
-`make install` creates a virtualenv, installs the package and downloads the
+`./scripts/dev.sh install` creates a virtualenv, installs the package and downloads the
 brand typefaces (Barlow Condensed and Lato, matching the All Elite website).
 
-`make preview` renders two flyers with no API key. Look in `output/`.
+`./scripts/dev.sh preview` renders two flyers with no API key. Look in `output/`.
 
 ---
 

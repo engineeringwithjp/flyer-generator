@@ -1,0 +1,12 @@
+{
+  "provenance": {
+    "source_type": "client_drone",
+    "approval_status": "approved",
+    "origin_path": "clients/all-elite/assets/raw/drone/DJI_0076.JPG",
+    "stage": "during",
+    "verified_by": "human-review",
+    "notes": "Brick estate, ladders staged, work in progress."
+  },
+  "client_id": "all-elite",
+  "service": "roofing"
+}

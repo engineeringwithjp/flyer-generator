@@ -17,6 +17,7 @@ from ..config import get_settings
 from ..errors import RenderError
 from ..logging_setup import get_logger
 from ..models import Client, FlyerSpecification
+from . import finishing
 from .composition import (
     Grid,
     contrast_ratio,
@@ -75,13 +76,45 @@ class FlyerRenderer:
         self.on_image = hex_to_rgb(spec.palette.get("on_image", "#FFFFFF"))
 
         self.warnings: list[str] = []
+        self.logo_drawn = False
+        # Grading a 4056px drone still costs real time, and a layout can use
+        # the same photograph in two places, so the finished source is cached
+        # per render rather than re-graded per panel.
+        self._finished: dict[Path, Image.Image] = {}
         self._footer_band: tuple[int, int] | None = None
         # Boxes other components have claimed. The logo relocates around them
         # rather than being drawn underneath the copy stack.
         self.reserved: list[tuple[int, int, int, int]] = []
+        # Every block of copy actually drawn, checked for collisions once the
+        # layout finishes. A layout that miscalculates its vertical budget
+        # draws the button on top of the body text and nothing downstream can
+        # see it - the pixels are valid, the flyer is not.
+        self.copy_boxes: list[tuple[str, tuple[int, int, int, int]]] = []
 
     def reserve(self, box: tuple[int, int, int, int]) -> None:
         self.reserved.append(box)
+
+    def note_copy(self, name: str, box: tuple[int, int, int, int]) -> None:
+        """Record where a block of copy was actually drawn."""
+        if box[2] > box[0] and box[3] > box[1]:
+            self.copy_boxes.append((name, box))
+
+    def check_collisions(self) -> None:
+        """Warn when two blocks of copy were drawn over each other.
+
+        Tolerates a few pixels of overlap: tightly stacked type often shares a
+        row of descender space, and flagging that would make the check noise.
+        Anything larger is a layout arithmetic error.
+        """
+        tolerance = self.s(6)
+        for index, (name_a, box_a) in enumerate(self.copy_boxes):
+            for name_b, box_b in self.copy_boxes[index + 1 :]:
+                overlap_x = min(box_a[2], box_b[2]) - max(box_a[0], box_b[0])
+                overlap_y = min(box_a[3], box_b[3]) - max(box_a[1], box_b[1])
+                if overlap_x > tolerance and overlap_y > tolerance:
+                    self.warnings.append(
+                        f"{name_a} and {name_b} overlap by {overlap_x}x{overlap_y}px"
+                    )
 
     @staticmethod
     def _overlaps(a: tuple[int, int, int, int], b: tuple[int, int, int, int], pad: int = 0) -> bool:
@@ -108,7 +141,7 @@ class FlyerRenderer:
         grayscale: bool = False,
     ) -> bool:
         """Fill ``box`` with a photograph. Returns False if no photo was used."""
-        from ..assets.image_utils import crop_to_aspect, load_rgb
+        from ..assets.image_utils import crop_to_aspect
         from ..models import FocalPoint
 
         left, top, right, bottom = box
@@ -122,7 +155,7 @@ class FlyerRenderer:
             return False
 
         try:
-            source = load_rgb(path)
+            source = self.finished_source(path)
         except Exception as exc:
             log.warning("Falling back to a procedural panel; %s is unusable: %s", path, exc)
             self.warnings.append(f"asset {asset_id} unreadable")
@@ -133,8 +166,32 @@ class FlyerRenderer:
         cropped = crop_to_aspect(source, width, height, mode=crop, focal=focal)
         if grayscale:
             cropped = ImageOps.grayscale(cropped).convert("RGB")
+        # Sharpening is only meaningful once the photo is at its final pixel
+        # size, so it happens here rather than in the grade.
+        cropped = finishing.sharpen_output(cropped, get_settings().photo_grade)
         self.image.paste(cropped, (left, top))
         return True
+
+    def finished_source(self, path: Path) -> Image.Image:
+        """Load a photograph and apply the house grade, once per render.
+
+        Grading happens at source resolution and before any crop, because
+        black point and local contrast are properties of the whole frame; if
+        you grade a crop, two panels cut from one photo come out looking like
+        two different photos.
+        """
+        from ..assets.image_utils import load_rgb
+
+        cached = self._finished.get(path)
+        if cached is not None:
+            return cached
+
+        source = load_rgb(path)
+        grade = get_settings().photo_grade
+        if grade != "none":
+            source = finishing.finish(source, grade)
+        self._finished[path] = source
+        return source
 
     def procedural_panel(self, box: tuple[int, int, int, int]) -> None:
         """Brand-coloured background used when no photograph is available.
@@ -221,15 +278,19 @@ class FlyerRenderer:
         if position == "none":
             return None
 
-        max_width = self.s(300)
-        max_height = self.s(96)
+        # The mark has two lines of type in it ("ALL ELITE" over "ROOFING &
+        # SIDING"), so a box sized for a single-line wordmark renders the
+        # second line as an unreadable smear. These are the smallest values at
+        # which the lower line still reads on a phone.
+        max_width = self.s(380)
+        max_height = self.s(132)
 
         path = self.context.logo_path
         artwork: Image.Image | None = None
         if path and path.exists():
             try:
                 artwork = Image.open(path).convert("RGBA")
-                artwork.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
+                artwork = self.fit_logo(artwork, max_width, max_height)
             except Exception as exc:
                 log.warning("Logo %s could not be drawn: %s", path, exc)
                 self.warnings.append("logo unreadable")
@@ -262,7 +323,69 @@ class FlyerRenderer:
             draw_lines(self.draw, fitted, x, y, ink)
 
         self.reserve(box)
+        self.logo_drawn = True
         return box
+
+    def fit_logo(self, artwork: Image.Image, max_width: int, max_height: int) -> Image.Image:
+        """Scale the mark to fill its reserved box in either direction.
+
+        ``Image.thumbnail`` only ever shrinks, so on a 2160px canvas a small
+        logo file would quietly render at its native size - roughly half as
+        wide as the layout reserved for it, which reads as a mistake rather
+        than as restraint. Enlarging is the lesser evil, but it costs
+        sharpness, so anything past a modest stretch is recorded as a warning
+        for the quality gate to pick up.
+        """
+        ratio = min(max_width / artwork.width, max_height / artwork.height)
+        if ratio > 1.15:
+            self.warnings.append(
+                f"logo upscaled {ratio:.1f}x from {artwork.width}px - supply a larger file"
+            )
+        size = (
+            max(int(round(artwork.width * ratio)), 1),
+            max(int(round(artwork.height * ratio)), 1),
+        )
+        if size == artwork.size:
+            return artwork
+        return artwork.resize(size, Image.Resampling.LANCZOS)
+
+    def assess_legibility(
+        self,
+        box: tuple[int, int, int, int],
+        ink: tuple[int, int, int],
+        what: str,
+        minimum: float = 3.0,
+    ) -> None:
+        """Warn when type is about to be set on a background it cannot beat.
+
+        Call this *before* drawing. A mean-luminance test is not enough: a busy
+        neighbourhood aerial averages to a comfortable mid-grey while half its
+        pixels are bright sky and half are dark foliage, so the type reads
+        against neither. Sampling a grid and counting how many individual
+        samples fail the contrast threshold catches exactly that case, which
+        is the one that keeps producing flyers nobody can read.
+
+        ``minimum`` follows WCAG: 3:1 is enough behind a headline set 100px
+        tall, but a 40px support line needs 4.5:1. Holding both to the headline
+        figure passed a support line printed over a sunlit driveway.
+        """
+        left, top = max(box[0], 0), max(box[1], 0)
+        right, bottom = min(box[2], self.width), min(box[3], self.height)
+        if right - left < 8 or bottom - top < 8:
+            return
+
+        patch = self.image.crop((left, top, right, bottom)).convert("RGB")
+        # 24x24 samples is enough to characterise a background and costs
+        # nothing next to the render itself.
+        patch = patch.resize((24, 24), Image.Resampling.BILINEAR)
+        samples = list(patch.getdata())
+        failing = sum(1 for pixel in samples if contrast_ratio(ink, pixel) < minimum)
+        share = failing / len(samples)
+        if share > 0.25:
+            self.warnings.append(
+                f"{what} sits on a background it does not read against "
+                f"({share:.0%} of it below {minimum:g}:1 contrast)"
+            )
 
     def _legible_ink(self, box: tuple[int, int, int, int]) -> tuple[int, int, int]:
         """Pick whichever ink genuinely reads against what is behind it.
@@ -360,6 +483,7 @@ class FlyerRenderer:
         from .typography import _draw_tracked
 
         _draw_tracked(self.draw, label, start_x, y, font, color, tracking)
+        self.note_copy("eyebrow", (start_x, y, start_x + line_width, y + size))
         # Clear the cap height plus breathing room so a following accent
         # rule or headline never collides with the label.
         return y + int(size * 1.75)
@@ -391,7 +515,11 @@ class FlyerRenderer:
             self.warnings.append(
                 f"headline rendered at {fitted.size}px - it may not survive thumbnail scaling"
             )
-        self.reserve((x, y, x + width, y + fitted.height))
+        box = (x, y, x + width, y + fitted.height)
+        if on_dark:
+            self.assess_legibility(box, color, "headline")
+        self.reserve(box)
+        self.note_copy("headline", box)
         return draw_lines(self.draw, fitted, x, y, color, align=align, box_width=width)
 
     def headline_two_tone(
@@ -586,7 +714,7 @@ class FlyerRenderer:
         if path and path.exists():
             try:
                 artwork = Image.open(path).convert("RGBA")
-                artwork.thumbnail((width_cap, self.s(80)), Image.Resampling.LANCZOS)
+                artwork = self.fit_logo(artwork, width_cap, self.s(80))
             except Exception:
                 artwork = None
 
@@ -595,6 +723,7 @@ class FlyerRenderer:
             x = self.grid.right - artwork.width
             y = top + (bottom - top - artwork.height) // 2
             self.paste(artwork, (x, y))
+            self.logo_drawn = True
             return (x, y, x + artwork.width, y + artwork.height)
 
         fitted = fit_text(
@@ -610,6 +739,7 @@ class FlyerRenderer:
         x = self.grid.right - fitted.width
         y = top + (bottom - top - fitted.height) // 2
         draw_lines(self.draw, fitted, x, y, self.on_image)
+        self.logo_drawn = True
         return (x, y, x + fitted.width, y + fitted.height)
 
     def chip_row(
@@ -778,6 +908,312 @@ class FlyerRenderer:
             Image.alpha_composite(self.image.convert("RGBA"), shadow).convert("RGB"), (0, 0)
         )
 
+    def headline_blocks(
+        self,
+        text: str,
+        x: int,
+        y: int,
+        width: int,
+        max_height: int,
+        block_color: tuple[int, int, int] | None = None,
+        ink: tuple[int, int, int] | None = None,
+        max_size: int | None = None,
+    ) -> int:
+        """Headline set on solid colour blocks that hug each line.
+
+        The device in All Elite's approved flyers. The block is what makes the
+        type legible, so the photograph underneath stays at full brightness
+        instead of being flattened by a scrim. Each line gets its own block
+        sized to that line, which is why the right edge is ragged.
+        """
+        fill = block_color or self.primary
+        letter = ink or hex_to_rgb("#EFE6DA")
+
+        fitted = fit_text(
+            text.upper(),
+            self.fonts,
+            "display",
+            width,
+            max_height,
+            max_size or self.s(104),
+            self.s(46),
+            line_spacing=1.16,
+            max_lines=3,
+        )
+        if not fitted.lines:
+            return y
+
+        from .typography import _draw_tracked
+
+        pad_x, pad_y = self.s(22), self.s(12)
+        block_h = fitted.size + pad_y * 2
+        cursor = y
+
+        # The approved flyers letter-space the longest line so it fills the
+        # measure, and let its block bleed off the right edge. Shorter lines
+        # keep a tight block, which is what gives the ragged right edge.
+        widths = [measure(line, fitted.font)[0] for line in fitted.lines]
+        longest = max(widths) if widths else 0
+        target = width - pad_x * 2
+
+        for line, line_width in zip(fitted.lines, widths, strict=False):
+            is_longest = line_width == longest
+            tracking = 0
+            if is_longest and len(line) > 1 and line_width < target:
+                tracking = min((target - line_width) // (len(line) - 1), self.s(14))
+
+            drawn = line_width + tracking * max(len(line) - 1, 0)
+            block_w = drawn + pad_x * 2
+            if is_longest:
+                block_w = min(block_w + self.s(18), self.width - x)  # bleed past the margin
+
+            block = Image.new("RGBA", (block_w, block_h), (*fill, 235))
+            self.paste(block, (x, cursor))
+
+            text_y = cursor + pad_y - self.s(4)
+            if tracking:
+                _draw_tracked(self.draw, line, x + pad_x, text_y, fitted.font, letter, tracking)
+            else:
+                self._draw_soft_shadow(line, x + pad_x, text_y, fitted.font)
+                self.draw.text((x + pad_x, text_y), line, font=fitted.font, fill=letter)
+
+            self.reserve((x, cursor, x + block_w, cursor + block_h))
+            cursor += block_h + self.s(4)
+
+        return cursor
+
+    def numbered_callout(
+        self, numeral: str, lead: str, body: str, x: int, y: int, width: int
+    ) -> int:
+        """Oversized numeral beside a short stack of text, drawn on the photo.
+
+        The device the approved carousels use to number a series:
+        "3  LOOK OUT FOR THESE / SIGNS TO PREVENT A TOTAL STRUCTURAL MELTDOWN".
+        Drawn directly on the photograph with a soft shadow, no panel.
+        """
+        if not (numeral or lead or body):
+            return y
+
+        cursor_x = x
+        if numeral:
+            size = self.s(118)
+            font = self.fonts.get("display", size)
+            self._draw_soft_shadow(numeral, x, y, font)
+            self.draw.text((x, y), numeral, font=font, fill=self.on_image)
+            cursor_x = x + measure(numeral, font)[0] + self.s(24)
+
+        text_width = width - (cursor_x - x)
+        lead_size = self.s(44)
+        lead_font = self.fonts.get("display", lead_size)
+        cursor_y = y + self.s(10)
+        if lead:
+            head = lead.upper()
+            self._draw_soft_shadow(head, cursor_x, cursor_y, lead_font)
+            self.draw.text((cursor_x, cursor_y), head, font=lead_font, fill=self.on_image)
+            cursor_y += int(lead_size * 1.12)
+
+        rest = body.upper()
+        if rest:
+            fitted = fit_text(
+                rest,
+                self.fonts,
+                "subhead",
+                text_width + self.s(40),
+                self.s(150),
+                self.s(36),
+                self.s(20),
+                line_spacing=1.2,
+                max_lines=3,
+            )
+            for line in fitted.lines:
+                self._draw_soft_shadow(line, cursor_x, cursor_y, fitted.font)
+                self.draw.text((cursor_x, cursor_y), line, font=fitted.font, fill=self.on_image)
+                cursor_y += fitted.line_height
+
+        self.reserve((x, y, x + width, cursor_y))
+        return cursor_y
+
+    def blurred_backdrop(self, asset_id: str | None, crop: str = "focal") -> None:
+        """Fill the canvas with a heavily blurred copy of the photograph.
+
+        The approved educational cards float a sharp detail strip over a blurred
+        version of the same image. It fills the frame without competing with the
+        body copy, and it means a 16:9 frame can sit in a 4:5 canvas without
+        letterboxing.
+        """
+        from ..assets.image_utils import crop_to_aspect
+
+        path = self.context.asset_paths.get(asset_id or "")
+        if path is None or not path.exists():
+            self.procedural_panel((0, 0, self.width, self.height))
+            return
+        try:
+            source = self.finished_source(path)
+        except Exception:
+            self.procedural_panel((0, 0, self.width, self.height))
+            return
+        filled = crop_to_aspect(source, self.width, self.height, mode=crop)
+        self.image.paste(filled.filter(ImageFilter.GaussianBlur(radius=self.s(26))), (0, 0))
+
+    def detail_strip(self, asset_id: str | None, top: float, bottom: float) -> None:
+        """A sharp, full-width band of the photograph over the blurred backdrop."""
+        y0, y1 = self.grid.y(top), self.grid.y(bottom)
+        self.photo_panel((0, y0, self.width, y1), asset_id, "center", False)
+
+    def body_band(
+        self,
+        title: str,
+        blocks: list[tuple[str, str]],
+        top: float = 0.60,
+        bottom: float = 0.88,
+    ) -> None:
+        """Translucent brand band carrying a title and labelled paragraphs.
+
+        The signature element of the client's approved carousels, and the reason
+        those flyers feel substantial rather than sparse.
+        """
+        y0, y1 = self.grid.y(top), self.grid.y(bottom)
+        band = Image.new("RGBA", (self.width, y1 - y0), (*self.primary, 214))
+        self.paste(band, (0, y0))
+
+        cream = hex_to_rgb("#F2E9DC")
+        x = self.grid.left
+        width = self.grid.content_width
+
+        cursor = y0 + self.s(30)
+        if title:
+            size = self.s(38)
+            font = self.fonts.get("display", size)
+            tracking = self.s(6)
+            from .typography import _draw_tracked, tracked_width
+
+            label = title.upper()
+            text_width = tracked_width(label, font, tracking)
+            _draw_tracked(
+                self.draw, label, x + (width - text_width) // 2, cursor, font, cream, tracking
+            )
+            cursor += int(size * 1.9)
+
+        # Share the remaining height between the blocks that actually have copy,
+        # so the type is sized to the space rather than truncated to fit it.
+        live = [(label, text) for label, text in blocks if text]
+        remaining = (y1 - self.s(24)) - cursor
+        available_per_block = max(remaining // max(len(live), 1), self.s(60))
+
+        # Fonts are built per block at the fitted size, so only the starting
+        # size is needed here.
+        label_size = self.s(29)
+
+        for label, text in live:
+            if not text:
+                continue
+
+            # Wrap the label and the body as ONE string at ONE width, then
+            # overdraw the label in bold. Tracking two widths - a narrower first
+            # line for the label, a wider one after - is what let copy run off
+            # the canvas, and it silently truncated sentences when the line
+            # budget ran out.
+            lead = f"{label}: " if label else ""
+            paragraph = f"{lead}{text}"
+
+            # Wrap using the BOLD metrics even though most of the paragraph is
+            # set in the body weight. Bold is the wider face, so wrapping to it
+            # is conservative and the drawn line can only ever be shorter.
+            fitted = fit_text(
+                paragraph,
+                self.fonts,
+                "bold",
+                width,
+                available_per_block,
+                label_size,
+                self.s(16),
+                line_spacing=1.30,
+                max_lines=8,
+            )
+            body_at_size = self.fonts.get("body", fitted.size)
+            label_at_size = self.fonts.get("bold", fitted.size)
+
+            line_y = cursor
+            for index, line in enumerate(fitted.lines):
+                if index == 0 and lead and line.startswith(lead):
+                    # Label in bold, the rest of the line in the body weight.
+                    self.draw.text((x, line_y), lead, font=label_at_size, fill=cream)
+                    offset = measure(lead, label_at_size)[0]
+                    remainder = line[len(lead) :]
+                    if remainder:
+                        self.draw.text(
+                            (x + offset, line_y), remainder, font=body_at_size, fill=cream
+                        )
+                else:
+                    self.draw.text((x, line_y), line, font=body_at_size, fill=cream)
+                line_y += fitted.line_height
+            cursor = line_y + self.s(16)
+
+        if cursor > y1:
+            self.warnings.append("body band copy overflowed its band")
+        self.reserve((0, y0, self.width, y1))
+
+    def tagline(self, text: str = "STAY ELITE") -> None:
+        """The gold tagline the approved cards sign off with."""
+        size = self.s(34)
+        font = self.fonts.get("display", size)
+        gold = hex_to_rgb("#D9A62E")
+        width = measure(text, font)[0]
+        self.draw.text(
+            (self.grid.right - width, self.grid.bottom - size), text, font=font, fill=gold
+        )
+
+    def brand_eyebrow(self, x: int, y: int) -> int:
+        """The small company line above the headline, in brand colour."""
+        label = self.client.company_name.upper()
+        size = self.s(27)
+        font = self.fonts.get("bold", size)
+        tracking = self.s(3)
+        from .typography import _draw_tracked
+
+        colour = (
+            self.primary
+            if not self.region_is_dark((x, y, x + self.s(500), y + size))
+            else lighten(self.primary, 0.55)
+        )
+        _draw_tracked(self.draw, label, x, y, font, colour, tracking)
+        return y + int(size * 1.6)
+
+    def mark_centered(self, y_bottom: int, max_width: int | None = None) -> None:
+        """The full logo lockup, centred near the base, as the approved flyers place it."""
+        width_cap = max_width or self.s(300)
+        path = self._mark_for_background(y_bottom, width_cap)
+        if path is None:
+            return
+        try:
+            with Image.open(path) as handle:
+                artwork = handle.convert("RGBA")
+        except Exception as exc:
+            log.warning("Logo %s could not be drawn: %s", path, exc)
+            return
+        artwork = self.fit_logo(artwork, width_cap, self.s(230))
+        x = (self.width - artwork.width) // 2
+        y = y_bottom - artwork.height
+        self.paste(artwork, (x, y))
+        self.reserve((x, y, x + artwork.width, y + artwork.height))
+        self.logo_drawn = True
+
+    def _mark_for_background(self, y_bottom: int, width_cap: int):
+        """Pick the dark or light mark depending on what sits behind it."""
+        from ..clients.loader import resolve_client_path
+
+        probe = (
+            (self.width - width_cap) // 2,
+            max(y_bottom - self.s(190), 0),
+            (self.width + width_cap) // 2,
+            y_bottom,
+        )
+        if self.region_is_dark(probe) and self.client.brand.logo_dark_path:
+            light = best_logo(resolve_client_path(self.client, self.client.brand.logo_dark_path))
+            if light is not None:
+                return light
+        return self.context.logo_path
+
     def support(
         self,
         text: str,
@@ -802,6 +1238,10 @@ class FlyerRenderer:
             line_spacing=1.28,
             max_lines=3,
         )
+        box = (x, y, x + width, y + fitted.height)
+        if on_dark:
+            self.assess_legibility(box, color, "support line", minimum=4.5)
+        self.note_copy("support", box)
         return draw_lines(self.draw, fitted, x, y, color, align=align, box_width=width)
 
     def bullets(
@@ -833,6 +1273,7 @@ class FlyerRenderer:
                 )
             self.draw.text((text_x, cursor), item, font=font, fill=color)
             cursor += size + gap
+        self.note_copy("bullets", (x, y, x + width, cursor - gap))
         return cursor
 
     # -------------------------------------------------------------- elements
@@ -882,6 +1323,7 @@ class FlyerRenderer:
         )
         box = (x, y, x + button_width, y + button_height)
         self.reserve(box)
+        self.note_copy("cta button", box)
         return box
 
     def offer_badge(self, text: str, center: tuple[int, int]) -> None:
@@ -1035,7 +1477,13 @@ def render_flyer(spec: FlyerSpecification, context: RenderContext) -> tuple[Imag
 
     renderer = FlyerRenderer(spec, context)
     builder(renderer)
+    renderer.check_collisions()
     image = renderer.finish()
+
+    # The client's mark goes on every flyer, without exception. A flyer that
+    # cannot be traced back to the business is wasted spend.
+    if not renderer.logo_drawn:
+        renderer.warnings.append("no client mark was drawn - every flyer must carry the logo")
 
     if image.size != (spec.canvas.width, spec.canvas.height):  # pragma: no cover - guard
         raise RenderError(
@@ -1044,11 +1492,34 @@ def render_flyer(spec: FlyerSpecification, context: RenderContext) -> tuple[Imag
     return image, renderer.warnings
 
 
+def best_logo(path: Path | None) -> Path | None:
+    """Prefer a higher-resolution sibling of the configured logo.
+
+    ``scripts/upscale_logo.py`` writes ``logo@6x.png`` next to ``logo.png``,
+    and a proper vector export would drop in the same way. Resolving by
+    pixel width rather than by filename means whichever file is actually
+    largest wins, so replacing the upscale with a real export needs no config
+    change.
+    """
+    if path is None or not path.exists():
+        return path
+    best, best_width = path, 0
+    for candidate in sorted(path.parent.glob(f"{path.stem}*{path.suffix}")):
+        try:
+            with Image.open(candidate) as handle:
+                width = handle.width
+        except Exception:
+            continue
+        if width > best_width:
+            best, best_width = candidate, width
+    return best
+
+
 def resolve_render_context(client: Client, asset_paths: dict[str, Path]) -> RenderContext:
     from ..clients.loader import resolve_client_path
 
     settings = get_settings()
-    logo = resolve_client_path(client, client.brand.logo_path)
+    logo = best_logo(resolve_client_path(client, client.brand.logo_path))
     return RenderContext(
         client=client,
         asset_paths=asset_paths,

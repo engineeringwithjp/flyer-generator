@@ -6,9 +6,9 @@ that runs unattended every weekday morning.
 ## Setup
 
 ```bash
-make install     # venv, dependencies, brand fonts
-make check       # ruff + pytest
-make preview     # render two flyers with no API key and no upload
+./scripts/dev.sh install     # venv, dependencies, brand fonts
+./scripts/dev.sh check       # ruff + pytest
+./scripts/dev.sh preview     # render two flyers with no API key and no upload
 ```
 
 ## The rule that matters most
@@ -74,16 +74,16 @@ design/<thing>     design-system or skill changes
 references/<...>   catalogued references (usually opened by the bot)
 ```
 
-See [docs/VERSIONING.md](docs/VERSIONING.md) for the tagging scheme and how to
+See [docs/VERSIONING.md](VERSIONING.md) for the tagging scheme and how to
 roll back.
 
 ## Before you open a PR
 
 ```bash
-make check          # ruff + pytest
+./scripts/dev.sh check          # ruff + pytest
 mypy app
 flyer validate
-make preview        # and look at the PNGs
+./scripts/dev.sh preview        # and look at the PNGs
 ```
 
 A rendering change needs a before/after image in the PR. Numbers do not tell

@@ -310,7 +310,7 @@ def test_cli_generate_with_a_short_brief(repo, capsys):
             "1",
             "--no-upload",
             "--campaign",
-            "siding",
+            "siding-replacement",
             "--message",
             "built-in insulation",
             "--cta",

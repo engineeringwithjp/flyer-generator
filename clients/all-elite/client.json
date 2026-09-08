@@ -46,7 +46,7 @@
       "body": "Lato"
     },
     "logo_path": "assets/logo/logo.png",
-    "logo_dark_path": ""
+    "logo_dark_path": "assets/logo/logo-light.png"
   },
   "contact": {
     "phone": "(551) 335-9235",
@@ -99,7 +99,33 @@
     "GAF Master Elite contractor",
     "25+ years of experience",
     "2,500+ customers served",
-    "50-year GAF Master Elite warranty available"
+    "50-year GAF Master Elite warranty available",
+    "Full tarping and protection of landscaping",
+    "Daily clean-up, even on multi-day projects",
+    "One dedicated project manager, start to end",
+    "24/7 emergency availability",
+    "Itemized, transparent written proposals",
+    "Final walkthrough, photographed"
+  ],
+  "campaigns_disabled": [
+    "drainage-problems",
+    "electrical-panel",
+    "electrical-safety",
+    "financing-available",
+    "generator-install",
+    "gutter-protection",
+    "gutter-replacement",
+    "gutter-seasonal-prep",
+    "hvac-emergency",
+    "hvac-replacement",
+    "hvac-tuneup",
+    "leak-detection",
+    "plumbing-emergency",
+    "remodeling-bath",
+    "remodeling-kitchen",
+    "water-heater",
+    "window-energy",
+    "window-replacement"
   ],
   "forbidden_claims": [
     "guaranteed insurance approval",

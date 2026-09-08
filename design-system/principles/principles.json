@@ -304,6 +304,11 @@
   ],
   "branding": [
     {
+      "id": "logo-always",
+      "class": "hard",
+      "rule": "Every flyer carries the All Elite mark, without exception. A flyer a homeowner cannot trace back to the business is wasted spend. The renderer picks the dark or knocked-out version depending on what sits behind it, and QA fails any flyer rendered without one."
+    },
+    {
       "id": "client-primary",
       "class": "hard",
       "rule": "The client is the advertiser. Manufacturer brands are material options, never the advertising brand."

@@ -91,7 +91,8 @@ def score_asset(
     # Client photography beats stock.
     if asset.is_client_owned:
         total *= modifiers.get("client_owned_bonus", 1.25)
-    # Provenance rank dominates: real client media outranks everything.
+    # Provenance rank dominates: real client media outranks everything, and a
+    # composed still outranks a frame grabbed from moving video.
     total *= asset.provenance.rank / 100.0 if asset.provenance.rank else 0.05
     # Recency is multiplicative so it can outrank the client bonus. Running the
     # same photograph two days in a row is a worse outcome than using stock.
@@ -148,6 +149,24 @@ def select_asset(
                 service,
             )
             return None
+
+    # The picture has to be of the thing the flyer is selling. Scoring alone
+    # was not enough: a service match is worth 1.0 against 0.45 for a generic
+    # exterior, but a sharp, well-composed generic aerial routinely outscored
+    # the one true siding photograph on every other term - and put a roof
+    # tear-off under a "SIDING REPAIR" headline. When the library holds any
+    # photograph of this service, only those are considered.
+    if service and service != "general":
+        on_service = [a for a in pool if a.service == service or service in a.tags]
+        if on_service:
+            pool = on_service
+        else:
+            log.warning(
+                "No photograph of %r for %s - falling back to general exterior "
+                "photography. Run `flyer coverage` to see what is missing.",
+                service,
+                client_id,
+            )
 
     # A worn roof cannot illustrate premium roofing, and a finished roof cannot
     # illustrate storm damage. Filter to the work states this message allows.
@@ -249,3 +268,21 @@ def select_pair(
         allow_non_production=allow_non_production,
     )
     return first, second
+
+
+def photo_coverage(catalog: AssetCatalog, client_id: str, services: list[str]) -> dict[str, int]:
+    """How many production photographs exist per service.
+
+    A flyer can only be as relevant as the library behind it. With no gutter
+    photography, a gutter campaign gets a roof aerial and the reader notices
+    before they read a word. This is the report that says so out loud rather
+    than letting it show up in the artwork.
+    """
+    pool = [a for a in catalog.for_client(client_id) if a.production_eligible]
+    counts = {service.lower(): 0 for service in services}
+    for asset in pool:
+        for service in counts:
+            if asset.service == service or service in asset.tags:
+                counts[service] += 1
+    counts["general"] = sum(1 for a in pool if a.service == "general")
+    return counts

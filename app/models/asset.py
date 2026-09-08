@@ -88,6 +88,17 @@ class Provenance(BaseModel):
         ),
     )
 
+    hold_reason: str = Field(
+        default="",
+        description=(
+            "Why this photograph must not be published, in plain words. Set it and "
+            "the asset stops being production-eligible no matter how it is approved "
+            "elsewhere. Written for the things no automated check can see - a worker "
+            "on a roof edge without fall protection, a recognisable face, a "
+            "neighbour's property, a customer's licence plate."
+        ),
+    )
+
     captured_at: str = ""
     camera: str = Field(default="", description="EXIF Make/Model when present")
     source_video: str = Field(default="", description="For extracted frames")
@@ -105,6 +116,7 @@ class Provenance(BaseModel):
         return (
             self.source_type in PRODUCTION_SOURCE_TYPES
             and self.approval_status is ApprovalStatus.APPROVED
+            and not self.hold_reason
         )
 
     @property

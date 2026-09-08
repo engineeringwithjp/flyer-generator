@@ -1,0 +1,12 @@
+{
+  "provenance": {
+    "source_type": "client_drone",
+    "approval_status": "approved",
+    "origin_path": "clients/all-elite/assets/raw/drone/DJI_0050.JPG",
+    "stage": "after",
+    "verified_by": "human-review",
+    "notes": "Same completed roof, second angle."
+  },
+  "client_id": "all-elite",
+  "service": "roofing"
+}

@@ -1,0 +1,12 @@
+{
+  "provenance": {
+    "source_type": "client_drone",
+    "approval_status": "approved",
+    "origin_path": "clients/all-elite/assets/raw/drone/DJI_0150.JPG",
+    "stage": "during",
+    "verified_by": "human-review",
+    "notes": "Underlayment down, shingles staged - a genuine in-progress shot."
+  },
+  "client_id": "all-elite",
+  "service": "roofing"
+}

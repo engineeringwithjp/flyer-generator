@@ -136,6 +136,12 @@ def plan_campaigns(
     catalog = load_catalog()
     season = season_for(today)
     eligible = catalog.for_services(client.services)
+    if client.campaigns_disabled:
+        blocked = set(client.campaigns_disabled)
+        dropped = [c.id for c in eligible if c.id in blocked]
+        eligible = [c for c in eligible if c.id not in blocked]
+        if dropped:
+            log.info("Skipping campaign(s) disabled for %s: %s", client.id, ", ".join(dropped))
 
     if not eligible:
         raise ValueError(

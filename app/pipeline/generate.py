@@ -210,6 +210,23 @@ def _resolve_output_dir(client: Client, when: date, settings: Settings) -> Path:
     return staging_dir(client, when, settings)
 
 
+def _expand_to_duplicates(assets, asset_ids: set[str]) -> set[str]:
+    """Widen an exclusion set to every copy of the same photograph.
+
+    An asset id encodes its path, so the same file sitting in both
+    ``raw/drone/`` and ``approved/`` is two assets. Excluding one let the other
+    straight through, and a photograph that went out on Sunday came back on
+    Tuesday under a different id. Content hash is the real identity.
+    """
+    if not asset_ids:
+        return asset_ids
+    by_id = {a.id: a for a in assets.index.assets}
+    hashes = {by_id[a].sha256 for a in asset_ids if a in by_id and by_id[a].sha256}
+    if not hashes:
+        return asset_ids
+    return asset_ids | {a.id for a in assets.index.assets if a.sha256 and a.sha256 in hashes}
+
+
 def _produce_flyer(
     client: Client,
     planned: PlannedFlyer,
@@ -233,6 +250,13 @@ def _produce_flyer(
 
     recent_refs = history.recent_reference_ids(client.id)
     recent_assets = history.recent_asset_ids(client.id)
+    # Photographs already in the client's folder are off the table, not merely
+    # deprioritised. Combined with `used_assets` this makes a repeat impossible
+    # within a batch and across the retention window.
+    off_limits = _expand_to_duplicates(
+        assets,
+        used_assets | history.delivered_asset_ids(client.id, settings.asset_reuse_days),
+    )
 
     reference = reference_lib.select_reference(
         service=planned.service,
@@ -253,7 +277,7 @@ def _produce_flyer(
             planned.service,
             planned.layout,
             recent_assets,
-            exclude=used_assets,
+            exclude=off_limits,
             angle=planned.angle,
         )
         secondary = None

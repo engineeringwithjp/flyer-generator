@@ -28,7 +28,7 @@ def _spec(**copy_overrides) -> FlyerSpecification:
         service="roofing",
         canvas=CanvasSpec(),
         layout=LayoutSpec(name="hero-full"),
-        image=ImageSpec(),
+        image=ImageSpec(asset_id="test-photo"),
         text=FlyerCopy(**copy),
         palette={
             "primary": "#12243A",

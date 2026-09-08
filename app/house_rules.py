@@ -165,6 +165,22 @@ def check(
             )
         )
 
+    # ---- a flyer selling a specific trade needs a picture of that trade
+    #
+    # The renderer falls back to a brand gradient when no photograph is
+    # available, which is a good failure for a general brand card and a poor
+    # one for "cracked panels let water walk in" - that flyer is an argument
+    # about something you can see, printed with nothing to look at.
+    if not spec.image.asset_id and spec.service not in {"", "general"}:
+        issues.append(
+            _issue(
+                "service_flyer_needs_a_photograph",
+                Severity.ERROR,
+                f"no photograph for a {spec.service} flyer - it rendered as a plain "
+                f"brand card. Run `flyer coverage`.",
+            )
+        )
+
     # ---- the eyebrow is a second chance to say something, not an echo
     eyebrow = " ".join(text.eyebrow.lower().split())
     headline = " ".join(text.headline.lower().split())

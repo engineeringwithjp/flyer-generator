@@ -189,7 +189,14 @@ def test_generation_works_with_an_empty_photo_library(repo):
     (repo / "data" / "assets" / "index.json").unlink(missing_ok=True)
 
     run = generate_flyers(client_id="testco", count=2, upload=False)
-    assert run.succeeded == 2, run.errors
+    # It still renders rather than crashing, and it still refuses to invent a
+    # photograph. What changed is that a flyer selling a specific trade with
+    # nothing to show for it is now held: a brand gradient is a fine background
+    # for a brand message and a poor argument about a roof.
+    assert run.results, run.errors
+    assert not run.errors
+    for result in run.results:
+        assert result.spec.image.asset_id is None
 
 
 def test_a_brief_reaches_the_finished_flyer(repo):

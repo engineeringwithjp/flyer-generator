@@ -221,6 +221,22 @@ class GenerationRun(BaseModel):
             "campaigns": [r.spec.campaign_id for r in self.results],
             "headlines": [r.spec.text.headline for r in self.results],
             "reference_ids": sorted({rid for r in self.results for rid in r.spec.reference_ids}),
+            "layouts": [r.spec.layout.name for r in self.results],
+            "type_pairings": [r.spec.layout.type_pairing for r in self.results],
+            # What the client has actually seen. The planner avoids repeating
+            # these, which is the only thing standing between a week of flyers
+            # and seven versions of the same card.
+            "delivered_layouts": [
+                r.spec.layout.name for r in self.results if (r.drive_url or r.drive_file_id)
+            ],
             "asset_ids": [r.spec.image.asset_id for r in self.results if r.spec.image.asset_id],
+            # Only the photographs that reached the client. A flyer held in
+            # staging has not been seen by anyone, so its photograph is still
+            # free to use; one that shipped is not.
+            "delivered_asset_ids": [
+                r.spec.image.asset_id
+                for r in self.results
+                if r.spec.image.asset_id and (r.drive_url or r.drive_file_id)
+            ],
             "errors": self.errors,
         }

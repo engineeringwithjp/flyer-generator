@@ -1,7 +1,898 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T21:52:31-04:00",
+  "updated_at": "2026-09-08T13:25:33-04:00",
   "entries": [
+    {
+      "run_id": "run_2026-09-08_fc09ab",
+      "flyer_id": "run_2026-09-08_fc09ab_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "siding-before-after",
+      "service": "siding",
+      "layout": "before-after",
+      "style": "warm-residential",
+      "headline": "Same Footprint. Different House.",
+      "cta": "See Our Work",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_bergenfield_before_tearoff_001",
+        "clients:all-elite:assets:approved:roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": false,
+      "qa_score": 70,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_fc09ab",
+      "flyer_id": "run_2026-09-08_fc09ab_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "seasonal-maintenance",
+      "service": "roofing",
+      "layout": "stat-stack",
+      "style": "clean-minimal",
+      "headline": "Three Things To Check Before Winter",
+      "cta": "Book A Seasonal Check",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_replacement_in_progress_tigerpaw_003"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": true,
+      "status": "delivered",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_b0c40d",
+      "flyer_id": "run_2026-09-08_b0c40d_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "roof-repair",
+      "service": "roofing",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Small Leak Today. Framing Bill Tomorrow.",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_bergenfield_before_tearoff_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_b0c40d",
+      "flyer_id": "run_2026-09-08_b0c40d_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "free-inspection",
+      "service": "roofing",
+      "layout": "stat-stack",
+      "style": "clean-minimal",
+      "headline": "We Go Up. You Get The Photos.",
+      "cta": "Book Your Free Inspection",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_completed_neighborhood_contrast_002"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_b295d0",
+      "flyer_id": "run_2026-09-08_b295d0_03",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "licensed-insured",
+      "service": "general",
+      "layout": "banner-lower-third",
+      "style": "corporate-trust",
+      "headline": "Licensed. Insured. Still Here In Ten Years.",
+      "cta": "Learn More",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0168"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_b295d0",
+      "flyer_id": "run_2026-09-08_b295d0_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "home-protection",
+      "service": "roofing",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Everything You Own Is Under That Roof",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_washington_township_curb_appeal_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_b295d0",
+      "flyer_id": "run_2026-09-08_b295d0_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "free-estimate",
+      "service": "general",
+      "layout": "house-educational",
+      "style": "premium-modern",
+      "headline": "An Itemized Number, Not A Ballpark",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0005"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": true,
+      "status": "delivered",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_63e657",
+      "flyer_id": "run_2026-09-08_63e657_03",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "general-contracting",
+      "service": "general",
+      "layout": "statement",
+      "style": "premium-modern",
+      "headline": "Twenty-Five Years On Northern Jersey Roofs",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0051"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_63e657",
+      "flyer_id": "run_2026-09-08_63e657_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "emergency-roofing",
+      "service": "roofing",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Two In The Morning Counts As A Weekday",
+      "cta": "Call (551) 335-9235",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_replacement_in_progress_tigerpaw_003"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_63e657",
+      "flyer_id": "run_2026-09-08_63e657_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "siding-energy",
+      "service": "siding",
+      "layout": "house-educational",
+      "style": "premium-modern",
+      "headline": "The Draft Is Coming Through The Wall",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0081"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_97c3cf",
+      "flyer_id": "run_2026-09-08_97c3cf_03",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "roof-replacement",
+      "service": "roofing",
+      "layout": "hero-editorial",
+      "style": "premium-modern",
+      "headline": "Your Last Roof, Not Your Next One",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_cresskill_aerial_estate_004"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": true,
+      "status": "delivered",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_97c3cf",
+      "flyer_id": "run_2026-09-08_97c3cf_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "roofing-before-after",
+      "service": "roofing",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "The Difference One Weekend Makes",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_completed_neighborhood_contrast_002"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_97c3cf",
+      "flyer_id": "run_2026-09-08_97c3cf_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "curb-appeal",
+      "service": "siding",
+      "layout": "before-after",
+      "style": "warm-residential",
+      "headline": "The First Thing Anyone Sees",
+      "cta": "See Our Work",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_bergenfield_before_tearoff_001",
+        "clients:all-elite:assets:approved:roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": false,
+      "qa_score": 70,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_4adb5e",
+      "flyer_id": "run_2026-09-08_4adb5e_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "exterior-upgrade",
+      "service": "windows",
+      "layout": "before-after",
+      "style": "warm-residential",
+      "headline": "Roof, Siding, Gutters. One Crew.",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_bergenfield_before_tearoff_001",
+        "clients:all-elite:assets:approved:roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": false,
+      "qa_score": 70,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_4adb5e",
+      "flyer_id": "run_2026-09-08_4adb5e_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "siding-storm-damage",
+      "service": "siding",
+      "layout": "hero-editorial",
+      "style": "premium-modern",
+      "headline": "Wind Finds The Loose Panel First",
+      "cta": "Call Us Today",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0005"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_36a322",
+      "flyer_id": "run_2026-09-08_36a322_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "aging-roof",
+      "service": "roofing",
+      "layout": "house-educational",
+      "style": "premium-modern",
+      "headline": "Twenty Years Is A Long Shift",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_replacement_in_progress_tigerpaw_003"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_36a322",
+      "flyer_id": "run_2026-09-08_36a322_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "siding-replacement",
+      "service": "siding",
+      "layout": "house-approved",
+      "style": "premium-modern",
+      "headline": "Stop Painting It Every Four Years",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0081"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_3eb4c7",
+      "flyer_id": "run_2026-09-07_3eb4c7_03",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "storm-damage",
+      "service": "roofing",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Tarped Today. Repaired Properly.",
+      "cta": "Call (551) 335-9235",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_aerial_during_underlayment_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": true,
+      "status": "delivered",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_3eb4c7",
+      "flyer_id": "run_2026-09-07_3eb4c7_02",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "premium-roofing",
+      "service": "roofing",
+      "layout": "house-approved",
+      "style": "premium-modern",
+      "headline": "The Warranty Is The Whole Point",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_aerial_after_architectural_grey_002"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": true,
+      "status": "delivered",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_3eb4c7",
+      "flyer_id": "run_2026-09-07_3eb4c7_01",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "siding-before-after",
+      "service": "siding",
+      "layout": "before-after",
+      "style": "warm-residential",
+      "headline": "Same Footprint. Different House.",
+      "cta": "See Our Work",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_bergenfield_before_tearoff_001",
+        "clients:all-elite:assets:approved:roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": false,
+      "qa_score": 70,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_04e11a",
+      "flyer_id": "run_2026-09-07_04e11a_03",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "seasonal-maintenance",
+      "service": "roofing",
+      "layout": "banner-lower-third",
+      "style": "corporate-trust",
+      "headline": "Ice Dams Start In September",
+      "cta": "Book A Seasonal Check",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_washington_township_curb_appeal_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": false,
+      "qa_score": 75,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_04e11a",
+      "flyer_id": "run_2026-09-07_04e11a_02",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "roof-repair",
+      "service": "roofing",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Small Leak Today. Framing Bill Tomorrow.",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_bergenfield_before_tearoff_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_04e11a",
+      "flyer_id": "run_2026-09-07_04e11a_01",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "free-inspection",
+      "service": "roofing",
+      "layout": "house-educational",
+      "style": "premium-modern",
+      "headline": "We Go Up. You Get The Photos.",
+      "cta": "Book Your Free Inspection",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_completed_neighborhood_contrast_002"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_d873c6",
+      "flyer_id": "run_2026-09-07_d873c6_03",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "licensed-insured",
+      "service": "general",
+      "layout": "house-educational",
+      "style": "premium-modern",
+      "headline": "Licensed. Insured. Still Here In Ten Years.",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0051"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_d873c6",
+      "flyer_id": "run_2026-09-07_d873c6_02",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "home-protection",
+      "service": "roofing",
+      "layout": "house-approved",
+      "style": "premium-modern",
+      "headline": "One Layer Between You And The Weather",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_cresskill_aerial_estate_004"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_d873c6",
+      "flyer_id": "run_2026-09-07_d873c6_01",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "free-estimate",
+      "service": "general",
+      "layout": "offer-badge",
+      "style": "urgent-emergency",
+      "headline": "Free Estimate. Written Down.",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0081"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 90,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_a9a296",
+      "flyer_id": "run_2026-09-07_a9a296_03",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "general-contracting",
+      "service": "general",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Twenty-Five Years On Northern Jersey Roofs",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0161_frame_24s"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_a9a296",
+      "flyer_id": "run_2026-09-07_a9a296_02",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "emergency-roofing",
+      "service": "roofing",
+      "layout": "offer-badge",
+      "style": "urgent-emergency",
+      "headline": "Water Is Already Inside. Call.",
+      "cta": "Call (551) 335-9235",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_replacement_in_progress_tigerpaw_003"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_a9a296",
+      "flyer_id": "run_2026-09-07_a9a296_01",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "roof-replacement",
+      "service": "roofing",
+      "layout": "house-approved",
+      "style": "premium-modern",
+      "headline": "Your Last Roof, Not Your Next One",
+      "cta": "Book Your Roof Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_completed_neighborhood_contrast_002"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_8db397",
+      "flyer_id": "run_2026-09-07_8db397_02",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "roofing-before-after",
+      "service": "roofing",
+      "layout": "house-approved",
+      "style": "premium-modern",
+      "headline": "The Difference One Weekend Makes",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_washington_township_curb_appeal_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_8db397",
+      "flyer_id": "run_2026-09-07_8db397_01",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "exterior-upgrade",
+      "service": "windows",
+      "layout": "before-after",
+      "style": "warm-residential",
+      "headline": "Roof, Siding, Gutters. One Crew.",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_bergenfield_before_tearoff_001",
+        "clients:all-elite:assets:approved:roof_bergenfield_after_architectural_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": false,
+      "qa_score": 70,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_c5b6f6",
+      "flyer_id": "run_2026-09-07_c5b6f6_02",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "aging-roof",
+      "service": "roofing",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Your Roof Is Telling You Something",
+      "cta": "Book An Inspection",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_aerial_during_underlayment_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-07_c5b6f6",
+      "flyer_id": "run_2026-09-07_c5b6f6_01",
+      "date": "2026-09-07",
+      "client": "all-elite",
+      "campaign": "siding-energy",
+      "service": "siding",
+      "layout": "house-educational",
+      "style": "premium-modern",
+      "headline": "The Draft Is Coming Through The Wall",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:dji_0002_frame_23s"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "delivered": false,
+      "status": "generated",
+      "approved": null
+    },
+    {
+      "run_id": "run_2026-09-08_1be13d",
+      "flyer_id": "run_2026-09-08_1be13d_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "storm-damage",
+      "service": "roofing",
+      "layout": "offer-badge",
+      "style": "urgent-emergency",
+      "headline": "Tarped Today. Repaired Properly.",
+      "cta": "Call Us Today",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_replacement_in_progress_tigerpaw_003"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "status": "generated",
+      "approved": null,
+      "delivered": false
+    },
+    {
+      "run_id": "run_2026-09-08_1be13d",
+      "flyer_id": "run_2026-09-08_1be13d_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "premium-roofing",
+      "service": "roofing",
+      "layout": "statement",
+      "style": "premium-modern",
+      "headline": "The Warranty Is The Whole Point",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:roof_completed_neighborhood_contrast_002"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": false,
+      "qa_score": 70,
+      "drive_file_id": "",
+      "status": "generated",
+      "approved": null,
+      "delivered": false
+    },
+    {
+      "run_id": "run_2026-09-08_9d10dd",
+      "flyer_id": "run_2026-09-08_9d10dd_02",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "curb-appeal",
+      "service": "siding",
+      "layout": "hero-full",
+      "style": "premium-modern",
+      "headline": "Twenty Feet Away Is Where It Counts",
+      "cta": "Get A Free Estimate",
+      "reference_ids": [],
+      "asset_ids": [
+        "clients:all-elite:assets:approved:siding_cresskill_luxury_curb_appeal_001"
+      ],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "status": "withdrawn",
+      "approved": null,
+      "delivered": false
+    },
+    {
+      "run_id": "run_2026-09-08_9d10dd",
+      "flyer_id": "run_2026-09-08_9d10dd_01",
+      "date": "2026-09-08",
+      "client": "all-elite",
+      "campaign": "siding-storm-damage",
+      "service": "siding",
+      "layout": "split-diagonal",
+      "style": "bold-promotional",
+      "headline": "Cracked Panels Let Water Walk In",
+      "cta": "Call Us Today",
+      "reference_ids": [],
+      "asset_ids": [],
+      "tools_used": [],
+      "renderer": "internal",
+      "qa_passed": true,
+      "qa_score": 95,
+      "drive_file_id": "",
+      "status": "generated",
+      "approved": null,
+      "delivered": false
+    },
     {
       "run_id": "run_2026-09-06_d062dd",
       "flyer_id": "run_2026-09-06_d062dd_05",
@@ -22,8 +913,9 @@
       "qa_passed": true,
       "qa_score": 95,
       "drive_file_id": "",
-      "status": "generated",
-      "approved": null
+      "status": "delivered",
+      "approved": null,
+      "delivered": true
     },
     {
       "run_id": "run_2026-09-06_d062dd",
@@ -47,7 +939,8 @@
       "qa_score": 70,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_d062dd",
@@ -70,7 +963,8 @@
       "qa_score": 75,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_d062dd",
@@ -92,8 +986,9 @@
       "qa_passed": true,
       "qa_score": 95,
       "drive_file_id": "",
-      "status": "generated",
-      "approved": null
+      "status": "delivered",
+      "approved": null,
+      "delivered": true
     },
     {
       "run_id": "run_2026-09-06_d062dd",
@@ -115,8 +1010,9 @@
       "qa_passed": true,
       "qa_score": 95,
       "drive_file_id": "",
-      "status": "generated",
-      "approved": null
+      "status": "delivered",
+      "approved": null,
+      "delivered": true
     },
     {
       "run_id": "run_2026-09-06_e7c8f0",
@@ -139,7 +1035,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_e7c8f0",
@@ -162,7 +1059,8 @@
       "qa_score": 75,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_e7c8f0",
@@ -184,8 +1082,9 @@
       "qa_passed": true,
       "qa_score": 95,
       "drive_file_id": "",
-      "status": "generated",
-      "approved": null
+      "status": "delivered",
+      "approved": null,
+      "delivered": true
     },
     {
       "run_id": "run_2026-09-06_e7c8f0",
@@ -208,7 +1107,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_642648",
@@ -231,7 +1131,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_642648",
@@ -254,7 +1155,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_642648",
@@ -277,7 +1179,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_642648",
@@ -300,7 +1203,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_642648",
@@ -324,7 +1228,8 @@
       "qa_score": 70,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9fd3e0",
@@ -347,7 +1252,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9fd3e0",
@@ -370,7 +1276,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9fd3e0",
@@ -393,7 +1300,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9fd3e0",
@@ -417,7 +1325,8 @@
       "qa_score": 70,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9dd737",
@@ -440,7 +1349,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9dd737",
@@ -463,7 +1373,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9dd737",
@@ -487,7 +1398,8 @@
       "qa_score": 70,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_9dd737",
@@ -510,7 +1422,8 @@
       "qa_score": 90,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_359fc3",
@@ -533,7 +1446,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_359fc3",
@@ -556,7 +1470,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_359fc3",
@@ -579,7 +1494,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_359fc3",
@@ -602,7 +1518,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_c14879",
@@ -625,7 +1542,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_c14879",
@@ -648,7 +1566,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_c14879",
@@ -671,7 +1590,8 @@
       "qa_score": 65,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_c14879",
@@ -694,7 +1614,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_8950f6",
@@ -717,7 +1638,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_8950f6",
@@ -740,7 +1662,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_8950f6",
@@ -763,7 +1686,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_8950f6",
@@ -786,7 +1710,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_8950f6",
@@ -809,7 +1734,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_8950f6",
@@ -833,7 +1759,8 @@
       "qa_score": 70,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_87fcae",
@@ -856,7 +1783,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_87fcae",
@@ -879,7 +1807,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_87fcae",
@@ -903,7 +1832,8 @@
       "qa_score": 70,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_87fcae",
@@ -926,7 +1856,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_234a33",
@@ -949,7 +1880,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_234a33",
@@ -972,7 +1904,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_234a33",
@@ -995,7 +1928,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_92ade8",
@@ -1018,7 +1952,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_92ade8",
@@ -1041,7 +1976,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_92ade8",
@@ -1064,7 +2000,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_75f897",
@@ -1088,7 +2025,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_75f897",
@@ -1111,7 +2049,8 @@
       "qa_score": 70,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_75f897",
@@ -1134,7 +2073,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_3755b8",
@@ -1157,7 +2097,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_3755b8",
@@ -1180,7 +2121,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_3755b8",
@@ -1203,7 +2145,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_3755b8",
@@ -1226,7 +2169,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_6ad71e",
@@ -1249,7 +2193,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_6ad71e",
@@ -1272,7 +2217,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_fbb934",
@@ -1295,7 +2241,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_fbb934",
@@ -1318,7 +2265,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-06_fe7b7b",
@@ -1341,7 +2289,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_644fbc",
@@ -1365,7 +2314,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_7a56b5",
@@ -1388,7 +2338,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_33ad3e",
@@ -1411,7 +2362,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_8d8088",
@@ -1434,7 +2386,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_83bcca",
@@ -1458,7 +2411,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_dd3bf3",
@@ -1481,7 +2435,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_dd3bf3",
@@ -1504,7 +2459,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_c66902",
@@ -1525,7 +2481,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_4e51e3",
@@ -1548,7 +2505,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_4e51e3",
@@ -1571,7 +2529,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_02987e",
@@ -1592,7 +2551,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_37dee3",
@@ -1614,7 +2574,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_7d0911",
@@ -1635,7 +2596,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_fedede",
@@ -1656,7 +2618,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_4308e9",
@@ -1677,7 +2640,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_cc89a1",
@@ -1698,7 +2662,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_184d20",
@@ -1719,7 +2684,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_354cde",
@@ -1741,7 +2707,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_e5b55c",
@@ -1762,7 +2729,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_321347",
@@ -1783,7 +2751,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_29416e",
@@ -1804,7 +2773,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_60c609",
@@ -1825,7 +2795,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_092010",
@@ -1846,7 +2817,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_741f9f",
@@ -1868,7 +2840,8 @@
       "qa_score": 90,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_137fea",
@@ -1889,7 +2862,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_d361e2",
@@ -1910,7 +2884,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_5571ec",
@@ -1931,7 +2906,8 @@
       "qa_score": 75,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_1a2fa6",
@@ -1952,7 +2928,8 @@
       "qa_score": 95,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_bfbede",
@@ -1973,7 +2950,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_bfbede",
@@ -1994,7 +2972,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_37d6aa",
@@ -2013,7 +2992,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     },
     {
       "run_id": "run_2026-09-05_37d6aa",
@@ -2032,7 +3012,8 @@
       "qa_score": 100,
       "drive_file_id": "",
       "status": "generated",
-      "approved": null
+      "approved": null,
+      "delivered": false
     }
   ]
 }

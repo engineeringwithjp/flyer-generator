@@ -193,7 +193,7 @@ def test_a_flyer_without_a_mark_fails_qa(repo, client, tmp_path):
         service="roofing",
         canvas=CanvasSpec(),
         layout=LayoutSpec(name="hero-full", logo_position="none"),
-        image=ImageSpec(),
+        image=ImageSpec(asset_id="test-photo"),
         text=FlyerCopy(headline="A Perfectly Fine Headline", cta="Call Us"),
         palette={
             "primary": "#12243A",
@@ -225,7 +225,7 @@ def test_a_flyer_with_a_mark_passes(repo, client, tmp_path):
         service="roofing",
         canvas=CanvasSpec(),
         layout=LayoutSpec(name="hero-full", logo_position="top-left"),
-        image=ImageSpec(),
+        image=ImageSpec(asset_id="test-photo"),
         text=FlyerCopy(headline="A Perfectly Fine Headline", cta="Call Us"),
         palette={
             "primary": "#12243A",
@@ -252,7 +252,7 @@ def test_the_house_layout_places_the_mark(repo, client, tmp_path):
         service="roofing",
         canvas=CanvasSpec(),
         layout=LayoutSpec(name="house-approved"),
-        image=ImageSpec(overlay="none"),
+        image=ImageSpec(asset_id="test-photo", overlay="none"),
         text=FlyerCopy(
             headline="Is Your Roof Crying For Help",
             callout_number="3",

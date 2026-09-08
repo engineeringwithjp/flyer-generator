@@ -539,16 +539,16 @@ def build_house_approved(r: FlyerRenderer) -> None:
         r.spec.image.crop,
         r.spec.image.grayscale,
     )
-    # Only a whisper, and only at the very top, so the brand line reads.
-    r.overlay_panel((0, 0, r.width, r.grid.y(0.10)), "dark_gradient", 0.30)
-
     x, width = r.grid.left, r.grid.content_width
 
-    y = r.brand_eyebrow(x, r.grid.y(0.038))
+    # No brand line at the top. The mark at the base is the brand statement in
+    # this series, and a small tracked-out company name set over open
+    # photography just went grey against the roof - two weak brand marks
+    # instead of one strong one.
     y = r.headline_blocks(
         copy.headline,
         x - r.s(12),  # blocks bleed slightly past the type margin
-        y,
+        r.grid.y(0.055),
         width + r.s(24),
         r.s(430),
         block_color=r.primary,
@@ -569,7 +569,16 @@ def build_house_approved(r: FlyerRenderer) -> None:
             width,
         )
     elif copy.support:
-        r.support(copy.support, x, r.grid.y(0.60), width, r.s(150), on_dark=True, align="left")
+        # The headline gets solid blocks behind it; the support line was left
+        # bare over open photograph and disappeared into a sunlit roof. It gets
+        # its own block, narrower and softer, in the same idiom.
+        support_y = max(y + r.s(46), r.grid.y(0.58))
+        r.solid_band(
+            (x - r.s(12), support_y - r.s(16), x + width + r.s(12), support_y + r.s(120)),
+            darken(r.primary, 0.15),
+            alpha=0.86,
+        )
+        r.support(copy.support, x, support_y, width, r.s(104), on_dark=True, align="left")
 
     r.mark_centered(r.grid.bottom, max_width=r.s(360))
 
@@ -589,10 +598,21 @@ def build_house_educational(r: FlyerRenderer) -> None:
     r.blurred_backdrop(r.spec.image.asset_id, r.spec.image.crop)
     r.detail_strip(r.spec.image.asset_id, 0.0, 0.52)
 
+    # These two fields only get written when Claude is doing the copy. Offline
+    # they are empty, and the band rendered as a large blank rectangle with the
+    # headline floating in it - the layout looked broken rather than sparse.
+    # Fall back to the copy that always exists.
     blocks = [
         ("What it looks like", copy.looks_like),
-        ("Why is it harmful", copy.harmful),
+        ("Why it matters", copy.harmful),
     ]
+    blocks = [(label, body) for label, body in blocks if body.strip()]
+    if not blocks:
+        blocks = [("The short version", copy.support)] if copy.support else []
+        blocks += [("What you get", " · ".join(copy.bullets))] if copy.bullets else []
+    if not blocks:
+        blocks = [("", copy.headline)]
+
     r.body_band(copy.card_title or copy.headline, blocks, top=0.56, bottom=0.90)
 
     r.tagline()

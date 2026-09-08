@@ -231,6 +231,24 @@
       "text_density": "low",
       "cta": "none - this archetype deliberately has no call to action",
       "treatment": "One enormous white headline over staggered lines, mark in a top corner, nothing else. Requires a photograph with a genuinely calm region; a busy aerial will swallow the type."
+    },
+    {
+      "id": "house-approved",
+      "layout": "house-approved",
+      "use_case": "The client's own approved style. Bold single-idea messages: replacement, premium positioning, storm response, curb appeal.",
+      "image_hierarchy": "One photograph, full bleed, kept at full brightness",
+      "text_density": "low",
+      "cta": "None on the card - the approved series carries the CTA on a dedicated closing card.",
+      "treatment": "Headline set in solid maroon blocks that hug each line, which gives the ragged right edge the approved set has. No overall scrim, so the photograph keeps its brightness. Centred brand mark at the base."
+    },
+    {
+      "id": "house-educational",
+      "layout": "house-educational",
+      "use_case": "The explanatory cards: seasonal advice, what fails and why, credentials, diagnosis.",
+      "image_hierarchy": "Sharp detail strip over a blurred copy of the same photograph",
+      "text_density": "high",
+      "cta": "STAY ELITE tagline at the base rather than an accent pill.",
+      "treatment": "Detail strip across the top half, brand band beneath carrying a titled block of real information in labelled paragraphs. Full-colour logo bottom-left. This is the layout most of the client's finalised flyers use."
     }
   ],
   "typography": [

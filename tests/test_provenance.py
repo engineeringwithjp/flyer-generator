@@ -172,7 +172,10 @@ def test_a_flyer_with_only_placeholders_uses_a_brand_background(placeholder_only
     from app.pipeline.generate import generate_flyers
 
     run = generate_flyers(client_id="testco", count=1, upload=False)
-    assert run.succeeded == 1
+    # The point of this test is the *choice*: no photograph beats a fake one.
+    # Whether the resulting flyer then ships is the quality gate's business,
+    # and for a service-specific campaign it now does not.
+    assert run.results
     assert run.results[0].spec.image.asset_id is None
 
 
@@ -213,3 +216,25 @@ def test_a_before_after_pair_comes_from_one_project(repo):
     assert before.provenance.project == after.provenance.project
     assert before.provenance.stage == "before"
     assert after.provenance.stage == "after"
+
+
+def test_a_partial_provenance_sidecar_keeps_the_derived_fields(repo):
+    """Hand-writing one provenance field must not drop the other three.
+
+    ``{"provenance": {"stage": "after"}}`` is the natural thing to write, and
+    a straight dict replace turned an approved client photograph into an
+    unknown, unapproved one - removing it from production with no warning.
+    """
+    import json
+
+    from app.assets.catalog import build_asset_index
+
+    photo = repo / "assets" / "roofing" / "roof-one.jpg"
+    photo.with_suffix(".json").write_text(
+        json.dumps({"provenance": {"stage": "after"}}), encoding="utf-8"
+    )
+
+    index = build_asset_index()
+    asset = next(a for a in index.assets if a.path.endswith("roofing/roof-one.jpg"))
+    assert asset.provenance.stage == "after"
+    assert asset.production_eligible, "the derived approval was thrown away"

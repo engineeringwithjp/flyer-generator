@@ -176,6 +176,7 @@ class Settings:
 
     # --- disk hygiene ---
     asset_max_edge: int
+    asset_reuse_days: int
     photo_grade: str
     output_retention_days: int
     delete_after_upload: bool
@@ -280,6 +281,10 @@ def load_settings(env_file: Path | None = None) -> Settings:
         # Must stay above the canvas long edge with room for a focal crop,
         # otherwise the library becomes the resolution ceiling.
         asset_max_edge=_int("ASSET_MAX_EDGE", 3600),
+        # A photograph that has gone out to the client is not used again for
+        # this many days. Raise it as the library grows; lower it only if runs
+        # start coming up short.
+        asset_reuse_days=_int("ASSET_REUSE_DAYS", 21),
         # Finishing recipe applied to every photograph: "house", "light" or
         # "none". See app/rendering/finishing.py.
         photo_grade=(_clean("PHOTO_GRADE") or "house").lower(),

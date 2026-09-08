@@ -263,9 +263,20 @@ class FlyerRenderer:
         panel = diagonal_panel((self.width, self.height), (*color, 255), split, top=top)
         self.paste(panel, (0, 0))
 
-    def solid_band(self, box: tuple[int, int, int, int], color: tuple[int, int, int]) -> None:
+    def solid_band(
+        self,
+        box: tuple[int, int, int, int],
+        color: tuple[int, int, int],
+        alpha: float = 1.0,
+    ) -> None:
+        """A flat block. ``alpha`` below 1 lets the photograph read through it."""
         left, top, right, bottom = box
-        self.draw.rectangle((left, top, right, bottom), fill=color)
+        if alpha >= 1.0:
+            self.draw.rectangle((left, top, right, bottom), fill=color)
+            return
+        width, height = max(right - left, 1), max(bottom - top, 1)
+        layer = Image.new("RGBA", (width, height), (*color, int(round(alpha * 255))))
+        self.paste(layer, (left, top))
 
     # -------------------------------------------------------------- branding
 
@@ -1194,6 +1205,20 @@ class FlyerRenderer:
         artwork = self.fit_logo(artwork, width_cap, self.s(230))
         x = (self.width - artwork.width) // 2
         y = y_bottom - artwork.height
+
+        # The mark is line art with transparent counters, so on a busy
+        # photograph the driveway shows through the letterforms and it stops
+        # reading as a logo. A soft plate fixes that - but the plate has to
+        # agree with which mark was picked. Choosing them from the same probe
+        # independently produced a white logo on a white plate.
+        pad_x, pad_y = self.s(34), self.s(22)
+        plate = (x - pad_x, y - pad_y, x + artwork.width + pad_x, y + artwork.height + pad_y)
+        using_light_mark = "light" in path.stem.lower()
+        if using_light_mark:
+            self.solid_band(plate, darken(self.primary, 0.25), alpha=0.62)
+        else:
+            self.solid_band(plate, self.paper, alpha=0.82)
+
         self.paste(artwork, (x, y))
         self.reserve((x, y, x + artwork.width, y + artwork.height))
         self.logo_drawn = True
@@ -1273,7 +1298,13 @@ class FlyerRenderer:
                 )
             self.draw.text((text_x, cursor), item, font=font, fill=color)
             cursor += size + gap
-        self.note_copy("bullets", (x, y, x + width, cursor - gap))
+        box = (x, y, x + width, cursor - gap)
+        if on_dark:
+            # Bullets are the smallest type on the flyer and were the one text
+            # component with no contrast check, so a proof point could vanish
+            # into a sunlit wall while the headline above it read perfectly.
+            self.assess_legibility(box, color, "bullets", minimum=4.5)
+        self.note_copy("bullets", box)
         return cursor
 
     # -------------------------------------------------------------- elements
@@ -1503,8 +1534,20 @@ def best_logo(path: Path | None) -> Path | None:
     """
     if path is None or not path.exists():
         return path
+
+    # Only resolution variants of *this* mark: logo.png, logo@2x.png,
+    # logo@6x.png. A prefix glob also matches logo-light.png, which is the
+    # white version - and since the upscales are all the same width, the light
+    # one won on ties and got drawn wherever the dark one was asked for. The
+    # brand colours disappeared from every flyer and nothing reported it.
+    variants = [path]
+    for candidate in sorted(path.parent.glob(f"{path.stem}@*{path.suffix}")):
+        suffix = candidate.stem[len(path.stem) + 1 :]
+        if suffix.endswith("x") and suffix[:-1].isdigit():
+            variants.append(candidate)
+
     best, best_width = path, 0
-    for candidate in sorted(path.parent.glob(f"{path.stem}*{path.suffix}")):
+    for candidate in variants:
         try:
             with Image.open(candidate) as handle:
                 width = handle.width

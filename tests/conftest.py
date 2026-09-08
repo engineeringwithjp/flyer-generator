@@ -138,6 +138,12 @@ def repo(tmp_path, monkeypatch):
     _write_image(root / "assets/roofing/roof-one.jpg", (90, 100, 112))
     _write_image(root / "assets/roofing/roof-two.jpg", (150, 158, 168))
     _write_image(root / "assets/siding/siding-one.jpg", (170, 180, 190))
+    # Tagged as finished work so an "upgrade" campaign can actually use it.
+    # Without a stage the work-state policy excludes it from every message that
+    # implies completed work, which leaves siding campaigns with no photograph.
+    (root / "assets/siding/siding-one.json").write_text(
+        json.dumps({"provenance": {"stage": "after"}}, indent=2), encoding="utf-8"
+    )
     _write_image(root / "clients/testco/assets/approved/roofing-client-shot.jpg", (70, 80, 92))
     _write_image(root / "clients/testco/assets/logo/logo.png", (255, 255, 255), size=(400, 120))
 

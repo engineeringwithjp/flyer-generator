@@ -126,3 +126,15 @@ def test_a_headline_that_is_only_the_campaign_name_is_blocked(client):
 def test_a_service_the_business_does_not_offer_is_blocked(client):
     spec = _spec(client, service="plumbing")
     assert "service_matches_the_business" in _errors(check(spec, client))
+
+
+def test_a_service_flyer_without_a_photograph_is_blocked(client):
+    """A brand gradient is a poor argument about cracked siding panels."""
+    spec = _spec(client, service="siding", image={"asset_id": None})
+    assert "service_flyer_needs_a_photograph" in _errors(check(spec, client))
+
+
+def test_a_general_flyer_without_a_photograph_is_fine(client):
+    """The procedural brand card is a legitimate output for a brand message."""
+    spec = _spec(client, service="general", image={"asset_id": None})
+    assert "service_flyer_needs_a_photograph" not in _errors(check(spec, client))

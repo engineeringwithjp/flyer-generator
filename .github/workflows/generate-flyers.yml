@@ -161,11 +161,17 @@ jobs:
           RUN_ID: ${{ steps.generate.outputs.run_id }}
           PASSED: ${{ steps.generate.outputs.flyers_passed }}
           TOTAL: ${{ steps.generate.outputs.flyers_generated }}
+          # Passed through the environment rather than interpolated into the
+          # script body. A `${{ }}` expression only accepts single-quoted
+          # strings, and a double-quoted one here made the whole file
+          # unparseable - which silently un-registered the `schedule:` triggers,
+          # so the daily run never fired at all. env: has no such trap.
+          CLIENT: ${{ inputs.client || 'all-elite' }}
         with:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const client = '${{ inputs.client || "all-elite" }}';
+            const client = process.env.CLIENT;
             const today = new Date().toISOString().slice(0, 10);
 
             let summary = '';

@@ -300,6 +300,28 @@ def _plan_with_claude(
     )
 
 
+def _photo_budget(client: Client) -> dict[str, int]:
+    """How many flyers each service can support today, by photograph count.
+
+    ``general`` is deliberately absent from the result: a general campaign can
+    be illustrated by any exterior, so it is never the constraint.
+    """
+    try:
+        from ..assets.catalog import AssetCatalog
+        from ..assets.selector import photo_coverage
+
+        counts = photo_coverage(AssetCatalog.load(), client.id, client.services)
+    except Exception as exc:  # the planner must never fail over a catalogue read
+        log.debug("Photo budget unavailable (%s); planning without it", exc)
+        return {}
+    counts.pop("general", None)
+    # A floor of one. Zero photographs for a service is a real problem, but it
+    # is the quality gate's problem - blocking the campaign here as well took
+    # the whole batch to nothing when a service had no tagged imagery. The
+    # budget exists to stop *duplication*, not to police absence.
+    return {service: max(count, 1) for service, count in counts.items()}
+
+
 def _plan_deterministic(
     client: Client,
     count: int,
@@ -310,7 +332,11 @@ def _plan_deterministic(
 ) -> CampaignPlan:
     """Least-recently-used rotation. No API required."""
     recent_ids = [entry.get("campaign") for entry in history]
-    recent_layouts = [entry.get("layout") for entry in history[:2]]
+    # Every layout the client has seen in the last ten days, not the last two
+    # runs, and read from the key that is actually written.
+    from ..pipeline import history as history_store
+
+    recent_layouts = history_store.delivered_layouts(client.id, days=10)
 
     def staleness(campaign: Campaign) -> tuple[int, int, str]:
         try:
@@ -319,16 +345,36 @@ def _plan_deterministic(
             last_used = 10_000
         return (-last_used, 0 if campaign.in_season(season) else 1, campaign.id)
 
-    ordered = sorted(eligible, key=staleness)
+    # Campaigns already delivered this week are out. The least-recently-used
+    # sort demotes them but does not remove them, and with a short eligible
+    # list "demoted" still comes up again two days later carrying the same
+    # headline.
+    from ..pipeline import history as history_store
+
+    seen_recently = history_store.delivered_campaigns(client.id, days=7)
+    fresh = [c for c in eligible if c.id not in seen_recently]
+    ordered = sorted(fresh or eligible, key=staleness)
+
+    # A batch cannot use more photographs of a service than exist. Scheduling
+    # two siding flyers against one siding photograph gets the first a photo
+    # and the second a plain brand card, because the selector will not reuse an
+    # image inside a batch. Better to spend the second slot on a service the
+    # library can actually illustrate.
+    budget = _photo_budget(client)
 
     chosen: list[PlannedFlyer] = []
     used_angles: set[str] = set()
+    used_services: dict[str, int] = {}
     for campaign in ordered:
         if len(chosen) >= count:
             break
+        allowance = budget.get(campaign.service)
+        if allowance is not None and used_services.get(campaign.service, 0) >= allowance:
+            continue
         # Prefer a different angle for the second slot.
         if campaign.angle in used_angles and len(ordered) > count * 2:
             continue
+        used_services[campaign.service] = used_services.get(campaign.service, 0) + 1
         layout = _default_layout(campaign, avoid=recent_layouts)
         used_angles.add(campaign.angle)
         chosen.append(
@@ -343,12 +389,17 @@ def _plan_deterministic(
             )
         )
 
-    # Top up if the angle filter was too strict.
+    # Top up if the angle filter was too strict. The photo budget still holds:
+    # a flyer with no photograph is worse than one flyer fewer.
     for campaign in ordered:
         if len(chosen) >= count:
             break
         if any(c.campaign_id == campaign.id for c in chosen):
             continue
+        allowance = budget.get(campaign.service)
+        if allowance is not None and used_services.get(campaign.service, 0) >= allowance:
+            continue
+        used_services[campaign.service] = used_services.get(campaign.service, 0) + 1
         chosen.append(
             PlannedFlyer(
                 slot=len(chosen) + 1,
@@ -371,10 +422,27 @@ def _plan_deterministic(
 
 
 def _default_layout(campaign: Campaign, avoid: list | None = None) -> str:
+    """The campaign's best layout that the client has not just seen.
+
+    Falling back to ``preferred_layouts[0]`` once the preferences were
+    exhausted is what kept putting hero-full on consecutive days: the avoid
+    list was consulted, found nothing, and then handed back the very layout it
+    was meant to rule out. Widening the search to every implemented layout
+    keeps the rotation moving even when a campaign has only two preferences.
+    """
+    from ..rendering.templates import LAYOUT_BUILDERS
+
     avoid = [a for a in (avoid or []) if a]
     for layout in campaign.preferred_layouts:
         if layout not in avoid:
             return layout
+
+    # `before-after` asserts two photographs are one job, so it is never a
+    # fallback - it is only ever used when a campaign explicitly asks for it.
+    for layout in sorted(LAYOUT_BUILDERS):
+        if layout not in avoid and layout != "before-after":
+            return layout
+
     if campaign.preferred_layouts:
         return campaign.preferred_layouts[0]
     return "banner-lower-third"

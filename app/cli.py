@@ -709,6 +709,9 @@ def cmd_deliver(args: argparse.Namespace) -> int:
         results=results,
     )
     report = deliver(run, client, when, settings)
+    from .pipeline import history
+
+    history.mark_delivered(report.delivered)
 
     for flyer_id in report.delivered:
         print(f"  {GREEN}delivered{RESET}  {flyer_id}")

@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: main
 
@@ -74,7 +74,7 @@ jobs:
           fi
 
       - name: Acknowledge
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const applied = '${{ steps.apply.outputs.applied }}';

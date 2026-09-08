@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/setup
         with:
@@ -51,7 +51,7 @@ jobs:
 
       - name: Open a pull request with the catalogued references
         if: steps.check.outputs.count != '0'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: references/ingest-${{ github.run_number }}
           commit-message: "feat(references): catalogue ${{ steps.check.outputs.count }} new reference(s)"

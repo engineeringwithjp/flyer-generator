@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with:
           fonts: "false"
@@ -32,7 +32,7 @@ jobs:
       # Flyers are gitignored, so the gallery is built from the most recent
       # generation artifacts rather than from the repository.
       - name: Pull recent flyer artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         continue-on-error: true
         with:
           pattern: flyers-*
@@ -44,7 +44,7 @@ jobs:
       - name: Build
         run: python -m app.cli gallery --out site
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
@@ -56,4 +56,4 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

@@ -164,10 +164,14 @@ class NanoBananaEngine:
         folder.mkdir(parents=True, exist_ok=True)
         return folder
 
-    def build_daily_batch(self, count: int = 5) -> list[FlyerConcept]:
+    def build_daily_batch(self, count: int = 5, target_date: date | None = None) -> list[FlyerConcept]:
         """Formulate a diverse batch of 5 daily flyer concepts with distinct houses, angles, and corporate styling.
         Zero em dashes, zero emojis, authentic corporate branding, and strict non-drone customer copy.
+        Includes seasonal promo rotation: exactly 5 times in September (days 1, 7, 14, 21, 28),
+        features the 'September Savings' ($500 off single replacement, $1,000 off 2 bundled replacements; repairs ineligible)
+        to prevent repetitive flyers.
         """
+        target_date = target_date or date.today()
         photos = self.pick_diverse_photos(count=8)
         while len(photos) < 8:
             photos.append(None)
@@ -225,35 +229,67 @@ class NanoBananaEngine:
             )
         )
 
-        # 3. Corporate Price Comparison Offer Flyer (Bergen County data + Maroon & Gold brand colors, mimic ref 6)
+        # 3. Promotional Slot: Conditional September Savings (5x / month in Sept) or Standard Price Comparison
+        is_september_promo_day = (target_date.month == 9 and target_date.day in {1, 7, 14, 21, 28})
         ref_comp = self.ref_dir / "reference_flyer6.png"
-        concepts.append(
-            FlyerConcept(
-                name="Price Comparison Offer Flyer",
-                archetype="price_comparison",
-                aspect_ratio="9:16",
-                references=[ref_comp] if ref_comp.exists() else [],
-                background_photo=photos[2],
-                output_filename="3 - Price Comparison Offer Flyer.jpg",
-                prompt=(
-                    f"Generate a 9:16 high-end corporate advertisement flyer for {CLIENT_INFO['name']}. "
-                    f"Clean modern flat design agency layout mimicking the reference flyer structure. "
-                    f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}). "
-                    f"Centrally framed high-definition aerial photograph of a newly completed roof on a Bergen County NJ home. "
-                    f"Incorporate the official {CLIENT_INFO['name']} logo seamlessly at the top center with authentic sharp vector proportions. No white sticker border. "
-                    f"Header Badge: BERGEN COUNTY'S PREMIER ROOFING CONTRACTOR | "
-                    f"Headline: UNBEATABLE QUALITY. UNBEATABLE PRICE. | "
-                    f"Subhead: Premium GAF Architectural Roofing Systems at Direct Contractor Pricing. | "
-                    f"Comparison Cards: "
-                    f"Card 1 (Muted charcoal): 'Average Bergen County Contractor: $14,800' (crossed out in red) - Standard Shingles | "
-                    f"Card 2 (Deep Maroon with Gold border): 'All Elite Direct Contractor Price: Starting at $6,499' (Bold Gold text) - GAF Master Elite Installation | "
-                    f"Trust Points: 50-Year GAF Golden Pledge Warranty | Top Rated Across Bergen County Homeowners | Price-Match Guarantee | "
-                    f"CTA Button: 'Claim Your Free On-Site Roof Inspection' | "
-                    f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['address']} | {CLIENT_INFO['license']}. "
-                    f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
-                ),
+
+        if is_september_promo_day:
+            concepts.append(
+                FlyerConcept(
+                    name="September Savings Promo Flyer",
+                    archetype="september_savings_promo",
+                    aspect_ratio="9:16",
+                    references=[ref_comp] if ref_comp.exists() else [],
+                    background_photo=photos[2],
+                    output_filename="3 - Promo - September Savings ($1,000 Replacement Bundle Offer).jpg",
+                    prompt=(
+                        f"Generate a 9:16 high-end corporate promotional advertisement flyer for {CLIENT_INFO['name']}. "
+                        f"Clean modern flat design agency layout. "
+                        f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}) with crisp white and dark charcoal ({CLIENT_INFO['colors']['dark']}). "
+                        f"Centrally framed high-definition photograph of a finished Bergen County luxury residential home with new architectural roof and clean siding. "
+                        f"Seamlessly incorporate the authentic All Elite company logo at the top on a flat solid header bar with crisp vector proportions and zero white sticker outlines. "
+                        f"Top Badge: SEPTEMBER SAVINGS EVENT | LIMITED TIME FALL OFFER | "
+                        f"Main Headline: SAVE UP TO $1,000 ON EXTERIOR REPLACEMENTS | "
+                        f"Subhead: Upgrade your home with New Jersey's premier roofing and siding contractor. | "
+                        f"Two Promo Offer Cards: "
+                        f"Card 1 (Dark Slate Card with Gold Accent): '$500 OFF Any Single Replacement Project' (Full Roof Replacement OR Full Siding Replacement) | "
+                        f"Card 2 (Deep Maroon Card with Gold Border): 'SAVE $1,000 TOTAL' (When you pair 2 replacement projects: Full Roof plus Full Siding Replacement) | "
+                        f"Prominent Fine Print Disclaimer: '*Repairs are not eligible for this offer. Valid exclusively on full replacement projects through September 30.' | "
+                        f"Trust Points: GAF Master Elite Certified | 50-Year Golden Pledge Warranty | Licensed and Insured | Flexible Financing Available | "
+                        f"CTA Button: 'Claim Your September Savings | Free On-Site Inspection' | "
+                        f"Footer: Phone: {CLIENT_INFO['phone']} | Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | Address: {CLIENT_INFO['address']} | License: {CLIENT_INFO['license']}. "
+                        f"Strict constraints: Do not mention drone roof inspections. Do not use em dashes. Do not use emojis or stars. Do not use white sticker outlines around the logo."
+                    ),
+                )
             )
-        )
+        else:
+            concepts.append(
+                FlyerConcept(
+                    name="Price Comparison Offer Flyer",
+                    archetype="price_comparison",
+                    aspect_ratio="9:16",
+                    references=[ref_comp] if ref_comp.exists() else [],
+                    background_photo=photos[2],
+                    output_filename="3 - Price Comparison Offer Flyer.jpg",
+                    prompt=(
+                        f"Generate a 9:16 high-end corporate advertisement flyer for {CLIENT_INFO['name']}. "
+                        f"Clean modern flat design agency layout mimicking the reference flyer structure. "
+                        f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}). "
+                        f"Centrally framed high-definition aerial photograph of a newly completed roof on a Bergen County NJ home. "
+                        f"Incorporate the official {CLIENT_INFO['name']} logo seamlessly at the top center with authentic sharp vector proportions. No white sticker border. "
+                        f"Header Badge: BERGEN COUNTY'S PREMIER ROOFING CONTRACTOR | "
+                        f"Headline: UNBEATABLE QUALITY. UNBEATABLE PRICE. | "
+                        f"Subhead: Premium GAF Architectural Roofing Systems at Direct Contractor Pricing. | "
+                        f"Comparison Cards: "
+                        f"Card 1 (Muted charcoal): 'Average Bergen County Contractor: $14,800' (crossed out in red) - Standard Shingles | "
+                        f"Card 2 (Deep Maroon with Gold border): 'All Elite Direct Contractor Price: Starting at $6,499' (Bold Gold text) - GAF Master Elite Installation | "
+                        f"Trust Points: 50-Year GAF Golden Pledge Warranty | Top Rated Across Bergen County Homeowners | Price-Match Guarantee | "
+                        f"CTA Button: 'Claim Your Free On-Site Roof Inspection' | "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['address']} | {CLIENT_INFO['license']}. "
+                        f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
+                    ),
+                )
+            )
 
         # 4. Roof Warning Signs & Inspection Alert Flyer (mimic ref 12)
         ref_warn = self.ref_dir / "reference_flyer12.png"
@@ -434,7 +470,7 @@ def run_daily_generation(count: int = 5, when: date | None = None) -> list[Path]
     """Execute the daily flyer generation workflow and write directly to Google Drive."""
     engine = NanoBananaEngine()
     dest_dir = engine.get_destination_folder(when)
-    concepts = engine.build_daily_batch(count)
+    concepts = engine.build_daily_batch(count, target_date=when)
 
     print(f"--- Running Nano Banana Pro Daily Generation ({len(concepts)} concepts) ---")
     print(f"Target Google Drive Folder: {dest_dir}")

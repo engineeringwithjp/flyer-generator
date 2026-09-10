@@ -12,6 +12,7 @@ license = { text = "MIT" }
 authors = [{ name = "engineeringwithjp" }]
 dependencies = [
     "anthropic>=0.40",
+    "google-genai>=2.0",
     "pydantic>=2.7",
     "Pillow>=10.3",
     "python-dotenv>=1.0",

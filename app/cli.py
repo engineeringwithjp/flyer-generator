@@ -114,6 +114,13 @@ def cmd_generate(args: argparse.Namespace) -> int:
     return 0 if run.succeeded == len(run.results) and not run.errors else 2
 
 
+def cmd_daily(args: argparse.Namespace) -> int:
+    from .nano_banana import run_daily_generation
+    count = getattr(args, "count", 5) or 5
+    run_daily_generation(count=count)
+    return 0
+
+
 def cmd_ingest(args: argparse.Namespace) -> int:
     from .pipeline.ingest import ingest_directory, ingest_reference
 
@@ -873,6 +880,10 @@ def build_parser() -> argparse.ArgumentParser:
     gen.add_argument("--date", help="ISO date to generate for (default: today, business timezone)")
     gen.add_argument("--no-upload", action="store_true", help="skip the Google Drive upload")
     gen.set_defaults(func=cmd_generate)
+
+    daily = subparsers.add_parser("daily", help="run Nano Banana Pro 5-flyer daily batch to Google Drive")
+    daily.add_argument("--count", type=int, default=5, help="number of flyers (default: 5)")
+    daily.set_defaults(func=cmd_daily)
 
     ing = subparsers.add_parser("ingest-reference", help="analyse and file reference images")
     ing.add_argument("path", nargs="?", help="image or directory (default: references/inbox)")

@@ -2,13 +2,15 @@
 
 Fully automated daily flyer generation engine:
 - Mimics reference flyers and carousel designs
-- Utilizes real client drone / project photos from Google Drive across unique projects
-- Intelligent diversity: picks distinct houses and angles (Closter, Rochelle Park, Elmwood Park, Hillsdale, etc.)
-- Detects roof vs siding vs in-progress deck and enhances with Nano Banana Pro
-- Protects brand identity: authentic corporate logo presentation without funny distortions
+- Utilizes real client project photos from Google Drive across unique projects
+- Strictly filters for 'After' and 'Completed' project photos (never 'Before' or tear-off photos)
+- Intelligent diversity: picks distinct houses and angles (Closter, Rochelle Park, Cresskill, Totowa, Hillsdale, Bergenfield, Elmwood Park, Washington Township)
+- Brand identity: authentic corporate logo presentation without sticker outlines or distortions
 - Brand styling: uses corporate deep maroon (#6B1528) and rich gold (#D4AF37) accents
 - Accurate Bergen County pricing & data from alleliteconstructioncorpnj.com
-- Carousel Posts: creates a dedicated folder containing 3+ sequential, ready-to-post Instagram slides
+- Strictly customer-facing: offers 'Free On-Site Inspection' (never drone inspections for customers)
+- AI-indicator free: zero em dashes, zero emojis, clean editorial typography
+- Carousel Posts: creates a dedicated folder containing 4 sequential, ready-to-post Instagram slides
 - Direct Google Drive sync: writes directly to 'Client Flyers/Flyers/<YYYY>/<Month>/<MM-DD>/' with 0MB local clutter
 """
 
@@ -48,7 +50,7 @@ CLIENT_INFO = {
     "phone": "(551) 335-9235",
     "email": "info@alleliteconstructioncorpnj.com",
     "license": "NJ HIC #13VH12314700",
-    "warranty": "50-year GAF Golden Pledge Master Elite Warranty",
+    "warranty": "50-Year GAF Golden Pledge Master Elite Warranty",
     "colors": {
         "maroon": "#6B1528",
         "gold": "#D4AF37",
@@ -86,21 +88,44 @@ class NanoBananaEngine:
         self.dest_dir = dest_dir
 
     def scan_background_photos_by_project(self) -> dict[str, list[Path]]:
-        """Group photos by project / job site to guarantee diverse houses and angles."""
+        """Group photos by project / job site to guarantee diverse houses and angles.
+        Strictly enforces AFTER and COMPLETED photos only: never picks Before photos or construction debris.
+        """
         valid_extensions = {".jpg", ".jpeg", ".png"}
         projects: dict[str, list[Path]] = defaultdict(list)
 
         if self.assets_dir.exists():
             for root, _, files in os.walk(self.assets_dir):
-                # Identify project from directory structure
-                rel = Path(root).relative_to(self.assets_dir)
-                parts = rel.parts
-                project_name = parts[1] if len(parts) > 1 and parts[0] == "Projects" else parts[0] if parts else "general"
+                root_path = Path(root)
+                parts_lower = [p.lower() for p in root_path.parts]
+
+                # Strictly exclude any Before folders, Videos, or hidden files
+                if "before" in parts_lower or "videos" in parts_lower or "video" in parts_lower:
+                    continue
+                if any(p.startswith(".") for p in root_path.parts):
+                    continue
+
+                # Project name extraction
+                try:
+                    rel = root_path.relative_to(self.assets_dir)
+                    parts = rel.parts
+                    if parts and parts[0] == "Projects":
+                        if len(parts) > 2 and parts[1] == "Completed":
+                            project_name = parts[2]
+                        elif len(parts) > 1:
+                            project_name = parts[1]
+                        else:
+                            project_name = "general"
+                    else:
+                        project_name = parts[0] if parts else "general"
+                except ValueError:
+                    project_name = "general"
 
                 for f in files:
-                    if not f.startswith(".") and any(f.lower().endswith(ext) for ext in valid_extensions):
-                        full_path = Path(root) / f
-                        projects[project_name].append(full_path)
+                    if f.startswith(".") or "before" in f.lower():
+                        continue
+                    if any(f.lower().endswith(ext) for ext in valid_extensions):
+                        projects[project_name].append(root_path / f)
 
         return projects
 
@@ -140,7 +165,9 @@ class NanoBananaEngine:
         return folder
 
     def build_daily_batch(self, count: int = 5) -> list[FlyerConcept]:
-        """Formulate a diverse batch of 5 daily flyer concepts with distinct houses, angles, and corporate styling."""
+        """Formulate a diverse batch of 5 daily flyer concepts with distinct houses, angles, and corporate styling.
+        Zero em dashes, zero emojis, authentic corporate branding, and strict non-drone customer copy.
+        """
         photos = self.pick_diverse_photos(count=8)
         while len(photos) < 8:
             photos.append(None)
@@ -160,15 +187,15 @@ class NanoBananaEngine:
                 prompt=(
                     f"Generate a 9:16 high-resolution Image of a Roofing Contractor Magazine cover for {CLIENT_INFO['name']}. "
                     f"Clean professional 4K. Mimic the bold typography, issue badge, and editorial layout of the reference magazine. "
-                    f"Ensure the roof is perfectly centered and high in definition, showcasing crisp GAF architectural shingles. "
-                    f"Incorporate the official All Elite company logo cleanly in the top or corner with authentic, sharp corporate proportions—no funny distortions. "
+                    f"Ensure the roof is perfectly centered and high in definition, showcasing crisp GAF architectural shingles on a completed New Jersey home. "
+                    f"Incorporate the official All Elite company logo cleanly in the top header band with authentic, sharp corporate proportions and zero white sticker outlines. "
                     f"Include clean, non-sloppy text boxes: "
                     f"Top Masthead: ROOFING CONTRACTOR | Badge: {date.today().year} ISSUE 01 | "
-                    f"Feature: NEW JERSEY ROOFING EXCELLENCE - Trusted Across Bergen & Passaic County | "
-                    f"Sub-box: HIGH-PERFORMANCE SHINGLE SYSTEMS - Advanced Weather Defense, 50-Year Warranty. | "
+                    f"Feature: NEW JERSEY ROOFING EXCELLENCE | Subtitle: Trusted Across Bergen and Passaic County | "
+                    f"Sub-box: HIGH-PERFORMANCE SHINGLE SYSTEMS - Advanced Weather Defense, 50-Year Warranty | "
                     f"Footer bar: Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | "
                     f"Address: {CLIENT_INFO['address']} | Phone: {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
-                    f"Editorial, authentic trade publication aesthetic."
+                    f"Editorial, authentic trade publication aesthetic. No emojis. No em dashes."
                 ),
             )
         )
@@ -184,21 +211,21 @@ class NanoBananaEngine:
                 background_photo=photos[1],
                 output_filename="2 - Roofing Excellence Magazine Cover.jpg",
                 prompt=(
-                    f"Generate a 9:16 high-resolution Image of a Roofing Excellence & Exterior Specialists Magazine Cover. "
-                    f"Clean professional 4K. Centered, eye-level aerial view of a luxury residential home with brand new architectural roofing and clean siding. "
-                    f"Integrate the official {CLIENT_INFO['name']} company logo cleanly and professionally in a solid clean card. "
+                    f"Generate a 9:16 high-resolution Image of a Roofing Excellence and Exterior Specialists Magazine Cover. "
+                    f"Clean professional 4K. Centered, eye-level view of a luxury residential home with brand new architectural roofing and clean siding. "
+                    f"Integrate the official {CLIENT_INFO['name']} company logo seamlessly at the top header without sticker outlines or rounded card bubbles. "
                     f"Header: ROOFING EXCELLENCE | Top Corner Badge: {date.today().year} EDITION | "
                     f"Tagline: Insight. Industry. Craftsmanship. | "
-                    f"Headline: CRAFTSMANSHIP, PROTECTION & CURB APPEAL | "
-                    f"Features: FULL ROOF REPLACEMENT • HIGH-DEFINITION SHINGLE SYSTEMS • SEAMLESS GUTTERS | "
+                    f"Headline: CRAFTSMANSHIP, PROTECTION AND CURB APPEAL | "
+                    f"Features: Full Roof Replacement | High-Definition Shingle Systems | Seamless Gutters | "
                     f"Contact Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | "
                     f"Visit Us: {CLIENT_INFO['address']} | Phone: {CLIENT_INFO['phone']} | {CLIENT_INFO['email']}. "
-                    f"Clean, prestigious editorial design."
+                    f"Clean, prestigious editorial design. No emojis. No em dashes."
                 ),
             )
         )
 
-        # 3. Corporate Price Comparison Offer Flyer (Bergen County data + Maroon & Gold brand colors)
+        # 3. Corporate Price Comparison Offer Flyer (Bergen County data + Maroon & Gold brand colors, mimic ref 6)
         ref_comp = self.ref_dir / "reference_flyer6.png"
         concepts.append(
             FlyerConcept(
@@ -210,18 +237,20 @@ class NanoBananaEngine:
                 output_filename="3 - Price Comparison Offer Flyer.jpg",
                 prompt=(
                     f"Generate a 9:16 high-end corporate advertisement flyer for {CLIENT_INFO['name']}. "
-                    f"Luxury contractor aesthetic utilizing corporate brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}). "
-                    f"Centrally framed high-definition aerial drone view of a newly finished roof on a Bergen County, NJ residential home. "
-                    f"Integrate the official {CLIENT_INFO['name']} company logo at the top center with clean, authentic, crisp vector proportions—never distorted. "
+                    f"Clean modern flat design agency layout mimicking the reference flyer structure. "
+                    f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}). "
+                    f"Centrally framed high-definition aerial photograph of a newly completed roof on a Bergen County NJ home. "
+                    f"Incorporate the official {CLIENT_INFO['name']} logo seamlessly at the top center with authentic sharp vector proportions. No white sticker border. "
                     f"Header Badge: BERGEN COUNTY'S PREMIER ROOFING CONTRACTOR | "
                     f"Headline: UNBEATABLE QUALITY. UNBEATABLE PRICE. | "
                     f"Subhead: Premium GAF Architectural Roofing Systems at Direct Contractor Pricing. | "
                     f"Comparison Cards: "
-                    f"Card 1 (Muted charcoal): 'Average Bergen County Contractor: $14,800' (crossed out in red) • Standard Shingles | "
-                    f"Card 2 (Deep Maroon with Gold border): 'All Elite Direct Contractor Price: Starting at $6,499' (Bold Gold text) • GAF Master Elite Installation | "
-                    f"Trust Badges: 50-Year GAF Golden Pledge Warranty • 4.9★ Rated Across 2,500+ NJ Homeowners • Price-Match Guarantee | "
-                    f"CTA Button: 'Claim Your Free Drone Roof Inspection' | "
-                    f"Footer: {CLIENT_INFO['website']} • {CLIENT_INFO['instagram']} • {CLIENT_INFO['phone']} • {CLIENT_INFO['address']} • {CLIENT_INFO['license']}."
+                    f"Card 1 (Muted charcoal): 'Average Bergen County Contractor: $14,800' (crossed out in red) - Standard Shingles | "
+                    f"Card 2 (Deep Maroon with Gold border): 'All Elite Direct Contractor Price: Starting at $6,499' (Bold Gold text) - GAF Master Elite Installation | "
+                    f"Trust Points: 50-Year GAF Golden Pledge Warranty | Top Rated Across Bergen County Homeowners | Price-Match Guarantee | "
+                    f"CTA Button: 'Claim Your Free On-Site Roof Inspection' | "
+                    f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['address']} | {CLIENT_INFO['license']}. "
+                    f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
                 ),
             )
         )
@@ -237,16 +266,17 @@ class NanoBananaEngine:
                 background_photo=photos[3],
                 output_filename="4 - Roof Warning Signs Inspection Flyer.jpg",
                 prompt=(
-                    f"Generate a 9:16 high-impact emergency roof inspection flyer for {CLIENT_INFO['name']}. "
-                    f"Clean professional 4K. Centered high-resolution drone photo of a residential home. "
-                    f"Include the official {CLIENT_INFO['name']} logo clearly at the top in a crisp corporate card. "
-                    f"Top Banner: ATTENTION BERGEN & NORTH JERSEY HOMEOWNERS | "
+                    f"Generate a 9:16 high-impact roof inspection alert flyer for {CLIENT_INFO['name']}. "
+                    f"Clean professional 4K. Centered high-resolution photo of a completed residential home. "
+                    f"Include the official {CLIENT_INFO['name']} logo clearly and seamlessly at the top. No white sticker outlines. "
+                    f"Top Banner: ATTENTION BERGEN AND NORTH JERSEY HOMEOWNERS | "
                     f"Main Headline: 5 SIGNS YOUR ROOF IS CRYING FOR HELP | "
-                    f"Subheadline: Don't wait for the next storm to discover a leak. Protect your home today. | "
-                    f"5 Warning Sign badges: 1. Missing or Curling Shingles | 2. Granule Loss in Gutters | 3. Water Stains on Ceilings | 4. Damaged Flashing | 5. Roof is 15-20+ Years Old | "
-                    f"Callout Box (Red/Gold): 'FREE SAME-DAY DRONE ROOF INSPECTION' | "
+                    f"Subheadline: Do not wait for the next storm to discover a leak. Protect your home today. | "
+                    f"5 Warning Sign items: 1. Missing or Curling Shingles | 2. Granule Loss in Gutters | 3. Water Stains on Ceilings | 4. Damaged Flashing | 5. Roof is 15-20+ Years Old | "
+                    f"Callout Box (Maroon and Gold): 'FREE SAME-DAY ON-SITE ROOF INSPECTION' | "
                     f"CTA Button: 'Call {CLIENT_INFO['phone']} Now' | "
-                    f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | {CLIENT_INFO['address']} | {CLIENT_INFO['license']}."
+                    f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | {CLIENT_INFO['address']} | {CLIENT_INFO['license']}. "
+                    f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
                 ),
             )
         )
@@ -264,14 +294,15 @@ class NanoBananaEngine:
                 output_filename="Slide 1 - The Hook.jpg",
                 prompt=(
                     f"Generate a 9:16 Instagram carousel cover slide for {CLIENT_INFO['name']}. "
-                    f"Centered bird's-eye overhead drone shot of a pristine residential roof in New Jersey. "
-                    f"Official {CLIENT_INFO['name']} logo in the upper corner without distortion. "
-                    f"Top Badge: 1/4 • SWIPE FOR THE ANATOMY | "
-                    f"Category: ALL ELITE ROOFING & SIDING • SYSTEM BREAKDOWN | "
+                    f"Clean modern editorial layout. Overhead view of a pristine residential roof in New Jersey. "
+                    f"Official {CLIENT_INFO['name']} logo seamlessly in the upper corner without distortion or sticker outlines. "
+                    f"Top Badge: Slide 1 of 4 | System Breakdown | "
+                    f"Category: ALL ELITE ROOFING AND SIDING | "
                     f"Massive Bold Headline: THE PART YOU NEVER SEE MATTERS MOST | "
                     f"Subhead: A roof that protects your family for 50 years starts long before the first shingle is installed. | "
-                    f"Indicator: 'Swipe to see what's beneath your shingles ➔' | "
-                    f"Footer: {CLIENT_INFO['instagram']} • {CLIENT_INFO['website']} • {CLIENT_INFO['phone']}."
+                    f"Indicator: 'Swipe to see what lies beneath your shingles >' | "
+                    f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
+                    f"No emojis. No em dashes."
                 ),
             ),
             FlyerConcept(
@@ -283,13 +314,14 @@ class NanoBananaEngine:
                 output_filename="Slide 2 - The Foundation.jpg",
                 prompt=(
                     f"Generate a 9:16 Instagram carousel educational slide 2 for {CLIENT_INFO['name']}. "
-                    f"In-progress overhead shot of a roof showing solid plywood decking and synthetic underlayment installation. "
-                    f"Official logo in corner. "
-                    f"Top Badge: 2/4 • THE FOUNDATION | "
+                    f"Overhead shot of a roof showing solid plywood decking and synthetic underlayment installation. "
+                    f"Official logo cleanly in corner. No sticker borders. "
+                    f"Top Badge: Slide 2 of 4 | The Foundation | "
                     f"Headline: IT STARTS AT THE DECK | "
-                    f"Educational text box: 'Standard felt paper degrades in under 15 years. At All Elite, we inspect 100% of the plywood decking, replacing rotted wood, followed by heavy-duty synthetic underlayment and ice & water shield for a dual watertight seal.' | "
-                    f"Swipe prompt: 'Swipe to see the outer armor ➔' | "
-                    f"Footer: {CLIENT_INFO['instagram']} • {CLIENT_INFO['website']} • {CLIENT_INFO['phone']}."
+                    f"Educational text box: 'Standard felt paper degrades in under 15 years. At All Elite, we inspect 100% of the plywood decking, replacing rotted wood, followed by heavy-duty synthetic underlayment and ice and water shield for a dual watertight seal.' | "
+                    f"Swipe prompt: 'Swipe to see the outer armor >' | "
+                    f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
+                    f"No emojis. No em dashes."
                 ),
             ),
             FlyerConcept(
@@ -302,12 +334,13 @@ class NanoBananaEngine:
                 prompt=(
                     f"Generate a 9:16 Instagram carousel educational slide 3 for {CLIENT_INFO['name']}. "
                     f"High-definition aerial view of finished GAF Timberline HDZ architectural shingles and clean drip edge. "
-                    f"Official logo in upper corner. "
-                    f"Top Badge: 3/4 • THE WEATHER SHIELD | "
+                    f"Official logo cleanly in upper corner. No sticker borders. "
+                    f"Top Badge: Slide 3 of 4 | The Weather Shield | "
                     f"Headline: THE OUTER ARMOR: GAF TIMBERLINE HDZ | "
-                    f"Educational text: '• LayerLock™ Technology: Mechanically fastens shingles to withstand winds up to 130 MPH. • StainGuard Plus™: Algae-resistant granules. • GAF Master Elite: 50-year Golden Pledge warranty protection.' | "
-                    f"Swipe prompt: 'Swipe for next steps ➔' | "
-                    f"Footer: {CLIENT_INFO['instagram']} • {CLIENT_INFO['website']} • {CLIENT_INFO['phone']}."
+                    f"Educational text: 'LayerLock Technology: Mechanically fastens shingles to withstand winds up to 130 MPH. StainGuard Plus: Algae-resistant granules. GAF Master Elite: 50-Year Golden Pledge warranty protection.' | "
+                    f"Swipe prompt: 'Swipe for next steps >' | "
+                    f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
+                    f"No emojis. No em dashes."
                 ),
             ),
             FlyerConcept(
@@ -319,13 +352,14 @@ class NanoBananaEngine:
                 output_filename="Slide 4 - Call To Action.jpg",
                 prompt=(
                     f"Generate a 9:16 Instagram carousel final CTA slide 4 for {CLIENT_INFO['name']}. "
-                    f"Eye-level drone shot of a fully finished Bergen County home with pristine roof and siding. "
-                    f"Official company logo centered in a clean white rounded card. "
-                    f"Top Badge: 4/4 • NEXT STEPS | "
-                    f"Headline: IS YOUR ROOF READY FOR THE NEXT NJ STORM? | "
-                    f"Trust points: Free 21-Point Drone Roof Inspection • Itemized Proposals • 25+ Years Experience • Daily Clean-Up | "
-                    f"CTA Button: 'Book Your Free Inspection Today' | "
-                    f"Footer: {CLIENT_INFO['phone']} • {CLIENT_INFO['website']} • {CLIENT_INFO['instagram']} • {CLIENT_INFO['address']} • {CLIENT_INFO['license']}."
+                    f"Eye-level shot of a completed Bergen County luxury home with pristine finished roof, clean siding, and manicured lawn. "
+                    f"Official company logo seamlessly placed at the top on a clean flat solid dark header. No white sticker border. "
+                    f"Top Badge: Slide 4 of 4 | Next Steps | "
+                    f"Headline: IS YOUR ROOF PREPARED FOR THE NEXT STORM? | "
+                    f"Trust points: Free In-Person On-Site Inspection | Transparent Itemized Proposals | GAF Master Elite Certified Installation | Daily Clean-Up and Dedicated Project Manager | "
+                    f"CTA Button: 'Schedule Your Free On-Site Inspection' | "
+                    f"Footer: Phone: {CLIENT_INFO['phone']} | Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | Address: {CLIENT_INFO['address']} | License: {CLIENT_INFO['license']}. "
+                    f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
                 ),
             ),
         ]

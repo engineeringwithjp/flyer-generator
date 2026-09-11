@@ -18,16 +18,19 @@ from __future__ import annotations
 
 import os
 import random
-import shutil
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
-from typing import Any
 
 # Default Paths
-DEFAULT_LOGO_PATH = Path("/Users/johnpineda/Documents/Projects/flyer-agent/all-elite/logo/logo.png")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+LOCAL_APPROVED_DIR = REPO_ROOT / "clients" / "all-elite" / "assets" / "approved"
+LOCAL_LOGO_LIGHT = REPO_ROOT / "clients" / "all-elite" / "assets" / "logo" / "logo-light@6x.png"
+LOCAL_LOGO_COLOR = REPO_ROOT / "clients" / "all-elite" / "assets" / "logo" / "logo@6x.png"
+
+DEFAULT_LOGO_PATH = LOCAL_LOGO_COLOR if LOCAL_LOGO_COLOR.exists() else Path("/Users/johnpineda/Documents/Projects/flyer-agent/all-elite/logo/logo.png")
 DEFAULT_REF_DIR = Path("/Users/johnpineda/Documents/Projects/flyer-agent/reference-flyers")
 DEFAULT_CAROUSEL_DIR = DEFAULT_REF_DIR / "carousel-flyers" / "carousel1"
 
@@ -58,6 +61,16 @@ CLIENT_INFO = {
     },
 }
 
+# Color constants
+MAROON = (107, 21, 40)          # #6B1528
+DARK_MAROON = (75, 14, 28)     # #4B0E1C
+GOLD = (212, 175, 55)           # #D4AF37
+LIGHT_GOLD = (245, 215, 110)    # #F5D76E
+DARK_BG = (14, 18, 24)          # #0E1218
+WHITE = (255, 255, 255)
+OFF_WHITE = (238, 242, 246)
+MUTED = (160, 170, 180)
+
 
 @dataclass
 class FlyerConcept:
@@ -72,7 +85,6 @@ class FlyerConcept:
     carousel_slides: list[FlyerConcept] = field(default_factory=list)
     width: int = 1080
     height: int = 1350
-
 
 
 class NanoBananaEngine:
@@ -103,7 +115,7 @@ class NanoBananaEngine:
                 parts_lower = [p.lower() for p in root_path.parts]
 
                 # Strictly exclude any Before folders, Bergenfield photos, Videos, or hidden files
-                if "before" in parts_lower or "bergenfield" in parts_lower or "videos" in parts_lower or "video" in parts_lower:
+                if any("before" in p or "bergenfield" in p or "video" in p for p in parts_lower):
                     continue
                 if any(p.startswith(".") for p in root_path.parts):
                     continue
@@ -131,12 +143,10 @@ class NanoBananaEngine:
                         projects[project_name].append(root_path / f)
 
         # Fallback safety net: If Google Drive CloudStorage is unreachable or returned few photos on sleep-wake
-        if not projects or sum(len(v) for v in projects.values()) < 5:
-            local_approved = Path("clients/all-elite/assets/approved")
-            if local_approved.exists():
-                for f in local_approved.iterdir():
-                    if f.suffix.lower() in valid_extensions and "before" not in f.name.lower() and "bergenfield" not in f.name.lower():
-                        projects["local_approved"].append(f)
+        if (not projects or sum(len(v) for v in projects.values()) < 5) and LOCAL_APPROVED_DIR.exists():
+            for f in LOCAL_APPROVED_DIR.iterdir():
+                if f.suffix.lower() in valid_extensions and "before" not in f.name.lower() and "bergenfield" not in f.name.lower():
+                    projects["local_approved"].append(f)
 
         return projects
 
@@ -751,31 +761,36 @@ class NanoBananaEngine:
 
         return concepts[:count]
 
-
     def render_concepts_locally(self, concepts: list[FlyerConcept], dest_dir: Path) -> list[Path]:
         """Render clean, high-end editorial concepts locally using Pillow at 1080x1350 (4:5).
         Strictly enforces:
-        - Original logo appearance (gold crown, maroon roofs; never white silhouette)
+        - Exact Instagram 4:5 (1080x1350 px) full bleed with zero blurry sides
+        - Original vector logo appearance (transparent background; never white sticker boxes)
         - Clean editorial typography directly overlaid without opaque blocking boxes
-        - Zero Bergenfield and zero Before photos
+        - GAF / green ZIP System standard (zero ABC Pro Guard)
+        - Pristine slide 4 completed estate with transparent logo
+        - Zero Bergenfield reused ridge caps and zero Before photos
         """
-        from PIL import Image, ImageDraw, ImageFont, ImageOps
+        from PIL import Image, ImageDraw, ImageFont
 
         dest_dir.mkdir(parents=True, exist_ok=True)
         results: list[Path] = []
 
         def get_font(name: str, size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-            p = Path("assets/fonts") / name
+            p = REPO_ROOT / "assets" / "fonts" / name
             if p.exists():
                 return ImageFont.truetype(str(p), size)
-            for fallback in ("/System/Library/Fonts/Supplemental/Arial.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
+            for fallback in ("/System/Library/Fonts/Supplemental/Arial Bold.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"):
                 if Path(fallback).exists():
                     return ImageFont.truetype(fallback, size)
             return ImageFont.load_default()
 
-        def load_original_logo(max_w: int = 240, max_h: int = 150) -> Image.Image:
-            if self.logo_path.exists():
-                orig = Image.open(self.logo_path).convert("RGBA")
+        def load_clean_logo(light: bool = True, max_w: int = 240, max_h: int = 150) -> Image.Image:
+            logo_p = LOCAL_LOGO_LIGHT if light else LOCAL_LOGO_COLOR
+            if not logo_p.exists():
+                logo_p = self.logo_path
+            if logo_p.exists():
+                orig = Image.open(logo_p).convert("RGBA")
                 bbox = orig.getbbox()
                 if bbox:
                     cropped = orig.crop(bbox)
@@ -783,115 +798,493 @@ class NanoBananaEngine:
                     return cropped.resize((int(cropped.width * ratio), int(cropped.height * ratio)), Image.Resampling.LANCZOS)
             return Image.new("RGBA", (max_w, max_h), (0, 0, 0, 0))
 
-        def load_and_scale_bg(photo: Path | None, width: int = 1080, height: int = 1350) -> Image.Image:
+        def load_and_scale_bg(photo: Path | None, width: int = 1080, height: int = 1350, anchor_y: float = 0.5, zoom: float = 1.0) -> Image.Image:
             # Fallback to local approved photo if photo is None or missing
-            if not photo or not photo.exists():
-                local_dir = Path("clients/all-elite/assets/approved")
-                if local_dir.exists():
-                    approved = [
-                        f for f in local_dir.iterdir()
-                        if f.suffix.lower() in {".jpg", ".jpeg", ".png"}
-                        and "before" not in f.name.lower()
-                        and "bergenfield" not in f.name.lower()
-                    ]
-                    if approved:
-                        photo = random.choice(approved)
+            if (not photo or not photo.exists()) and LOCAL_APPROVED_DIR.exists():
+                approved = [
+                    f for f in LOCAL_APPROVED_DIR.iterdir()
+                    if f.suffix.lower() in {".jpg", ".jpeg", ".png"}
+                    and "before" not in f.name.lower()
+                    and "bergenfield" not in f.name.lower()
+                ]
+                if approved:
+                    photo = random.choice(approved)
 
             if photo and photo.exists():
                 try:
                     img = Image.open(photo).convert("RGBA")
-                    ratio = max(width / img.width, height / img.height)
+                    ratio = max(width / img.width, height / img.height) * zoom
                     scaled = img.resize((int(img.width * ratio), int(img.height * ratio)), Image.Resampling.LANCZOS)
-                    x_off = (scaled.width - width) // 2
-                    y_off = (scaled.height - height) // 2
+                    x_off = int((scaled.width - width) * 0.5)
+                    y_off = int((scaled.height - height) * anchor_y)
+                    x_off = max(0, min(scaled.width - width, x_off))
+                    y_off = max(0, min(scaled.height - height, y_off))
                     return scaled.crop((x_off, y_off, x_off + width, y_off + height))
                 except Exception as e:
                     print(f"Warning loading photo {photo}: {e}", file=sys.stderr)
 
-            # Final fallback: guaranteed non-black default
-            bg = Image.new("RGBA", (width, height), (35, 45, 55))
-            return bg
+            # Final fallback: dark slate background
+            return Image.new("RGBA", (width, height), (20, 26, 34, 255))
 
+        def draw_gradient(im: Image.Image, start_y: int, end_y: int, start_alpha: int = 0, end_alpha: int = 240, color=(10, 14, 20)) -> Image.Image:
+            overlay = Image.new("RGBA", im.size, (0, 0, 0, 0))
+            odraw = ImageDraw.Draw(overlay)
+            h = end_y - start_y
+            for i in range(h):
+                y = start_y + i
+                alpha = int(start_alpha + (end_alpha - start_alpha) * (i / max(1, h)))
+                odraw.line([(0, y), (im.size[0], y)], fill=(color[0], color[1], color[2], alpha))
+            return Image.alpha_composite(im.convert("RGBA"), overlay)
+
+        def draw_centered_text(draw: ImageDraw.ImageDraw, text: str, y: int, font: ImageFont.ImageFont, fill, canvas_w: int = 1080) -> tuple[int, int]:
+            bbox = draw.textbbox((0, 0), text, font=font)
+            tw = bbox[2] - bbox[0]
+            x = (canvas_w - tw) // 2
+            draw.text((x, y), text, font=font, fill=fill)
+            return tw, bbox[3] - bbox[1]
+
+        def draw_centered_in_box(draw: ImageDraw.ImageDraw, text: str, x1: int, x2: int, y: int, font: ImageFont.ImageFont, fill) -> tuple[int, int]:
+            bbox = draw.textbbox((0, 0), text, font=font)
+            tw = bbox[2] - bbox[0]
+            x = x1 + (x2 - x1 - tw) // 2
+            draw.text((x, y), text, font=font, fill=fill)
+            return tw, bbox[3] - bbox[1]
 
         for concept in concepts:
             if concept.is_carousel_folder:
                 carousel_folder = dest_dir / concept.output_filename
                 carousel_folder.mkdir(parents=True, exist_ok=True)
-                for slide in concept.carousel_slides:
+                for _idx, slide in enumerate(concept.carousel_slides, start=1):
                     slide_path = carousel_folder / slide.output_filename
-                    canvas = load_and_scale_bg(slide.background_photo, slide.width, slide.height)
-                    draw = ImageDraw.Draw(canvas)
-                    
-                    # Gradient overlay for text legibility
-                    grad = Image.new("RGBA", (slide.width, slide.height), (0, 0, 0, 0))
-                    gdraw = ImageDraw.Draw(grad)
-                    for y in range(slide.height // 2, slide.height):
-                        alpha = int(180 * ((y - slide.height // 2) / (slide.height // 2)))
-                        gdraw.line([(0, y), (slide.width, y)], fill=(10, 14, 20, alpha))
-                    canvas = Image.alpha_composite(canvas, grad)
-                    draw = ImageDraw.Draw(canvas)
-
-                    # Top right badge
-                    badge_num = slide.archetype.split("_")[-1]
-                    draw.rounded_rectangle((slide.width - 140, 40, slide.width - 40, 85), radius=10, fill=(0, 0, 0, 200), outline=(212, 175, 55, 180), width=1)
-                    draw.text((slide.width - 90, 62), f"{badge_num}/4", font=get_font("Inter-Regular.ttf", 24), anchor="mm", fill=(255, 255, 255))
+                    W, H = slide.width, slide.height
 
                     if slide.archetype == "carousel_slide_4":
-                        # Final CTA slide with authentic logo
-                        logo_img = load_original_logo(max_w=280, max_h=180)
-                        plate_w, plate_h = logo_img.width + 50, logo_img.height + 30
-                        plate_x = (slide.width - plate_w) // 2
-                        plate_y = 200
-                        draw.rounded_rectangle((plate_x, plate_y, plate_x + plate_w, plate_y + plate_h), radius=18, fill=(255, 255, 255, 245))
-                        canvas.paste(logo_img, (plate_x + 25, plate_y + 15), logo_img)
+                        # Slide 4: Luxury estate overhead (DJI_0081) with transparent logo (NO white sticker box!)
+                        s4_bg = LOCAL_APPROVED_DIR / "DJI_0081.JPG"
+                        canvas = load_and_scale_bg(s4_bg if s4_bg.exists() else slide.background_photo, W, H)
+                        dim = Image.new("RGBA", (W, H), (12, 16, 22, 215))
+                        canvas = Image.alpha_composite(canvas, dim)
+                        draw = ImageDraw.Draw(canvas)
 
-                        draw.text((slide.width // 2, plate_y + plate_h + 80), "YOUR ROOF DESERVES THIS STANDARD", font=get_font("BebasNeue-Regular.ttf", 68), anchor="mm", fill=(255, 255, 255))
-                        draw.text((slide.width // 2, plate_y + plate_h + 150), "GAF Master Elite certified craftsmanship backed by our 50-year warranty.", font=get_font("Lato-Regular.ttf", 26), anchor="mm", fill=(220, 225, 230))
-                        
-                        btn_w, btn_h = 560, 68
-                        btn_x = (slide.width - btn_w) // 2
-                        btn_y = plate_y + plate_h + 260
-                        draw.rounded_rectangle((btn_x, btn_y, btn_x + btn_w, btn_y + btn_h), radius=34, outline=(255, 255, 255, 240), width=2)
-                        draw.text((slide.width // 2, btn_y + btn_h // 2), "SCHEDULE YOUR FREE INSPECTION", font=get_font("Lato-Bold.ttf", 26), anchor="mm", fill=(255, 255, 255))
-                    else:
-                        # Slides 1-3: Hook, Foundation, Armor
-                        draw.text((60, 1020), slide.name.upper(), font=get_font("Lato-Bold.ttf", 22), fill=(212, 175, 55))
-                        draw.text((60, 1070), slide.archetype.replace("carousel_slide_", "STEP ").upper(), font=get_font("BebasNeue-Regular.ttf", 64), fill=(255, 255, 255))
-                        draw.text((60, 1140), "Crafted with GAF Master Elite standards for permanent storm protection.", font=get_font("Lato-Regular.ttf", 26), fill=(220, 225, 230))
+                        # Top counter
+                        draw.rounded_rectangle([W - 145, 35, W - 45, 80], radius=10, fill=(0, 0, 0, 180), outline=GOLD, width=1)
+                        draw.text((W - 120, 44), "4/4", font=get_font("Arial Bold.ttf", 24), fill=WHITE)
 
-                    # Footer
-                    draw.text((slide.width // 2, 1310), f"{CLIENT_INFO['instagram']}  |  {CLIENT_INFO['phone']}  |  {CLIENT_INFO['website']}", font=get_font("Inter-Regular.ttf", 22), anchor="mm", fill=(200, 205, 210))
+                        # Transparent Logo
+                        logo = load_clean_logo(light=True, max_w=300, max_h=190)
+                        canvas.paste(logo, ((W - logo.width) // 2, 240), logo)
+
+                        draw = ImageDraw.Draw(canvas)
+                        draw_centered_text(draw, "YOUR ROOF DESERVES", 480, get_font("Arial Bold.ttf", 54), WHITE, W)
+                        draw_centered_text(draw, "THIS STANDARD", 545, get_font("Arial Bold.ttf", 54), WHITE, W)
+                        draw_centered_text(
+                            draw,
+                            "GAF Master Elite certified craftsmanship backed by our\n50-year Golden Pledge warranty.",
+                            640,
+                            get_font("Inter-Regular.ttf", 24),
+                            OFF_WHITE,
+                            W,
+                        )
+
+                        btn_y = 760
+                        btn_w = 640
+                        btn_h = 80
+                        btn_x = (W - btn_w) // 2
+                        draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=40, fill=MAROON, outline=GOLD, width=2)
+                        draw_centered_text(draw, "SCHEDULE A FREE ON-SITE INSPECTION", btn_y + 24, get_font("Arial Bold.ttf", 26), WHITE, W)
+
+                        draw_centered_text(draw, f"Phone: {CLIENT_INFO['phone']}  •  {CLIENT_INFO['website']}  •  {CLIENT_INFO['instagram']}", 890, get_font("Arial Bold.ttf", 22), LIGHT_GOLD, W)
+                        draw_centered_text(draw, CLIENT_INFO['address'], 935, get_font("Inter-Regular.ttf", 20), MUTED, W)
+
+                    elif slide.archetype == "carousel_slide_1":
+                        # Slide 1: Hook - Crew integrity / System Breakdown
+                        s1_bg = LOCAL_APPROVED_DIR / "roof_estate_during_crew_install_001.jpg"
+                        canvas = load_and_scale_bg(s1_bg if s1_bg.exists() else slide.background_photo, W, H, anchor_y=0.08, zoom=1.45)
+                        canvas = draw_gradient(canvas, 620, H, start_alpha=0, end_alpha=245, color=(10, 14, 20))
+                        draw = ImageDraw.Draw(canvas)
+
+                        draw.rounded_rectangle([W - 145, 35, W - 45, 80], radius=10, fill=(0, 0, 0, 180), outline=GOLD, width=1)
+                        draw.text((W - 120, 44), "1/4", font=get_font("Arial Bold.ttf", 24), fill=WHITE)
+
+                        ty = 830
+                        draw.line([(70, ty), (135, ty)], fill=GOLD, width=4)
+                        draw.text((70, ty + 16), "CREW INTEGRITY", font=get_font("BarlowCondensed-Bold.ttf", 24), fill=LIGHT_GOLD)
+                        draw.text((70, ty + 54), "A CREW THAT HOLDS THE LINE", font=get_font("Arial Bold.ttf", 50), fill=WHITE)
+                        draw.text((70, ty + 120), "Every hand on the roof works to the exact same standard.\nPrecision does not scale down on our job sites.", font=get_font("Inter-Regular.ttf", 22), fill=OFF_WHITE)
+                        draw.text((70, ty + 200), "Swipe to see how we build ->", font=get_font("BarlowCondensed-Bold.ttf", 24), fill=LIGHT_GOLD)
+                        draw_centered_text(draw, f"{CLIENT_INFO['name']}  |  {CLIENT_INFO['instagram']}  |  {CLIENT_INFO['phone']}", H - 45, get_font("Inter-Regular.ttf", 17), MUTED, W)
+
+                    elif slide.archetype == "carousel_slide_2":
+                        # Slide 2: Foundation - Deck & GAF FeltBuster underlayment (zero ABC pro guard)
+                        s2_bg = LOCAL_APPROVED_DIR / "roof_aerial_during_underlayment_001.jpg"
+                        canvas = load_and_scale_bg(s2_bg if s2_bg.exists() else slide.background_photo, W, H)
+                        canvas = draw_gradient(canvas, 620, H, start_alpha=0, end_alpha=245, color=(10, 14, 20))
+                        draw = ImageDraw.Draw(canvas)
+
+                        draw.rounded_rectangle([W - 145, 35, W - 45, 80], radius=10, fill=(0, 0, 0, 180), outline=GOLD, width=1)
+                        draw.text((W - 120, 44), "2/4", font=get_font("Arial Bold.ttf", 24), fill=WHITE)
+
+                        ty = 830
+                        draw.line([(70, ty), (135, ty)], fill=GOLD, width=4)
+                        draw.text((70, ty + 16), "THE FOUNDATION", font=get_font("BarlowCondensed-Bold.ttf", 24), fill=LIGHT_GOLD)
+                        draw.text((70, ty + 54), "ZERO SHORTCUTS UNDER THE SHINGLES", font=get_font("Arial Bold.ttf", 46), fill=WHITE)
+                        draw.text((70, ty + 120), "We inspect 100% of plywood decking and replace damaged wood.\nFollowed by dual-layer ice & water shield and GAF synthetic underlayment.", font=get_font("Inter-Regular.ttf", 22), fill=OFF_WHITE)
+                        draw.text((70, ty + 200), "Swipe to outer armor ->", font=get_font("BarlowCondensed-Bold.ttf", 24), fill=LIGHT_GOLD)
+                        draw_centered_text(draw, f"{CLIENT_INFO['name']}  |  {CLIENT_INFO['instagram']}  |  {CLIENT_INFO['phone']}", H - 45, get_font("Inter-Regular.ttf", 17), MUTED, W)
+
+                    elif slide.archetype == "carousel_slide_3":
+                        # Slide 3: Storm resilience - GAF Timberline HDZ LayerLock shingles
+                        s3_bg = LOCAL_APPROVED_DIR / "DJI_0074.JPG"
+                        canvas = load_and_scale_bg(s3_bg if s3_bg.exists() else slide.background_photo, W, H)
+                        canvas = draw_gradient(canvas, 620, H, start_alpha=0, end_alpha=245, color=(10, 14, 20))
+                        draw = ImageDraw.Draw(canvas)
+
+                        draw.rounded_rectangle([W - 145, 35, W - 45, 80], radius=10, fill=(0, 0, 0, 180), outline=GOLD, width=1)
+                        draw.text((W - 120, 44), "3/4", font=get_font("Arial Bold.ttf", 24), fill=WHITE)
+
+                        ty = 830
+                        draw.line([(70, ty), (135, ty)], fill=GOLD, width=4)
+                        draw.text((70, ty + 16), "STORM RESILIENCE", font=get_font("BarlowCondensed-Bold.ttf", 24), fill=LIGHT_GOLD)
+                        draw.text((70, ty + 54), "BUILT TO OUTLAST THE STORM", font=get_font("Arial Bold.ttf", 50), fill=WHITE)
+                        draw.text((70, ty + 120), "GAF Timberline HDZ shingles mechanically locked course by course.\nEngineered to withstand 130 MPH coastal winds with 50-year warranty.", font=get_font("Inter-Regular.ttf", 22), fill=OFF_WHITE)
+                        draw.text((70, ty + 200), "Swipe for your roof ->", font=get_font("BarlowCondensed-Bold.ttf", 24), fill=LIGHT_GOLD)
+                        draw_centered_text(draw, f"{CLIENT_INFO['name']}  |  {CLIENT_INFO['instagram']}  |  {CLIENT_INFO['phone']}", H - 45, get_font("Inter-Regular.ttf", 17), MUTED, W)
+
                     canvas.convert("RGB").save(slide_path, "JPEG", quality=96)
                     results.append(slide_path)
+
             else:
                 out = dest_dir / concept.output_filename
-                canvas = load_and_scale_bg(concept.background_photo, concept.width, concept.height)
-                draw = ImageDraw.Draw(canvas)
+                W, H = concept.width, concept.height
 
-                # Clean dark header
-                draw.rectangle((0, 0, concept.width, 140), fill=(20, 24, 28, 250))
-                logo_img = load_original_logo(max_w=200, max_h=100)
-                # Paste original logo on clean header
-                canvas.paste(logo_img, (40, 20), logo_img)
-                draw.text((concept.width - 40, 70), "MASTER ELITE CERTIFIED", font=get_font("Lato-Bold.ttf", 24), anchor="rm", fill=(212, 175, 55))
+                # Dedicated Archetype Renderers
+                if concept.archetype == "magazine_industry_voice":
+                    im = Image.new("RGBA", (W, H), (14, 18, 24, 255))
+                    bg_photo = LOCAL_APPROVED_DIR / "DJI_0081.JPG"
+                    im.paste(load_and_scale_bg(bg_photo, W, H), (0, 0))
+                    im = draw_gradient(im, 0, 420, start_alpha=240, end_alpha=20, color=(12, 16, 22))
+                    im = draw_gradient(im, 700, H, start_alpha=0, end_alpha=245, color=(12, 16, 22))
+                    draw = ImageDraw.Draw(im)
 
-                # Gradient bottom for text legibility
-                grad = Image.new("RGBA", (concept.width, concept.height), (0, 0, 0, 0))
-                gdraw = ImageDraw.Draw(grad)
-                for y in range(concept.height - 450, concept.height):
-                    alpha = int(220 * ((y - (concept.height - 450)) / 450))
-                    gdraw.line([(0, y), (concept.width, y)], fill=(15, 18, 22, alpha))
-                canvas = Image.alpha_composite(canvas, grad)
-                draw = ImageDraw.Draw(canvas)
+                    draw_centered_text(draw, "ROOFING", 25, get_font("Oswald-Bold.ttf", 92), WHITE, W)
+                    bar_y = 135
+                    draw.rectangle([0, bar_y, W, bar_y + 42], fill=(107, 21, 40, 240))
+                    draw_centered_text(draw, "THE INDUSTRY VOICE  |  NEW JERSEY SPECIAL EDITION", bar_y + 8, get_font("BarlowCondensed-Bold.ttf", 24), LIGHT_GOLD, W)
 
-                # Headline & Subheadline
-                draw.text((50, concept.height - 380), concept.name.upper(), font=get_font("BebasNeue-Regular.ttf", 64), fill=(255, 255, 255))
-                draw.text((50, concept.height - 310), "Precision Craftsmanship • 50-Year Golden Pledge Warranty • Direct Pricing", font=get_font("Lato-Regular.ttf", 26), fill=(212, 175, 55))
-                draw.text((50, concept.height - 260), "Serving Bergen, Passaic, and Northern New Jersey Homeowners.", font=get_font("Lato-Regular.ttf", 24), fill=(220, 225, 230))
+                    badge_x = W - 165
+                    draw.rounded_rectangle([badge_x, 25, badge_x + 130, 85], radius=8, fill=GOLD)
+                    draw_centered_in_box(draw, str(date.today().year), badge_x, badge_x + 130, 32, get_font("Arial Bold.ttf", 22), DARK_MAROON)
+                    draw_centered_in_box(draw, "ANNUAL", badge_x, badge_x + 130, 56, get_font("Arial Bold.ttf", 17), DARK_MAROON)
 
-                # Footer
-                draw.rectangle((0, concept.height - 90, concept.width, concept.height), fill=(10, 12, 16))
-                draw.text((concept.width // 2, concept.height - 45), f"Call {CLIENT_INFO['phone']}  |  {CLIENT_INFO['website']}  |  {CLIENT_INFO['license']}", font=get_font("Inter-Regular.ttf", 22), anchor="mm", fill=(255, 255, 255))
+                    draw.text((60, 210), "BERGEN COUNTY LUXURY:", font=get_font("BarlowCondensed-Bold.ttf", 28), fill=GOLD)
+                    draw.text((60, 245), "The Roof That Defines An Estate", font=get_font("Oswald-Bold.ttf", 44), fill=WHITE)
+                    draw.text((60, 305), "Elevating architectural curb appeal and weather defense across North Jersey.", font=get_font("Inter-Regular.ttf", 20), fill=OFF_WHITE)
+
+                    draw.rounded_rectangle([60, 780, W - 60, 1060], radius=16, fill=(16, 22, 30, 235), outline=GOLD, width=2)
+                    draw.text((95, 810), "INDUSTRY REPORT: MASTER ELITE CRAFTSMANSHIP", font=get_font("BarlowCondensed-Bold.ttf", 26), fill=LIGHT_GOLD)
+                    draw.text((95, 848), "WHY CERTIFIED INSTALLATION OUTLASTS THE REST", font=get_font("Oswald-Bold.ttf", 38), fill=WHITE)
+                    draw.text(
+                        (95, 905),
+                        "Full tear-off inspection, ice and water shield defense, and precision GAF LayerLock fastening.\nDelivering 50-year non-prorated Golden Pledge protection to New Jersey homeowners.",
+                        font=get_font("Inter-Regular.ttf", 20),
+                        fill=OFF_WHITE,
+                    )
+
+                    btn_y = 985
+                    btn_w = 540
+                    btn_h = 55
+                    btn_x = (W - btn_w) // 2
+                    draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=28, fill=MAROON, outline=GOLD, width=2)
+                    draw_centered_text(draw, "SCHEDULE YOUR FREE ON-SITE INSPECTION", btn_y + 14, get_font("Arial Bold.ttf", 21), WHITE, W)
+
+                    logo = load_clean_logo(light=True, max_w=240, max_h=150)
+                    im.paste(logo, ((W - logo.width) // 2, 1090), logo)
+
+                    draw = ImageDraw.Draw(im)
+                    foot_y = 1245
+                    draw.rectangle([0, foot_y, W, H], fill=(12, 16, 22, 255))
+                    draw.line([(0, foot_y), (W, foot_y)], fill=GOLD, width=2)
+                    draw_centered_text(draw, f"Website: {CLIENT_INFO['website']}  |  Instagram: {CLIENT_INFO['instagram']}", foot_y + 20, get_font("Arial Bold.ttf", 21), WHITE, W)
+                    draw_centered_text(draw, f"Phone: {CLIENT_INFO['phone']}  |  {CLIENT_INFO['address']}", foot_y + 52, get_font("Inter-Regular.ttf", 19), OFF_WHITE, W)
+                    draw_centered_text(draw, f"Licensed & Insured {CLIENT_INFO['license']}", foot_y + 80, get_font("Inter-Regular.ttf", 17), MUTED, W)
+                    canvas = im
+
+                elif concept.archetype == "invisible_difference":
+                    im = Image.new("RGBA", (W, H), (14, 18, 24, 255))
+                    bg_photo = LOCAL_APPROVED_DIR / "roof_dotyrd_suburban_estate_001.jpg"
+                    if not bg_photo.exists():
+                        bg_photo = LOCAL_APPROVED_DIR / "roof_cresskill_aerial_estate_004.jpg"
+                    im.paste(load_and_scale_bg(bg_photo, W, H, anchor_y=0.4), (0, 0))
+                    im = draw_gradient(im, 0, 480, start_alpha=240, end_alpha=30, color=(12, 16, 22))
+                    im = draw_gradient(im, 680, H, start_alpha=0, end_alpha=250, color=(12, 16, 22))
+                    draw = ImageDraw.Draw(im)
+
+                    draw_centered_text(draw, "THE DIFFERENCE ISN'T", 60, get_font("Oswald-Bold.ttf", 66), WHITE, W)
+                    draw_centered_text(draw, "ALWAYS VISIBLE", 135, get_font("Oswald-Bold.ttf", 66), WHITE, W)
+
+                    bar_w = 640
+                    bar_x = (W - bar_w) // 2
+                    bar_y = 225
+                    draw.rounded_rectangle([bar_x, bar_y, bar_x + bar_w, bar_y + 55], radius=28, fill=MAROON, outline=GOLD, width=2)
+                    draw_centered_text(draw, "IT'S BUILT INTO EVERY DECISION", bar_y + 14, get_font("BarlowCondensed-Bold.ttf", 26), WHITE, W)
+
+                    p_y = 320
+                    p_w = 220
+                    gap = 24
+                    start_px = (W - (4 * p_w + 3 * gap)) // 2
+                    pillars = ["1. INSPECTION", "2. MATERIALS", "3. INSTALLATION", "4. PERFORMANCE"]
+                    for i, p in enumerate(pillars):
+                        px = start_px + i * (p_w + gap)
+                        draw.rounded_rectangle([px, p_y, px + p_w, p_y + 50], radius=10, fill=(20, 26, 36, 230), outline=GOLD, width=1)
+                        draw_centered_in_box(draw, p, px, px + p_w, p_y + 14, get_font("Arial Bold.ttf", 17), LIGHT_GOLD)
+
+                    card_y = 780
+                    draw.rounded_rectangle([60, card_y, W - 60, 1050], radius=16, fill=(16, 22, 30, 235), outline=GOLD, width=2)
+                    draw.text((95, card_y + 25), "GAF MASTER ELITE CERTIFIED INSTALLATION", font=get_font("BarlowCondensed-Bold.ttf", 26), fill=LIGHT_GOLD)
+                    draw.text((95, card_y + 60), "50-YEAR GOLDEN PLEDGE PROTECTION", font=get_font("Oswald-Bold.ttf", 38), fill=WHITE)
+                    draw.text(
+                        (95, card_y + 115),
+                        "• Decking: 100% inspection and replacement of damaged plywood.\n• Underlayment: High-performance synthetic shield & leak defense.\n• Shingles: GAF Timberline HDZ mechanically locked against 130 MPH winds.",
+                        font=get_font("Inter-Regular.ttf", 20),
+                        fill=OFF_WHITE,
+                    )
+
+                    btn_y = card_y + 195
+                    btn_w = 560
+                    btn_h = 55
+                    btn_x = (W - btn_w) // 2
+                    draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=28, fill=MAROON, outline=GOLD, width=2)
+                    draw_centered_text(draw, f"GET YOUR FREE ESTIMATE: {CLIENT_INFO['phone']}", btn_y + 14, get_font("Arial Bold.ttf", 22), WHITE, W)
+
+                    logo = load_clean_logo(light=True, max_w=240, max_h=150)
+                    im.paste(logo, ((W - logo.width) // 2, 1090), logo)
+
+                    draw = ImageDraw.Draw(im)
+                    foot_y = 1245
+                    draw.rectangle([0, foot_y, W, H], fill=(12, 16, 22, 255))
+                    draw.line([(0, foot_y), (W, foot_y)], fill=GOLD, width=2)
+                    draw_centered_text(draw, f"{CLIENT_INFO['name']}  •  Hackensack, NJ  •  {CLIENT_INFO['license']}", foot_y + 22, get_font("Arial Bold.ttf", 21), WHITE, W)
+                    draw_centered_text(draw, f"{CLIENT_INFO['website']}  •  {CLIENT_INFO['instagram']}  •  {CLIENT_INFO['phone']}", foot_y + 54, get_font("Inter-Regular.ttf", 19), OFF_WHITE, W)
+                    canvas = im
+
+                elif concept.archetype == "weather_defense":
+                    im = Image.new("RGBA", (W, H), (14, 18, 24, 255))
+                    bg_photo = LOCAL_APPROVED_DIR / "roof_cresskill_aerial_estate_004.jpg"
+                    im.paste(load_and_scale_bg(bg_photo, W, H), (0, 0))
+                    im = draw_gradient(im, 0, 420, start_alpha=245, end_alpha=30, color=(12, 16, 22))
+                    im = draw_gradient(im, 480, H, start_alpha=20, end_alpha=250, color=(12, 16, 22))
+
+                    logo = load_clean_logo(light=True, max_w=140, max_h=110)
+                    im.paste(logo, ((W - logo.width) // 2, 22), logo)
+
+                    draw = ImageDraw.Draw(im)
+                    draw_centered_text(draw, "YOUR ROOF FACES THIS EVERY YEAR", 155, get_font("Oswald-Bold.ttf", 52), WHITE, W)
+                    draw_centered_text(draw, "North Jersey seasons demand an engineered roofing system built to endure.", 220, get_font("Inter-Regular.ttf", 20), LIGHT_GOLD, W)
+
+                    card_w = 220
+                    card_h = 320
+                    card_y = 500
+                    gap = 24
+                    start_cx = (W - (4 * card_w + 3 * gap)) // 2
+                    weather_items = [
+                        ("SUMMER HEAT", "Intense UV Sun", "Algae-resistant granules prevent shingle blistering & thermal breakdown."),
+                        ("HEAVY RAIN", "Driving Storms", "Dual-layer ice & water shield ensures watertight roof valley defense."),
+                        ("COASTAL WINDS", "130 MPH Gusts", "GAF LayerLock technology mechanically fastens against blow-offs."),
+                        ("WINTER FREEZE", "Snow & Ice Dams", "Proper attic ventilation and waterproof barriers stop leaks cold."),
+                    ]
+
+                    for i, (season, title, desc) in enumerate(weather_items):
+                        cx = start_cx + i * (card_w + gap)
+                        draw.rounded_rectangle([cx, card_y, cx + card_w, card_y + card_h], radius=14, fill=(16, 22, 30, 235), outline=GOLD, width=2)
+                        draw.rounded_rectangle([cx, card_y, cx + card_w, card_y + 45], radius=14, fill=MAROON)
+                        draw_centered_in_box(draw, season, cx, cx + card_w, card_y + 12, get_font("Arial Bold.ttf", 17), WHITE)
+                        draw_centered_in_box(draw, title, cx, cx + card_w, card_y + 60, get_font("Arial Bold.ttf", 20), LIGHT_GOLD)
+                        words = desc.split()
+                        lines = []
+                        cur = []
+                        for w in words:
+                            if len(" ".join(cur + [w])) <= 20:
+                                cur.append(w)
+                            else:
+                                lines.append(" ".join(cur))
+                                cur = [w]
+                        if cur:
+                            lines.append(" ".join(cur))
+                        dy = card_y + 115
+                        for line_txt in lines:
+                            draw_centered_in_box(draw, line_txt, cx, cx + card_w, dy, get_font("Inter-Regular.ttf", 16), OFF_WHITE)
+                            dy += 24
+
+                    banner_y = 860
+                    banner_w = 952
+                    banner_x = (W - banner_w) // 2
+                    draw.rounded_rectangle([banner_x, banner_y, banner_x + banner_w, banner_y + 85], radius=16, fill=MAROON, outline=GOLD, width=2)
+                    draw_centered_text(draw, "FREE SAME-DAY ON-SITE ROOF INSPECTION", banner_y + 16, get_font("Arial Bold.ttf", 26), WHITE, W)
+                    draw_centered_text(draw, f"Comprehensive digital analysis with zero obligation • Call {CLIENT_INFO['phone']}", banner_y + 48, get_font("Inter-Regular.ttf", 18), LIGHT_GOLD, W)
+
+                    btn_y = 975
+                    btn_w = 580
+                    btn_h = 70
+                    btn_x = (W - btn_w) // 2
+                    draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=35, fill=GOLD)
+                    draw_centered_text(draw, f"CALL {CLIENT_INFO['phone']} NOW", btn_y + 14, get_font("Arial Bold.ttf", 24), DARK_MAROON, W)
+                    draw_centered_text(draw, "GAF Master Elite Certified  •  Licensed & Insured", btn_y + 42, get_font("Inter-Regular.ttf", 17), DARK_MAROON, W)
+
+                    foot_y = 1245
+                    draw.rectangle([0, foot_y, W, H], fill=(12, 16, 22, 255))
+                    draw.line([(0, foot_y), (W, foot_y)], fill=GOLD, width=2)
+                    draw_centered_text(draw, f"Website: {CLIENT_INFO['website']}  |  Instagram: {CLIENT_INFO['instagram']}", foot_y + 20, get_font("Arial Bold.ttf", 21), WHITE, W)
+                    draw_centered_text(draw, f"Phone: {CLIENT_INFO['phone']}  |  {CLIENT_INFO['address']}", foot_y + 52, get_font("Inter-Regular.ttf", 19), OFF_WHITE, W)
+                    draw_centered_text(draw, f"Licensed & Insured {CLIENT_INFO['license']}", foot_y + 80, get_font("Inter-Regular.ttf", 17), MUTED, W)
+                    canvas = im
+
+                elif concept.archetype == "siding_financing":
+                    im = Image.new("RGBA", (W, H), (14, 18, 24, 255))
+                    bg_photo = LOCAL_APPROVED_DIR / "siding_cresskill_luxury_curb_appeal_001.jpg"
+                    im.paste(load_and_scale_bg(bg_photo, W, H), (0, 0))
+                    im = draw_gradient(im, 0, 460, start_alpha=245, end_alpha=30, color=(14, 18, 24))
+                    im = draw_gradient(im, 640, H, start_alpha=0, end_alpha=250, color=(14, 18, 24))
+
+                    logo = load_clean_logo(light=True, max_w=140, max_h=110)
+                    im.paste(logo, ((W - logo.width) // 2, 22), logo)
+
+                    draw = ImageDraw.Draw(im)
+                    draw_centered_text(draw, "NEW SIDING. $0 DOWN.", 155, get_font("Oswald-Bold.ttf", 60), WHITE, W)
+                    draw_centered_text(draw, "NO PAYMENTS FOR A YEAR.", 225, get_font("Oswald-Bold.ttf", 60), GOLD, W)
+
+                    b_y = 315
+                    b_w = 290
+                    b_h = 120
+                    gap = 35
+                    start_bx = (W - (3 * b_w + 2 * gap)) // 2
+                    badges = [
+                        ("$0", "DOWN"),
+                        ("0", "PAYMENTS"),
+                        ("0%", "INTEREST (12 MO)"),
+                    ]
+                    for i, (bval, blbl) in enumerate(badges):
+                        bx = start_bx + i * (b_w + gap)
+                        draw.rounded_rectangle([bx, b_y, bx + b_w, b_y + b_h], radius=14, fill=(107, 21, 40, 240), outline=GOLD, width=2)
+                        draw_centered_in_box(draw, bval, bx, bx + b_w, b_y + 12, get_font("Oswald-Bold.ttf", 48), WHITE)
+                        draw_centered_in_box(draw, blbl, bx, bx + b_w, b_y + 76, get_font("Arial Bold.ttf", 17), LIGHT_GOLD)
+
+                    card_y = 790
+                    draw.rounded_rectangle([60, card_y, W - 60, 1050], radius=16, fill=(16, 22, 30, 235), outline=GOLD, width=2)
+                    draw.text((95, card_y + 25), "PREMIUM EXTERIOR SPECIALISTS • LICENSED & INSURED", font=get_font("BarlowCondensed-Bold.ttf", 26), fill=LIGHT_GOLD)
+                    draw.text((95, card_y + 60), "TRANSFORM YOUR HOME'S CURB APPEAL & EFFICIENCY", font=get_font("Oswald-Bold.ttf", 38), fill=WHITE)
+                    draw.text(
+                        (95, card_y + 115),
+                        "James Hardie fiber cement and premium insulated vinyl siding.\nEngineered moisture barriers, custom aluminum trim, and lifetime durability.",
+                        font=get_font("Inter-Regular.ttf", 20),
+                        fill=OFF_WHITE,
+                    )
+
+                    btn_y = card_y + 185
+                    btn_w = 620
+                    btn_h = 55
+                    btn_x = (W - btn_w) // 2
+                    draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=28, fill=MAROON, outline=GOLD, width=2)
+                    draw_centered_text(draw, "CLAIM YOUR $0 DOWN FINANCING TODAY", btn_y + 14, get_font("Arial Bold.ttf", 22), WHITE, W)
+
+                    foot_y = 1245
+                    draw.rectangle([0, foot_y, W, H], fill=(12, 16, 22, 255))
+                    draw.line([(0, foot_y), (W, foot_y)], fill=GOLD, width=2)
+                    draw_centered_text(draw, f"Website: {CLIENT_INFO['website']}  |  Instagram: {CLIENT_INFO['instagram']}", foot_y + 20, get_font("Arial Bold.ttf", 21), WHITE, W)
+                    draw_centered_text(draw, f"Phone: {CLIENT_INFO['phone']}  |  {CLIENT_INFO['address']}", foot_y + 52, get_font("Inter-Regular.ttf", 19), OFF_WHITE, W)
+                    draw_centered_text(draw, f"Licensed & Insured {CLIENT_INFO['license']}", foot_y + 80, get_font("Inter-Regular.ttf", 17), MUTED, W)
+                    canvas = im
+
+                elif concept.archetype == "september_savings_promo":
+                    im = Image.new("RGBA", (W, H), (14, 18, 24, 255))
+                    bg_photo = LOCAL_APPROVED_DIR / "DJI_0081.JPG"
+                    im.paste(load_and_scale_bg(bg_photo, W, H), (0, 0))
+                    im = draw_gradient(im, 0, 480, start_alpha=245, end_alpha=30, color=(14, 18, 24))
+                    im = draw_gradient(im, 600, H, start_alpha=0, end_alpha=250, color=(14, 18, 24))
+
+                    logo = load_clean_logo(light=True, max_w=150, max_h=110)
+                    im.paste(logo, ((W - logo.width) // 2, 20), logo)
+
+                    draw = ImageDraw.Draw(im)
+                    draw_centered_text(draw, "SEPTEMBER SAVINGS EVENT", 155, get_font("Oswald-Bold.ttf", 52), GOLD, W)
+                    draw_centered_text(draw, "LIMITED TIME FALL ROOF & SIDING INCENTIVE", 215, get_font("BarlowCondensed-Bold.ttf", 26), WHITE, W)
+
+                    card_y = 300
+                    card_w = 460
+                    card_h = 240
+                    # Left Promo Card: $500 OFF
+                    draw.rounded_rectangle([60, card_y, 60 + card_w, card_y + card_h], radius=16, fill=(107, 21, 40, 240), outline=GOLD, width=2)
+                    draw_centered_in_box(draw, "$500 OFF", 60, 60 + card_w, card_y + 20, get_font("Oswald-Bold.ttf", 54), WHITE)
+                    draw_centered_in_box(draw, "SINGLE REPLACEMENT", 60, 60 + card_w, card_y + 85, get_font("Arial Bold.ttf", 20), LIGHT_GOLD)
+                    draw_centered_in_box(draw, "Valid on any full roof or", 60, 60 + card_w, card_y + 130, get_font("Inter-Regular.ttf", 19), OFF_WHITE)
+                    draw_centered_in_box(draw, "complete siding installation.", 60, 60 + card_w, card_y + 160, get_font("Inter-Regular.ttf", 19), OFF_WHITE)
+
+                    # Right Promo Card: $1,000 OFF BUNDLE
+                    rx = W - 60 - card_w
+                    draw.rounded_rectangle([rx, card_y, rx + card_w, card_y + card_h], radius=16, fill=(16, 22, 30, 240), outline=GOLD, width=2)
+                    draw_centered_in_box(draw, "$1,000 OFF", rx, rx + card_w, card_y + 20, get_font("Oswald-Bold.ttf", 54), GOLD)
+                    draw_centered_in_box(draw, "2-PROJECT BUNDLE", rx, rx + card_w, card_y + 85, get_font("Arial Bold.ttf", 20), WHITE)
+                    draw_centered_in_box(draw, "Pair roof replacement with", rx, rx + card_w, card_y + 130, get_font("Inter-Regular.ttf", 19), OFF_WHITE)
+                    draw_centered_in_box(draw, "new siding for maximum savings.", rx, rx + card_w, card_y + 160, get_font("Inter-Regular.ttf", 19), OFF_WHITE)
+
+                    # Info Box
+                    info_y = 800
+                    draw.rounded_rectangle([60, info_y, W - 60, 1050], radius=16, fill=(16, 22, 30, 235), outline=GOLD, width=2)
+                    draw.text((95, info_y + 25), "EXCLUSIVELY FOR NORTH JERSEY HOMEOWNERS", font=get_font("BarlowCondensed-Bold.ttf", 26), fill=LIGHT_GOLD)
+                    draw.text((95, info_y + 60), "50-YEAR GOLDEN PLEDGE PROTECTION INCLUDED", font=get_font("Oswald-Bold.ttf", 36), fill=WHITE)
+                    draw.text(
+                        (95, info_y + 115),
+                        "*Repairs are not eligible for this offer. Valid exclusively on full replacement projects\nscheduled through September 30. GAF Master Elite certified workmanship.",
+                        font=get_font("Inter-Regular.ttf", 20),
+                        fill=OFF_WHITE,
+                    )
+
+                    btn_y = info_y + 185
+                    btn_w = 580
+                    btn_h = 55
+                    btn_x = (W - btn_w) // 2
+                    draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=28, fill=MAROON, outline=GOLD, width=2)
+                    draw_centered_text(draw, "CLAIM YOUR SEPTEMBER SAVINGS NOW", btn_y + 14, get_font("Arial Bold.ttf", 22), WHITE, W)
+
+                    foot_y = 1245
+                    draw.rectangle([0, foot_y, W, H], fill=(12, 16, 22, 255))
+                    draw.line([(0, foot_y), (W, foot_y)], fill=GOLD, width=2)
+                    draw_centered_text(draw, f"Website: {CLIENT_INFO['website']}  |  Instagram: {CLIENT_INFO['instagram']}", foot_y + 20, get_font("Arial Bold.ttf", 21), WHITE, W)
+                    draw_centered_text(draw, f"Phone: {CLIENT_INFO['phone']}  |  {CLIENT_INFO['address']}", foot_y + 52, get_font("Inter-Regular.ttf", 19), OFF_WHITE, W)
+                    draw_centered_text(draw, f"Licensed & Insured {CLIENT_INFO['license']}", foot_y + 80, get_font("Inter-Regular.ttf", 17), MUTED, W)
+                    canvas = im
+
+                else:
+                    # Clean generic fallback for any other archetype (e.g. magazine_contractor, price_comparison, warning_signs, etc.)
+                    canvas = load_and_scale_bg(concept.background_photo, W, H)
+                    canvas = draw_gradient(canvas, 0, 380, start_alpha=240, end_alpha=20, color=(14, 18, 24))
+                    canvas = draw_gradient(canvas, H - 550, H, start_alpha=0, end_alpha=245, color=(14, 18, 24))
+                    draw = ImageDraw.Draw(canvas)
+
+                    # Clean top header with transparent logo
+                    logo = load_clean_logo(light=True, max_w=200, max_h=100)
+                    canvas.paste(logo, (50, 30), logo)
+                    draw = ImageDraw.Draw(canvas)
+                    draw.text((W - 50, 75), "GAF MASTER ELITE CERTIFIED", font=get_font("BarlowCondensed-Bold.ttf", 26), anchor="rm", fill=GOLD)
+
+                    # Headline & body card at bottom safe area
+                    card_y = H - 460
+                    draw.rounded_rectangle([50, card_y, W - 50, H - 120], radius=16, fill=(16, 22, 30, 235), outline=GOLD, width=2)
+                    draw.text((80, card_y + 30), concept.name.upper(), font=get_font("Oswald-Bold.ttf", 40), fill=WHITE)
+                    draw.text((80, card_y + 85), "Precision Craftsmanship • 50-Year Golden Pledge Warranty • Direct Pricing", font=get_font("BarlowCondensed-Bold.ttf", 24), fill=LIGHT_GOLD)
+                    draw.text((80, card_y + 130), "Serving Bergen, Passaic, and Northern New Jersey Homeowners with certified excellence.", font=get_font("Inter-Regular.ttf", 20), fill=OFF_WHITE)
+
+                    btn_y = card_y + 185
+                    btn_w = 560
+                    btn_h = 55
+                    btn_x = (W - btn_w) // 2
+                    draw.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=28, fill=MAROON, outline=GOLD, width=2)
+                    draw_centered_text(draw, f"FREE ON-SITE ESTIMATE: {CLIENT_INFO['phone']}", btn_y + 14, get_font("Arial Bold.ttf", 22), WHITE, W)
+
+                    # Footer
+                    foot_y = H - 95
+                    draw.rectangle((0, foot_y, W, H), fill=(10, 14, 20))
+                    draw.line([(0, foot_y), (W, foot_y)], fill=GOLD, width=2)
+                    draw.text((W // 2, foot_y + 45), f"{CLIENT_INFO['phone']}  |  {CLIENT_INFO['website']}  |  {CLIENT_INFO['license']}", font=get_font("Inter-Regular.ttf", 20), anchor="mm", fill=WHITE)
 
                 canvas.convert("RGB").save(out, "JPEG", quality=96)
                 results.append(out)
@@ -906,8 +1299,9 @@ class NanoBananaEngine:
 
         try:
             import io
-            from PIL import Image
+
             from google import genai
+            from PIL import Image
             client = genai.Client(api_key=api_key)
 
             # Map 4:5 to Imagen 3 supported aspect ratio (3:4 is closest supported by Imagen 3)
@@ -968,8 +1362,19 @@ class NanoBananaEngine:
         return []
 
 
-def run_daily_generation(count: int = 5, when: date | None = None, force: bool = False) -> list[Path]:
-    """Execute the daily flyer generation workflow and write directly to Google Drive."""
+def run_daily_generation(
+    count: int = 5,
+    when: date | None = None,
+    force: bool = False,
+    engine_mode: str = "local",
+) -> list[Path]:
+    """Execute the daily flyer generation workflow and write directly to Google Drive.
+    Defaults to engine_mode='local' to guarantee:
+    - 100% adherence to authentic vector logo (no white sticker boxes)
+    - Full-bleed native Instagram 4:5 1080x1350 px sizing with zero blurry sides
+    - Strict GAF / green ZIP material standards (zero ABC Pro Guard)
+    - High-contrast, publication-grade typography
+    """
     engine = NanoBananaEngine()
     dest_dir = engine.get_destination_folder(when)
     concepts = engine.build_daily_batch(count, target_date=when)
@@ -983,15 +1388,16 @@ def run_daily_generation(count: int = 5, when: date | None = None, force: bool =
         return existing_files
 
     results: list[Path] = []
-    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-    if api_key:
-        for idx, concept in enumerate(concepts, start=1):
-            print(f"[{idx}/{len(concepts)}] Concept: {concept.name}")
-            out_paths = engine.execute_with_genai_api(concept, dest_dir)
-            if out_paths:
-                for p in out_paths:
-                    print(f"   -> Saved directly to Drive: {p.name}")
-                    results.append(p)
+    if engine_mode == "ai":
+        api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        if api_key:
+            for idx, concept in enumerate(concepts, start=1):
+                print(f"[{idx}/{len(concepts)}] Concept: {concept.name}")
+                out_paths = engine.execute_with_genai_api(concept, dest_dir)
+                if out_paths:
+                    for p in out_paths:
+                        print(f"   -> Saved directly to Drive: {p.name}")
+                        results.append(p)
 
     if not results:
         print("Executing native edge-to-edge 4:5 local rendering engine...")
@@ -1004,4 +1410,3 @@ def run_daily_generation(count: int = 5, when: date | None = None, force: bool =
 
 if __name__ == "__main__":
     run_daily_generation()
-

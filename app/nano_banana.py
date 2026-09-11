@@ -169,10 +169,12 @@ class NanoBananaEngine:
 
     def build_daily_batch(self, count: int = 5, target_date: date | None = None) -> list[FlyerConcept]:
         """Formulate a diverse batch of 5 daily flyer concepts with distinct houses, angles, and corporate styling.
-        Zero em dashes, zero emojis, authentic corporate branding, and strict non-drone customer copy.
+        Guarantees non-redundancy and non-repetitive designs by rotating across the full reference flyer library:
+        - Day slot 1 (e.g. 09-10): Trade Magazine (ref 16/18), Price Comparison (ref 6), Warning Signs (ref 12), System Breakdown Carousel.
+        - Day slot 2 (e.g. 09-11): Industry Voice Editorial (ref 17), Invisible Difference (ref 9), Four-Season Weather Defense (ref 14), Siding & Financing (ref 7/8), Crew Standards Carousel (carousel 4/5/6).
+        - Day slot 0 (e.g. 09-12): Heritage Zero Shortcuts (ref 13), Multi-Angle Services (ref 15), Reliability Guarantee (ref 10), Price Comparison (ref 6), Materials Carousel.
         Includes seasonal promo rotation: exactly 5 times in September (days 1, 7, 14, 21, 28),
-        features the 'September Savings' ($500 off single replacement, $1,000 off 2 bundled replacements; repairs ineligible)
-        to prevent repetitive flyers.
+        features the 'September Savings' ($500 off single replacement, $1,000 off 2 bundled replacements; repairs ineligible).
         """
         target_date = target_date or date.today()
         photos = self.pick_diverse_photos(count=8)
@@ -180,93 +182,413 @@ class NanoBananaEngine:
             photos.append(None)
 
         concepts: list[FlyerConcept] = []
-
-        # 1. Magazine Cover 1: Roofing Contractor Magazine (mimic ref 16 & 17)
-        ref_mag1 = self.ref_dir / "reference_flyer16.jpg"
-        concepts.append(
-            FlyerConcept(
-                name="Roofing Contractor Magazine Cover",
-                archetype="magazine_contractor",
-                aspect_ratio="4:5",
-                references=[ref_mag1] if ref_mag1.exists() else [],
-                background_photo=photos[0],
-                output_filename="1 - Roofing Contractor Magazine Cover.jpg",
-                prompt=(
-                    f"Generate a 4:5 high-resolution Image (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides or pillarboxing borders) of a Roofing Contractor Magazine cover for {CLIENT_INFO['name']}. "
-                    f"Clean professional 4K. Mimic the bold typography, issue badge, and editorial layout of the reference magazine. "
-                    f"Ensure the roof is perfectly centered and high in definition, showcasing crisp GAF architectural shingles on a completed New Jersey home. "
-                    f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}) masthead banner. "
-                    f"Incorporate the official All Elite company logo cleanly in the header with authentic, sharp corporate proportions and zero white sticker outlines. "
-                    f"Include clean, non-sloppy text boxes: "
-                    f"Top Masthead: ROOFING CONTRACTOR | Badge: {date.today().year} ISSUE 01 | "
-                    f"Feature: NEW JERSEY ROOFING EXCELLENCE | Subtitle: Trusted Across Bergen and Passaic County | "
-                    f"Sub-box: HIGH-PERFORMANCE SHINGLE SYSTEMS - Advanced Weather Defense, 50-Year Warranty | "
-                    f"Footer bar: Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | "
-                    f"Address: {CLIENT_INFO['address']} | Phone: {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
-                    f"Editorial, authentic trade publication aesthetic. No emojis. No em dashes."
-                ),
-            )
-        )
-
-        # 2. Magazine Cover 2: Roofing Excellence & Exterior Digest (mimic ref 18 & 17)
-        ref_mag2 = self.ref_dir / "reference_flyer18.jpeg"
-        concepts.append(
-            FlyerConcept(
-                name="Roofing Excellence Magazine Cover",
-                archetype="magazine_excellence",
-                aspect_ratio="4:5",
-                references=[ref_mag2] if ref_mag2.exists() else [],
-                background_photo=photos[1],
-                output_filename="2 - Roofing Excellence Magazine Cover.jpg",
-                prompt=(
-                    f"Generate a 4:5 high-resolution Image (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides or pillarboxing borders) of a Roofing Excellence and Exterior Specialists Magazine Cover. "
-                    f"Clean professional 4K. Centered, eye-level view of a luxury residential home with brand new architectural roofing and clean siding. "
-                    f"Integrate the official {CLIENT_INFO['name']} company logo seamlessly at the top header without sticker outlines or rounded card bubbles. "
-                    f"Header: ROOFING EXCELLENCE | Top Corner Badge: {date.today().year} EDITION | "
-                    f"Tagline: Insight. Industry. Craftsmanship. | "
-                    f"Headline: CRAFTSMANSHIP, PROTECTION AND CURB APPEAL | "
-                    f"Features: Full Roof Replacement | High-Definition Shingle Systems | Seamless Gutters | "
-                    f"Contact Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | "
-                    f"Visit Us: {CLIENT_INFO['address']} | Phone: {CLIENT_INFO['phone']} | {CLIENT_INFO['email']}. "
-                    f"Clean, prestigious editorial design. No emojis. No em dashes."
-                ),
-            )
-        )
-
-        # 3. Promotional Slot: Conditional September Savings (5x / month in Sept) or Standard Price Comparison
         is_september_promo_day = (target_date.month == 9 and target_date.day in {1, 7, 14, 21, 28})
-        ref_comp = self.ref_dir / "reference_flyer6.png"
+        rotation_slot = target_date.day % 3
 
-        if is_september_promo_day:
+        if rotation_slot == 2:
+            # --- ROTATION B (e.g. 09-11): Industry Voice, Invisible Difference, Weather Defense, Siding Financing, Crew Carousel ---
+            ref_mag = self.ref_dir / "reference_flyer17.jpg"
             concepts.append(
                 FlyerConcept(
-                    name="September Savings Promo Flyer",
-                    archetype="september_savings_promo",
+                    name="The Industry Voice Magazine Cover",
+                    archetype="magazine_industry_voice",
                     aspect_ratio="4:5",
-                    references=[ref_comp] if ref_comp.exists() else [],
-                    background_photo=photos[2],
-                    output_filename="3 - Promo - September Savings ($1,000 Replacement Bundle Offer).jpg",
+                    references=[ref_mag] if ref_mag.exists() else [],
+                    background_photo=photos[0],
+                    output_filename="1 - The Industry Voice Magazine Cover.jpg",
                     prompt=(
-                        f"Generate a 4:5 high-end corporate promotional advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
-                        f"Clean modern flat design agency layout. "
-                        f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}) with crisp white and dark charcoal ({CLIENT_INFO['colors']['dark']}). "
-                        f"Centrally framed high-definition photograph of a finished Bergen County luxury residential home with new architectural roof and clean siding. "
-                        f"Seamlessly incorporate the authentic All Elite company logo at the top on a flat solid header bar with crisp vector proportions and zero white sticker outlines. "
-                        f"Top Badge: SEPTEMBER SAVINGS EVENT | LIMITED TIME FALL OFFER | "
-                        f"Main Headline: SAVE UP TO $1,000 ON EXTERIOR REPLACEMENTS | "
-                        f"Subhead: Upgrade your home with New Jersey's premier roofing and siding contractor. | "
-                        f"Two Promo Offer Cards: "
-                        f"Card 1 (Dark Slate Card with Gold Accent): '$500 OFF Any Single Replacement Project' (Full Roof Replacement OR Full Siding Replacement) | "
-                        f"Card 2 (Deep Maroon Card with Gold Border): 'SAVE $1,000 TOTAL' (When you pair 2 replacement projects: Full Roof plus Full Siding Replacement) | "
-                        f"Prominent Fine Print Disclaimer: '*Repairs are not eligible for this offer. Valid exclusively on full replacement projects through September 30.' | "
-                        f"Trust Points: GAF Master Elite Certified | 50-Year Golden Pledge Warranty | Licensed and Insured | Flexible Financing Available | "
-                        f"CTA Button: 'Claim Your September Savings | Free On-Site Inspection' | "
-                        f"Footer: Phone: {CLIENT_INFO['phone']} | Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | Address: {CLIENT_INFO['address']} | License: {CLIENT_INFO['license']}. "
-                        f"Strict constraints: Do not mention drone roof inspections. Do not use em dashes. Do not use emojis or stars. Do not use white sticker outlines around the logo."
+                        f"Generate a 4:5 high-resolution editorial trade magazine cover (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
+                        f"Mimic the bold typography, issue badge, and editorial elegance of reference_flyer17.jpg. "
+                        f"Full clear wide shot of a luxury estate with new architectural roofing against a morning sky. "
+                        f"Top yellow year badge: '{target_date.year}'. "
+                        f"Massive bold editorial masthead: 'ROOFING'. Sub-bar: 'THE INDUSTRY VOICE | NEW JERSEY SPECIAL EDITION'. "
+                        f"Official {CLIENT_INFO['name']} logo anchored cleanly in the lower corner. "
+                        f"Feature headline: 'MASTER ELITE CRAFTSMANSHIP ACROSS BERGEN COUNTY'. "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
+                        f"Editorial trade publication aesthetic. No emojis. No em dashes."
                     ),
                 )
             )
+
+            ref_diff = self.ref_dir / "reference_flyer9.png"
+            concepts.append(
+                FlyerConcept(
+                    name="The Invisible Difference Craftsmanship Flyer",
+                    archetype="invisible_difference",
+                    aspect_ratio="4:5",
+                    references=[ref_diff] if ref_diff.exists() else [],
+                    background_photo=photos[1],
+                    output_filename="2 - The Invisible Difference Craftsmanship Flyer.jpg",
+                    prompt=(
+                        f"Generate a 4:5 high-impact corporate craft flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic the layout, bold typography, and visual structure of reference_flyer9.png. "
+                        f"Angled perspective of a pristine architectural shingle roof meeting the open sky. "
+                        f"Official {CLIENT_INFO['name']} logo seamlessly integrated. No white sticker border. "
+                        f"Header: 'THE DIFFERENCE ISN'T ALWAYS VISIBLE'. "
+                        f"Subhead bar: 'It is built into every decision.' "
+                        f"4 Pillar Badges: 1. INSPECTION | 2. MATERIALS | 3. INSTALLATION | 4. LONG-TERM PERFORMANCE. "
+                        f"Bottom callout: 'GAF Master Elite Certified • 50-Year Golden Pledge Protection'. "
+                        f"Footer: {CLIENT_INFO['phone']} | {CLIENT_INFO['website']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes. No drone claims."
+                    ),
+                )
+            )
+
+            ref_weather = self.ref_dir / "reference_flyer14.png"
+            concepts.append(
+                FlyerConcept(
+                    name="Four-Season Weather Defense Flyer",
+                    archetype="weather_defense",
+                    aspect_ratio="4:5",
+                    references=[ref_weather] if ref_weather.exists() else [],
+                    background_photo=photos[2],
+                    output_filename="3 - Four-Season Weather Defense Flyer.jpg",
+                    prompt=(
+                        f"Generate a 4:5 residential weather protection flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic the 4-panel defense card layout of reference_flyer14.png. "
+                        f"Full view of a finished New Jersey residential roof. "
+                        f"Official company logo at top center with original gold crown and maroon roof. "
+                        f"Headline: 'YOUR ROOF FACES THIS EVERY YEAR'. "
+                        f"4 Defense Cards: 1. Intense UV Sun | 2. Driving Heavy Rain | 3. 130 MPH Coastal Winds | 4. Freezing Winter Snow. "
+                        f"Red/Maroon CTA banner: 'CALL FOR A FREE ON-SITE INSPECTION!'. "
+                        f"Footer: Phone: {CLIENT_INFO['phone']} | {CLIENT_INFO['website']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes. Strictly no drone claims."
+                    ),
+                )
+            )
+
+            ref_siding = self.ref_dir / "reference_flyer7.png"
+            concepts.append(
+                FlyerConcept(
+                    name="Premium Siding & Exterior Transformation Flyer",
+                    archetype="siding_financing",
+                    aspect_ratio="4:5",
+                    references=[ref_siding] if ref_siding.exists() else [],
+                    background_photo=photos[3],
+                    output_filename="4 - Premium Siding & Exterior Transformation Flyer.jpg",
+                    prompt=(
+                        f"Generate a 4:5 exterior remodeling advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic the high-converting financing card layout of reference_flyer7.png. "
+                        f"Crisp eye-level view of a completed residential home with premium James Hardie or vinyl siding and finished roof. "
+                        f"Headline: 'NEW SIDING. $0 DOWN. NO PAYMENTS FOR A YEAR.' "
+                        f"3 Financing Badges: '$0 DOWN' | '0 PAYMENTS' | '0% INTEREST FOR 12 MONTHS'. "
+                        f"Trust Badge: 'TOP-RATED NEW JERSEY EXTERIOR SPECIALISTS • 5-STAR REVIEWS'. "
+                        f"CTA Button: 'Schedule Your Free On-Site Consultation'. "
+                        f"Footer: {CLIENT_INFO['phone']} | {CLIENT_INFO['website']} | {CLIENT_INFO['address']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                )
+            )
+
+            # Carousel Series B: The Installation Standard & Crew Integrity
+            carousel_folder_name = "5 - Carousel - Installation Standards & Crew Integrity (Instagram Post)"
+            ref_car = self.carousel_dir / "carousel_flyer4.png"
+            carousel_slides = [
+                FlyerConcept(
+                    name="Slide 1 - The Standard",
+                    archetype="carousel_slide_1",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[4],
+                    output_filename="Slide 1 - The Standard.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel cover slide (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic carousel_flyer4.png. Eye-level view of professional roofing crew working meticulously on a steep pitch roof. "
+                        f"Top badge: 'Slide 1 of 4 | The Standard'. "
+                        f"Headline: 'A CREW THAT HOLDS THE LINE'. "
+                        f"Subhead: 'Every hand on the roof works to the same standard. Precision does not scale down.' "
+                        f"Swipe prompt: 'Swipe to see how we build >'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 2 - Deck & Underlayment",
+                    archetype="carousel_slide_2",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[5],
+                    output_filename="Slide 2 - Deck & Underlayment.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel educational slide 2 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Plywood deck and synthetic underlayment installation in progress. "
+                        f"Top badge: 'Slide 2 of 4 | Foundation'. "
+                        f"Headline: 'ZERO SHORTCUTS UNDER THE SHINGLES'. "
+                        f"Educational text: 'We inspect every square foot of decking, replace rotted plywood, and install dual-layer ice and water shield in critical valleys.' "
+                        f"Swipe prompt: 'Swipe for storm resilience >'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 3 - Outlasting the Storm",
+                    archetype="carousel_slide_3",
+                    aspect_ratio="4:5",
+                    references=[self.carousel_dir / "carousel_flyer5.png"] if (self.carousel_dir / "carousel_flyer5.png").exists() else [],
+                    background_photo=photos[6],
+                    output_filename="Slide 3 - Outlasting the Storm.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel educational slide 3 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic carousel_flyer5.png. Overhead shot of clean architectural roof lines, tight valleys, and finished flashing. "
+                        f"Top badge: 'Slide 3 of 4 | The Result'. "
+                        f"Headline: 'BUILT TO OUTLAST THE STORM'. "
+                        f"Educational text: 'Clean lines. Tight valleys. Mechanically fastened LayerLock shingles engineered to withstand 130 MPH winds.' "
+                        f"Swipe prompt: 'Swipe for next steps >'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 4 - Master Elite Call To Action",
+                    archetype="carousel_slide_4",
+                    aspect_ratio="4:5",
+                    references=[self.carousel_dir / "carousel_flyer6.png"] if (self.carousel_dir / "carousel_flyer6.png").exists() else [],
+                    background_photo=photos[7],
+                    output_filename="Slide 4 - Master Elite Call To Action.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel final CTA slide 4 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic carousel_flyer6.png. Stunning finished luxury home. "
+                        f"Official company logo centered cleanly at top. "
+                        f"Headline: 'YOUR ROOF DESERVES THIS STANDARD'. "
+                        f"Outline pill CTA Button: 'SCHEDULE A FREE ON-SITE INSPECTION'. "
+                        f"Footer: Phone: {CLIENT_INFO['phone']} | Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | License: {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes. No drone claims."
+                    ),
+                ),
+            ]
+            concepts.append(
+                FlyerConcept(
+                    name=carousel_folder_name,
+                    archetype="carousel_folder",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    prompt="Instagram Carousel Post Package: Crew Standards & Storm Resilience (4 slides)",
+                    output_filename=carousel_folder_name,
+                    is_carousel_folder=True,
+                    carousel_slides=carousel_slides,
+                )
+            )
+
+        elif rotation_slot == 0:
+            # --- ROTATION C (e.g. 09-12): Heritage Zero Shortcuts, Multi-Angle Services, Reliability Guarantee, Price Comparison, Materials Carousel ---
+            ref_zero = self.ref_dir / "reference_flyer13.png"
+            concepts.append(
+                FlyerConcept(
+                    name="Architectural Heritage Zero Shortcuts Flyer",
+                    archetype="heritage_zero_shortcuts",
+                    aspect_ratio="4:5",
+                    references=[ref_zero] if ref_zero.exists() else [],
+                    background_photo=photos[0],
+                    output_filename="1 - Architectural Heritage - Zero Shortcuts.jpg",
+                    prompt=(
+                        f"Generate a 4:5 architectural craftsmanship flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic the bold diagonal split layout of reference_flyer13.png. "
+                        f"High-end stone residential estate with intricate roof architecture against clear sky. "
+                        f"Headline: 'PRECISION CRAFTSMANSHIP. ZERO SHORTCUTS.' "
+                        f"Subhead: 'GAF Master Elite Certified • 50-Year Golden Pledge Warranty'. "
+                        f"Official logo cleanly integrated in the white diagonal badge. "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                )
+            )
+
+            ref_multi = self.ref_dir / "reference_flyer15.png"
+            concepts.append(
+                FlyerConcept(
+                    name="Multi-Angle Precision Roofing Services",
+                    archetype="multi_services",
+                    aspect_ratio="4:5",
+                    references=[ref_multi] if ref_multi.exists() else [],
+                    background_photo=photos[1],
+                    output_filename="2 - Multi-Angle Precision Roofing Services.jpg",
+                    prompt=(
+                        f"Generate a 4:5 multi-angle services flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic reference_flyer15.png. Angled panels showing roof installation, valley flashing, and finished shingles. "
+                        f"Header: 'FULL EXTERIOR ROOFING SERVICES'. "
+                        f"Subhead: 'Our certified specialists deliver exceptional results on every project.' "
+                        f"CTA Button: 'Request Your Free Itemized Proposal'. "
+                        f"Footer: {CLIENT_INFO['phone']} | {CLIENT_INFO['website']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                )
+            )
+
+            ref_ghost = self.ref_dir / "reference_flyer10.png"
+            concepts.append(
+                FlyerConcept(
+                    name="Contractor Reliability Guarantee - We Wont Ghost You",
+                    archetype="reliability_guarantee",
+                    aspect_ratio="4:5",
+                    references=[ref_ghost] if ref_ghost.exists() else [],
+                    background_photo=photos[2],
+                    output_filename="3 - Contractor Reliability Guarantee - We Wont Ghost You.jpg",
+                    prompt=(
+                        f"Generate a 4:5 bold contractor reliability flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic reference_flyer10.png. High-contrast bold blue sky with finished residential roof. "
+                        f"Main Headline: 'WE WON'T GHOST YOU'. "
+                        f"Subheadline: 'Reliable communication. Dedicated on-site project managers. Daily progress updates.' "
+                        f"Trust Points: Licensed & Insured NJ Contractor | Zero Unexplained Delays | 100% Cleanup Guarantee. "
+                        f"CTA Button: 'Work With A Contractor You Can Trust'. "
+                        f"Footer: {CLIENT_INFO['phone']} | {CLIENT_INFO['website']} | {CLIENT_INFO['address']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                )
+            )
+
+            ref_comp = self.ref_dir / "reference_flyer6.png"
+            concepts.append(
+                FlyerConcept(
+                    name="Direct Contractor Price Comparison",
+                    archetype="price_comparison",
+                    aspect_ratio="4:5",
+                    references=[ref_comp] if ref_comp.exists() else [],
+                    background_photo=photos[3],
+                    output_filename="4 - Direct Contractor Price Comparison.jpg",
+                    prompt=(
+                        f"Generate a 4:5 high-end corporate advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic reference_flyer6.png. Full aerial photograph of a newly completed roof on a Bergen County NJ home. "
+                        f"Header: 'UNBEATABLE QUALITY. UNBEATABLE PRICE.' "
+                        f"Comparison: Competitors at $14,800 vs All Elite Direct Pricing starting at $6,499. "
+                        f"CTA Button: 'Claim Your Free On-Site Roof Inspection'. "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                )
+            )
+
+            # Carousel Series C: Materials Breakdown & Lifetime Warranty
+            carousel_folder_name = "5 - Carousel - Materials Breakdown & Lifetime Warranty (Instagram Post)"
+            ref_car = self.carousel_dir / "carousel_flyer1.png"
+            carousel_slides = [
+                FlyerConcept(
+                    name="Slide 1 - Premium Components",
+                    archetype="carousel_slide_1",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[4],
+                    output_filename="Slide 1 - Premium Components.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel cover slide (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Pristine completed residential roof. "
+                        f"Top badge: 'Slide 1 of 4 | Materials'. "
+                        f"Headline: 'WHAT MAKES A ROOF LAST 50 YEARS?'. "
+                        f"Subhead: 'The difference between a 15-year roof and a lifetime roof is inside the system.' "
+                        f"Swipe prompt: 'Swipe to see the components >'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 2 - Synthetic Shield",
+                    archetype="carousel_slide_2",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[5],
+                    output_filename="Slide 2 - Synthetic Shield.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel educational slide 2 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Synthetic underlayment installation in progress. "
+                        f"Top badge: 'Slide 2 of 4 | Underlayment'. "
+                        f"Headline: 'GAF FELTBUSTER SYNTHETIC UNDERLAYMENT'. "
+                        f"Educational text: 'Tougher than traditional felt. Moisture-resistant, tear-proof, and designed for extreme temperature resilience.' "
+                        f"Swipe prompt: 'Swipe for shingle technology >'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 3 - Architectural Armor",
+                    archetype="carousel_slide_3",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[6],
+                    output_filename="Slide 3 - Architectural Armor.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel educational slide 3 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Timberline HDZ architectural shingles closeup with crisp ridge caps. "
+                        f"Top badge: 'Slide 3 of 4 | The Armor'. "
+                        f"Headline: 'TIMBERLINE HDZ ARCHITECTURAL SHINGLES'. "
+                        f"Educational text: 'LayerLock mechanical fastening. Algae-resistant StainGuard Plus. Wind defense up to 130 MPH.' "
+                        f"Swipe prompt: 'Swipe for warranty details >'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 4 - Golden Pledge Warranty",
+                    archetype="carousel_slide_4",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[7],
+                    output_filename="Slide 4 - Golden Pledge Warranty.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel final CTA slide 4 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Completed luxury estate. "
+                        f"Headline: 'BACKED BY GAF 50-YEAR GOLDEN PLEDGE'. "
+                        f"CTA Button: 'SCHEDULE YOUR FREE ON-SITE INSPECTION'. "
+                        f"Footer: Phone: {CLIENT_INFO['phone']} | Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | License: {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes. No drone claims."
+                    ),
+                ),
+            ]
+            concepts.append(
+                FlyerConcept(
+                    name=carousel_folder_name,
+                    archetype="carousel_folder",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    prompt="Instagram Carousel Post Package: Materials Breakdown & Warranty (4 slides)",
+                    output_filename=carousel_folder_name,
+                    is_carousel_folder=True,
+                    carousel_slides=carousel_slides,
+                )
+            )
+
         else:
+            # --- ROTATION A (e.g. 09-10): Trade Editorial, Excellence Digest, Price Comparison / Promo, Warning Signs, System Breakdown Carousel ---
+            ref_mag1 = self.ref_dir / "reference_flyer16.jpg"
+            concepts.append(
+                FlyerConcept(
+                    name="Roofing Contractor Magazine Cover",
+                    archetype="magazine_contractor",
+                    aspect_ratio="4:5",
+                    references=[ref_mag1] if ref_mag1.exists() else [],
+                    background_photo=photos[0],
+                    output_filename="1 - Roofing Contractor Magazine Cover.jpg",
+                    prompt=(
+                        f"Generate a 4:5 high-resolution Image (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) of a Roofing Contractor Magazine cover for {CLIENT_INFO['name']}. "
+                        f"Editorial trade publication aesthetic mimicking reference_flyer16.jpg. Unobstructed view of completed home. "
+                        f"Top Masthead: ROOFING CONTRACTOR | Badge: {target_date.year} ISSUE 01 | "
+                        f"Feature: NEW JERSEY ROOFING EXCELLENCE | Subtitle: Trusted Across Bergen and Passaic County | "
+                        f"Sub-box: HIGH-PERFORMANCE SHINGLE SYSTEMS - Advanced Weather Defense, 50-Year Warranty | "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                )
+            )
+
+            ref_mag2 = self.ref_dir / "reference_flyer18.jpeg"
+            concepts.append(
+                FlyerConcept(
+                    name="Roofing Excellence Magazine Cover",
+                    archetype="magazine_excellence",
+                    aspect_ratio="4:5",
+                    references=[ref_mag2] if ref_mag2.exists() else [],
+                    background_photo=photos[1],
+                    output_filename="2 - Roofing Excellence Magazine Cover.jpg",
+                    prompt=(
+                        f"Generate a 4:5 high-resolution Image (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) of a Roofing Excellence Magazine Cover. "
+                        f"Mimic reference_flyer18.jpeg. Non-overlapping header and logo. Luxury residential home. "
+                        f"Header: ROOFING EXCELLENCE | Top Corner Badge: {target_date.year} EDITION | "
+                        f"Headline: CRAFTSMANSHIP, PROTECTION AND CURB APPEAL | "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                )
+            )
+
+            ref_comp = self.ref_dir / "reference_flyer6.png"
             concepts.append(
                 FlyerConcept(
                     name="Price Comparison Offer Flyer",
@@ -276,149 +598,151 @@ class NanoBananaEngine:
                     background_photo=photos[2],
                     output_filename="3 - Price Comparison Offer Flyer.jpg",
                     prompt=(
-                        f"Generate a 4:5 high-end corporate advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
-                        f"Clean modern flat design agency layout mimicking the reference flyer structure. "
-                        f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}). "
-                        f"Centrally framed high-definition aerial photograph of a newly completed roof on a Bergen County NJ home. "
-                        f"Incorporate the official {CLIENT_INFO['name']} logo seamlessly at the top center with authentic sharp vector proportions. No white sticker border. "
-                        f"Header Badge: BERGEN COUNTY'S PREMIER ROOFING CONTRACTOR | "
-                        f"Headline: UNBEATABLE QUALITY. UNBEATABLE PRICE. | "
-                        f"Subhead: Premium GAF Architectural Roofing Systems at Direct Contractor Pricing. | "
-                        f"Comparison Cards: "
-                        f"Card 1 (Muted charcoal): 'Average Bergen County Contractor: $14,800' (crossed out in red) - Standard Shingles | "
-                        f"Card 2 (Deep Maroon with Gold border): 'All Elite Direct Contractor Price: Starting at $6,499' (Bold Gold text) - GAF Master Elite Installation | "
-                        f"Trust Points: 50-Year GAF Golden Pledge Warranty | Top Rated Across Bergen County Homeowners | Price-Match Guarantee | "
-                        f"CTA Button: 'Claim Your Free On-Site Roof Inspection' | "
-                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['address']} | {CLIENT_INFO['license']}. "
-                        f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
+                        f"Generate a 4:5 high-end corporate advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic reference_flyer6.png. Full aerial photo of finished roof. "
+                        f"Header: 'UNBEATABLE QUALITY. UNBEATABLE PRICE.' "
+                        f"Comparison: Competitors at $14,800 vs All Elite Direct Pricing starting at $6,499. "
+                        f"CTA Button: 'Claim Your Free On-Site Roof Inspection'. "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes."
                     ),
                 )
             )
 
-        # 4. Roof Warning Signs & Inspection Alert Flyer (mimic ref 12)
-        ref_warn = self.ref_dir / "reference_flyer12.png"
-        concepts.append(
-            FlyerConcept(
-                name="Roof Warning Signs Inspection Flyer",
-                archetype="warning_signs",
+            ref_warn = self.ref_dir / "reference_flyer12.png"
+            concepts.append(
+                FlyerConcept(
+                    name="Roof Warning Signs Inspection Flyer",
+                    archetype="warning_signs",
+                    aspect_ratio="4:5",
+                    references=[ref_warn] if ref_warn.exists() else [],
+                    background_photo=photos[3],
+                    output_filename="4 - Roof Warning Signs Inspection Flyer.jpg",
+                    prompt=(
+                        f"Generate a 4:5 high-impact roof inspection alert flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Mimic reference_flyer12.png. Centered photo of completed home. "
+                        f"Headline: '5 SIGNS YOUR ROOF IS CRYING FOR HELP'. "
+                        f"5 Warning Sign cards: Curling Shingles, Granule Loss, Water Stains, Damaged Flashing, 15+ Years Old. "
+                        f"Callout: 'FREE SAME-DAY ON-SITE ROOF INSPECTION'. "
+                        f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['phone']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes. No drone claims."
+                    ),
+                )
+            )
+
+            # Carousel Series A: Roofing System Breakdown
+            carousel_folder_name = "5 - Carousel - Roofing System Breakdown (Instagram Post)"
+            ref_car = self.carousel_dir / "carousel_flyer1.png"
+            carousel_slides = [
+                FlyerConcept(
+                    name="Slide 1 - The Hook",
+                    archetype="carousel_slide_1",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[4],
+                    output_filename="Slide 1 - The Hook.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel cover slide (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Overhead view of pristine roof in New Jersey. "
+                        f"Top badge: 'Slide 1 of 4 | System Breakdown'. "
+                        f"Headline: 'THE PART YOU NEVER SEE MATTERS MOST'. "
+                        f"Subhead: 'A roof that protects your family for 50 years starts long before the first shingle is installed.' "
+                        f"Swipe prompt: 'Swipe to see what lies beneath your shingles >'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 2 - The Foundation",
+                    archetype="carousel_slide_2",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[5],
+                    output_filename="Slide 2 - The Foundation.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel educational slide 2 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Decking and underlayment installation in progress. "
+                        f"Headline: 'IT STARTS AT THE DECK'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 3 - The Outer Armor",
+                    archetype="carousel_slide_3",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[6],
+                    output_filename="Slide 3 - The Outer Armor.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel educational slide 3 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"GAF Timberline HDZ shingle installation. "
+                        f"Headline: 'THE OUTER ARMOR: GAF TIMBERLINE HDZ'. "
+                        f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']}. "
+                        f"No emojis. No em dashes."
+                    ),
+                ),
+                FlyerConcept(
+                    name="Slide 4 - Call To Action",
+                    archetype="carousel_slide_4",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    background_photo=photos[7],
+                    output_filename="Slide 4 - Call To Action.jpg",
+                    prompt=(
+                        f"Generate a 4:5 Instagram carousel final CTA slide 4 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                        f"Completed estate with pristine roof and lawn. "
+                        f"Headline: 'YOUR ROOF DESERVES THIS STANDARD'. "
+                        f"CTA Button: 'SCHEDULE YOUR FREE ON-SITE INSPECTION'. "
+                        f"Footer: {CLIENT_INFO['phone']} | {CLIENT_INFO['website']} | {CLIENT_INFO['license']}. "
+                        f"No emojis. No em dashes. No drone claims."
+                    ),
+                ),
+            ]
+            concepts.append(
+                FlyerConcept(
+                    name=carousel_folder_name,
+                    archetype="carousel_folder",
+                    aspect_ratio="4:5",
+                    references=[ref_car] if ref_car.exists() else [],
+                    prompt="Instagram Carousel Post Package: System Breakdown (4 slides)",
+                    output_filename=carousel_folder_name,
+                    is_carousel_folder=True,
+                    carousel_slides=carousel_slides,
+                )
+            )
+
+        # On designated September Promo days (1, 7, 14, 21, 28), inject September Savings Promo
+        if is_september_promo_day:
+            ref_promo = self.ref_dir / "reference_flyer6.png"
+            promo_concept = FlyerConcept(
+                name="September Savings Promo Flyer",
+                archetype="september_savings_promo",
                 aspect_ratio="4:5",
-                references=[ref_warn] if ref_warn.exists() else [],
-                background_photo=photos[3],
-                output_filename="4 - Roof Warning Signs Inspection Flyer.jpg",
+                references=[ref_promo] if ref_promo.exists() else [],
+                background_photo=photos[2],
+                output_filename="Promo - September Savings ($1,000 Replacement Bundle Offer).jpg",
                 prompt=(
-                    f"Generate a 4:5 high-impact roof inspection alert flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
-                    f"Clean professional 4K. Centered high-resolution photo of a completed residential home. "
-                    f"Include the official {CLIENT_INFO['name']} logo clearly and seamlessly at the top. No white sticker outlines. "
-                    f"Top Banner: ATTENTION BERGEN AND NORTH JERSEY HOMEOWNERS | "
-                    f"Main Headline: 5 SIGNS YOUR ROOF IS CRYING FOR HELP | "
-                    f"Subheadline: Do not wait for the next storm to discover a leak. Protect your home today. | "
-                    f"5 Warning Sign items: 1. Missing or Curling Shingles | 2. Granule Loss in Gutters | 3. Water Stains on Ceilings | 4. Damaged Flashing | 5. Roof is 15-20+ Years Old | "
-                    f"Callout Box (Maroon and Gold): 'FREE SAME-DAY ON-SITE ROOF INSPECTION' | "
-                    f"CTA Button: 'Call {CLIENT_INFO['phone']} Now' | "
-                    f"Footer: {CLIENT_INFO['website']} | {CLIENT_INFO['instagram']} | {CLIENT_INFO['address']} | {CLIENT_INFO['license']}. "
-                    f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
+                    f"Generate a 4:5 promotional advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge) for {CLIENT_INFO['name']}. "
+                    f"Centrally framed luxury home with new architectural roof and siding. "
+                    f"Top Badge: 'SEPTEMBER SAVINGS EVENT | LIMITED TIME FALL OFFER'. "
+                    f"Main Headline: 'SAVE UP TO $1,000 ON EXTERIOR REPLACEMENTS'. "
+                    f"Card 1: '$500 OFF Any Single Replacement Project (Full Roof OR Siding)'. "
+                    f"Card 2: 'SAVE $1,000 TOTAL When You Pair 2 Replacement Projects (Roof + Siding)'. "
+                    f"Disclaimer: '*Repairs are not eligible for this offer. Valid exclusively on full replacement projects through September 30.' "
+                    f"CTA: 'Claim Your September Savings | Free On-Site Inspection'. "
+                    f"Footer: {CLIENT_INFO['phone']} | {CLIENT_INFO['website']} | {CLIENT_INFO['license']}. "
+                    f"No emojis. No em dashes."
                 ),
             )
-        )
-
-        # 5. Instagram Educational Carousel Post (Folder with 4 sequential slides)
-        ref_car = self.carousel_dir / "carousel_flyer1.png"
-        carousel_folder_name = "5 - Carousel - Roofing System Breakdown (Instagram Post)"
-        carousel_slides = [
-            FlyerConcept(
-                name="Slide 1 - The Hook",
-                archetype="carousel_slide_1",
-                aspect_ratio="4:5",
-                references=[ref_car] if ref_car.exists() else [],
-                background_photo=photos[4],
-                output_filename="Slide 1 - The Hook.jpg",
-                prompt=(
-                    f"Generate a 4:5 Instagram carousel cover slide (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
-                    f"Clean modern editorial layout. Overhead view of a pristine residential roof in New Jersey. "
-                    f"Official {CLIENT_INFO['name']} logo seamlessly in the upper corner without distortion or sticker outlines. "
-                    f"Top Badge: Slide 1 of 4 | System Breakdown | "
-                    f"Category: ALL ELITE ROOFING AND SIDING | "
-                    f"Massive Bold Headline: THE PART YOU NEVER SEE MATTERS MOST | "
-                    f"Subhead: A roof that protects your family for 50 years starts long before the first shingle is installed. | "
-                    f"Indicator: 'Swipe to see what lies beneath your shingles >' | "
-                    f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
-                    f"No emojis. No em dashes."
-                ),
-            ),
-            FlyerConcept(
-                name="Slide 2 - The Foundation",
-                archetype="carousel_slide_2",
-                aspect_ratio="4:5",
-                references=[self.carousel_dir / "carousel_flyer2.png"] if (self.carousel_dir / "carousel_flyer2.png").exists() else [],
-                background_photo=photos[5],
-                output_filename="Slide 2 - The Foundation.jpg",
-                prompt=(
-                    f"Generate a 4:5 Instagram carousel educational slide 2 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
-                    f"Overhead shot of a roof showing solid plywood decking and synthetic underlayment installation (GAF FeltBuster synthetic underlayment or green ZIP System; strictly premium industry-standard building materials only). "
-                    f"Official logo cleanly in corner. No sticker borders. "
-                    f"Top Badge: Slide 2 of 4 | The Foundation | "
-                    f"Headline: IT STARTS AT THE DECK | "
-                    f"Educational text box: 'Standard felt paper degrades in under 15 years. At All Elite, we inspect 100% of the plywood decking, replacing rotted wood, followed by heavy-duty synthetic underlayment and ice and water shield for a dual watertight seal.' | "
-                    f"Swipe prompt: 'Swipe to see the outer armor >' | "
-                    f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
-                    f"No emojis. No em dashes."
-                ),
-            ),
-            FlyerConcept(
-                name="Slide 3 - The Outer Armor",
-                archetype="carousel_slide_3",
-                aspect_ratio="4:5",
-                references=[ref_car] if ref_car.exists() else [],
-                background_photo=photos[6],
-                output_filename="Slide 3 - The Outer Armor.jpg",
-                prompt=(
-                    f"Generate a 4:5 Instagram carousel educational slide 3 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
-                    f"High-definition aerial view of finished GAF Timberline HDZ architectural shingles and clean drip edge. Real crew installation with GAF materials. Premium industry-standard building materials only. "
-                    f"Official logo cleanly in upper corner. No sticker borders. "
-                    f"Top Badge: Slide 3 of 4 | The Weather Shield | "
-                    f"Headline: THE OUTER ARMOR: GAF TIMBERLINE HDZ | "
-                    f"Educational text: 'LayerLock Technology: Mechanically fastens shingles to withstand winds up to 130 MPH. StainGuard Plus: Algae-resistant granules. GAF Master Elite: 50-Year Golden Pledge warranty protection.' | "
-                    f"Swipe prompt: 'Swipe for next steps >' | "
-                    f"Footer: {CLIENT_INFO['instagram']} | {CLIENT_INFO['website']} | {CLIENT_INFO['phone']}. "
-                    f"No emojis. No em dashes."
-                ),
-            ),
-            FlyerConcept(
-                name="Slide 4 - Call To Action",
-                archetype="carousel_slide_4",
-                aspect_ratio="4:5",
-                references=[ref_car] if ref_car.exists() else [],
-                background_photo=photos[7],
-                output_filename="Slide 4 - Call To Action.jpg",
-                prompt=(
-                    f"Generate a 4:5 Instagram carousel final CTA slide 4 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
-                    f"Eye-level shot of a completed Bergen County luxury home with pristine finished roof, clean siding, and manicured lawn (never an aged or worn home). "
-                    f"Official company logo seamlessly placed at the top on a clean flat solid dark header. No white sticker border. "
-                    f"Top Badge: Slide 4 of 4 | Next Steps | "
-                    f"Headline: IS YOUR ROOF PREPARED FOR THE NEXT STORM? | "
-                    f"Subtitle: YOUR ROOF DESERVES THIS STANDARD | "
-                    f"Trust points: Free In-Person On-Site Inspection | Transparent Itemized Proposals | GAF Master Elite Certified Installation | Daily Clean-Up and Dedicated Project Manager | "
-                    f"CTA Button: 'Schedule Your Free On-Site Inspection' | "
-                    f"Footer: Phone: {CLIENT_INFO['phone']} | Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | Address: {CLIENT_INFO['address']} | License: {CLIENT_INFO['license']}. "
-                    f"Strict constraints: Do not mention drone roof inspections. Do not use emojis. Do not use em dashes."
-                ),
-            ),
-        ]
-
-        concepts.append(
-            FlyerConcept(
-                name=carousel_folder_name,
-                archetype="carousel_folder",
-                aspect_ratio="4:5",
-                references=[ref_car] if ref_car.exists() else [],
-                prompt="Instagram Carousel Post Package (4 slides)",
-                output_filename=carousel_folder_name,
-                is_carousel_folder=True,
-                carousel_slides=carousel_slides,
-            )
-        )
+            # Replace slot 2 (index 2) with promo flyer
+            if len(concepts) > 2:
+                concepts[2] = promo_concept
+            else:
+                concepts.append(promo_concept)
 
         return concepts[:count]
+
 
     def render_concepts_locally(self, concepts: list[FlyerConcept], dest_dir: Path) -> list[Path]:
         """Render clean, high-end editorial concepts locally using Pillow at 1080x1350 (4:5).
@@ -629,6 +953,11 @@ def run_daily_generation(count: int = 5, when: date | None = None) -> list[Path]
 
     print(f"--- Running Nano Banana Pro Daily Generation ({len(concepts)} concepts) ---")
     print(f"Target Google Drive Folder: {dest_dir}")
+
+    existing_files = [p for p in dest_dir.glob("*.jpg") if p.is_file()]
+    if len(existing_files) >= count:
+        print(f"Target folder {dest_dir.name} already contains {len(existing_files)} verified flyers. Preserving existing high-resolution artwork.")
+        return existing_files
 
     results: list[Path] = []
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")

@@ -57,3 +57,33 @@ def test_house_rules_are_agreeable(client):
     spec = _spec(client)
     issues = check(spec, client)
     assert _errors(issues) == set()
+
+
+def test_unapproved_materials_rejected(client):
+    """Unapproved materials like ABC Pro Guard are strictly rejected in favor of GAF/ZIP System."""
+    spec = _spec(client, text={"support": "Installed with ABC Pro Guard underlayment."})
+    issues = check(spec, client)
+    assert "no_unapproved_materials" in _errors(issues)
+
+
+def test_before_photo_on_standard_layout_rejected(client):
+    """Never use before photos unless the layout is explicitly a before-after comparison."""
+    spec = _spec(client, image={"asset_id": "projects/closter/before/dji_001.jpg"})
+    issues = check(spec, client)
+    assert "no_before_photo_without_comparison" in _errors(issues)
+
+
+def test_before_photo_allowed_on_comparison_layout(client):
+    """Before photos are permitted on confirmed before-after comparison layouts."""
+    spec = _spec(
+        client,
+        layout={"name": "before-after"},
+        image={
+            "asset_id": "projects/closter/before/dji_001.jpg",
+            "secondary_asset_id": "projects/closter/after/dji_002.jpg",
+            "pair_confirmed": True,
+        },
+    )
+    issues = check(spec, client)
+    assert "no_before_photo_without_comparison" not in _errors(issues)
+

@@ -63,13 +63,16 @@ CLIENT_INFO = {
 class FlyerConcept:
     name: str
     archetype: str
-    aspect_ratio: str
-    references: list[Path]
-    prompt: str
+    aspect_ratio: str = "4:5"  # Native Instagram 4:5 Feed & Carousel (1080 x 1350 px)
+    references: list[Path] = field(default_factory=list)
+    prompt: str = ""
     background_photo: Path | None = None
     output_filename: str = ""
     is_carousel_folder: bool = False
     carousel_slides: list[FlyerConcept] = field(default_factory=list)
+    width: int = 1080
+    height: int = 1350
+
 
 
 class NanoBananaEngine:
@@ -184,15 +187,16 @@ class NanoBananaEngine:
             FlyerConcept(
                 name="Roofing Contractor Magazine Cover",
                 archetype="magazine_contractor",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[ref_mag1] if ref_mag1.exists() else [],
                 background_photo=photos[0],
                 output_filename="1 - Roofing Contractor Magazine Cover.jpg",
                 prompt=(
-                    f"Generate a 9:16 high-resolution Image of a Roofing Contractor Magazine cover for {CLIENT_INFO['name']}. "
+                    f"Generate a 4:5 high-resolution Image (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides or pillarboxing borders) of a Roofing Contractor Magazine cover for {CLIENT_INFO['name']}. "
                     f"Clean professional 4K. Mimic the bold typography, issue badge, and editorial layout of the reference magazine. "
                     f"Ensure the roof is perfectly centered and high in definition, showcasing crisp GAF architectural shingles on a completed New Jersey home. "
-                    f"Incorporate the official All Elite company logo cleanly in the top header band with authentic, sharp corporate proportions and zero white sticker outlines. "
+                    f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}) masthead banner. "
+                    f"Incorporate the official All Elite company logo cleanly in the header with authentic, sharp corporate proportions and zero white sticker outlines. "
                     f"Include clean, non-sloppy text boxes: "
                     f"Top Masthead: ROOFING CONTRACTOR | Badge: {date.today().year} ISSUE 01 | "
                     f"Feature: NEW JERSEY ROOFING EXCELLENCE | Subtitle: Trusted Across Bergen and Passaic County | "
@@ -210,12 +214,12 @@ class NanoBananaEngine:
             FlyerConcept(
                 name="Roofing Excellence Magazine Cover",
                 archetype="magazine_excellence",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[ref_mag2] if ref_mag2.exists() else [],
                 background_photo=photos[1],
                 output_filename="2 - Roofing Excellence Magazine Cover.jpg",
                 prompt=(
-                    f"Generate a 9:16 high-resolution Image of a Roofing Excellence and Exterior Specialists Magazine Cover. "
+                    f"Generate a 4:5 high-resolution Image (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides or pillarboxing borders) of a Roofing Excellence and Exterior Specialists Magazine Cover. "
                     f"Clean professional 4K. Centered, eye-level view of a luxury residential home with brand new architectural roofing and clean siding. "
                     f"Integrate the official {CLIENT_INFO['name']} company logo seamlessly at the top header without sticker outlines or rounded card bubbles. "
                     f"Header: ROOFING EXCELLENCE | Top Corner Badge: {date.today().year} EDITION | "
@@ -238,12 +242,12 @@ class NanoBananaEngine:
                 FlyerConcept(
                     name="September Savings Promo Flyer",
                     archetype="september_savings_promo",
-                    aspect_ratio="9:16",
+                    aspect_ratio="4:5",
                     references=[ref_comp] if ref_comp.exists() else [],
                     background_photo=photos[2],
                     output_filename="3 - Promo - September Savings ($1,000 Replacement Bundle Offer).jpg",
                     prompt=(
-                        f"Generate a 9:16 high-end corporate promotional advertisement flyer for {CLIENT_INFO['name']}. "
+                        f"Generate a 4:5 high-end corporate promotional advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
                         f"Clean modern flat design agency layout. "
                         f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}) with crisp white and dark charcoal ({CLIENT_INFO['colors']['dark']}). "
                         f"Centrally framed high-definition photograph of a finished Bergen County luxury residential home with new architectural roof and clean siding. "
@@ -267,12 +271,12 @@ class NanoBananaEngine:
                 FlyerConcept(
                     name="Price Comparison Offer Flyer",
                     archetype="price_comparison",
-                    aspect_ratio="9:16",
+                    aspect_ratio="4:5",
                     references=[ref_comp] if ref_comp.exists() else [],
                     background_photo=photos[2],
                     output_filename="3 - Price Comparison Offer Flyer.jpg",
                     prompt=(
-                        f"Generate a 9:16 high-end corporate advertisement flyer for {CLIENT_INFO['name']}. "
+                        f"Generate a 4:5 high-end corporate advertisement flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
                         f"Clean modern flat design agency layout mimicking the reference flyer structure. "
                         f"Brand colors: Deep Maroon ({CLIENT_INFO['colors']['maroon']}) and Warm Gold ({CLIENT_INFO['colors']['gold']}). "
                         f"Centrally framed high-definition aerial photograph of a newly completed roof on a Bergen County NJ home. "
@@ -297,12 +301,12 @@ class NanoBananaEngine:
             FlyerConcept(
                 name="Roof Warning Signs Inspection Flyer",
                 archetype="warning_signs",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[ref_warn] if ref_warn.exists() else [],
                 background_photo=photos[3],
                 output_filename="4 - Roof Warning Signs Inspection Flyer.jpg",
                 prompt=(
-                    f"Generate a 9:16 high-impact roof inspection alert flyer for {CLIENT_INFO['name']}. "
+                    f"Generate a 4:5 high-impact roof inspection alert flyer (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
                     f"Clean professional 4K. Centered high-resolution photo of a completed residential home. "
                     f"Include the official {CLIENT_INFO['name']} logo clearly and seamlessly at the top. No white sticker outlines. "
                     f"Top Banner: ATTENTION BERGEN AND NORTH JERSEY HOMEOWNERS | "
@@ -324,12 +328,12 @@ class NanoBananaEngine:
             FlyerConcept(
                 name="Slide 1 - The Hook",
                 archetype="carousel_slide_1",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[ref_car] if ref_car.exists() else [],
                 background_photo=photos[4],
                 output_filename="Slide 1 - The Hook.jpg",
                 prompt=(
-                    f"Generate a 9:16 Instagram carousel cover slide for {CLIENT_INFO['name']}. "
+                    f"Generate a 4:5 Instagram carousel cover slide (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
                     f"Clean modern editorial layout. Overhead view of a pristine residential roof in New Jersey. "
                     f"Official {CLIENT_INFO['name']} logo seamlessly in the upper corner without distortion or sticker outlines. "
                     f"Top Badge: Slide 1 of 4 | System Breakdown | "
@@ -344,13 +348,13 @@ class NanoBananaEngine:
             FlyerConcept(
                 name="Slide 2 - The Foundation",
                 archetype="carousel_slide_2",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[self.carousel_dir / "carousel_flyer2.png"] if (self.carousel_dir / "carousel_flyer2.png").exists() else [],
                 background_photo=photos[5],
                 output_filename="Slide 2 - The Foundation.jpg",
                 prompt=(
-                    f"Generate a 9:16 Instagram carousel educational slide 2 for {CLIENT_INFO['name']}. "
-                    f"Overhead shot of a roof showing solid plywood decking and synthetic underlayment installation. "
+                    f"Generate a 4:5 Instagram carousel educational slide 2 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
+                    f"Overhead shot of a roof showing solid plywood decking and synthetic underlayment installation (GAF FeltBuster synthetic underlayment or green ZIP System; strictly premium industry-standard building materials only). "
                     f"Official logo cleanly in corner. No sticker borders. "
                     f"Top Badge: Slide 2 of 4 | The Foundation | "
                     f"Headline: IT STARTS AT THE DECK | "
@@ -363,13 +367,13 @@ class NanoBananaEngine:
             FlyerConcept(
                 name="Slide 3 - The Outer Armor",
                 archetype="carousel_slide_3",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[ref_car] if ref_car.exists() else [],
                 background_photo=photos[6],
                 output_filename="Slide 3 - The Outer Armor.jpg",
                 prompt=(
-                    f"Generate a 9:16 Instagram carousel educational slide 3 for {CLIENT_INFO['name']}. "
-                    f"High-definition aerial view of finished GAF Timberline HDZ architectural shingles and clean drip edge. "
+                    f"Generate a 4:5 Instagram carousel educational slide 3 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
+                    f"High-definition aerial view of finished GAF Timberline HDZ architectural shingles and clean drip edge. Real crew installation with GAF materials. Premium industry-standard building materials only. "
                     f"Official logo cleanly in upper corner. No sticker borders. "
                     f"Top Badge: Slide 3 of 4 | The Weather Shield | "
                     f"Headline: THE OUTER ARMOR: GAF TIMBERLINE HDZ | "
@@ -382,16 +386,17 @@ class NanoBananaEngine:
             FlyerConcept(
                 name="Slide 4 - Call To Action",
                 archetype="carousel_slide_4",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[ref_car] if ref_car.exists() else [],
                 background_photo=photos[7],
                 output_filename="Slide 4 - Call To Action.jpg",
                 prompt=(
-                    f"Generate a 9:16 Instagram carousel final CTA slide 4 for {CLIENT_INFO['name']}. "
-                    f"Eye-level shot of a completed Bergen County luxury home with pristine finished roof, clean siding, and manicured lawn. "
+                    f"Generate a 4:5 Instagram carousel final CTA slide 4 (1080x1350 px, safe grid view 3:4 1012x1350 px, full bleed edge-to-edge, zero blurry sides) for {CLIENT_INFO['name']}. "
+                    f"Eye-level shot of a completed Bergen County luxury home with pristine finished roof, clean siding, and manicured lawn (never an aged or worn home). "
                     f"Official company logo seamlessly placed at the top on a clean flat solid dark header. No white sticker border. "
                     f"Top Badge: Slide 4 of 4 | Next Steps | "
                     f"Headline: IS YOUR ROOF PREPARED FOR THE NEXT STORM? | "
+                    f"Subtitle: YOUR ROOF DESERVES THIS STANDARD | "
                     f"Trust points: Free In-Person On-Site Inspection | Transparent Itemized Proposals | GAF Master Elite Certified Installation | Daily Clean-Up and Dedicated Project Manager | "
                     f"CTA Button: 'Schedule Your Free On-Site Inspection' | "
                     f"Footer: Phone: {CLIENT_INFO['phone']} | Website: {CLIENT_INFO['website']} | Instagram: {CLIENT_INFO['instagram']} | Address: {CLIENT_INFO['address']} | License: {CLIENT_INFO['license']}. "
@@ -404,7 +409,7 @@ class NanoBananaEngine:
             FlyerConcept(
                 name=carousel_folder_name,
                 archetype="carousel_folder",
-                aspect_ratio="9:16",
+                aspect_ratio="4:5",
                 references=[ref_car] if ref_car.exists() else [],
                 prompt="Instagram Carousel Post Package (4 slides)",
                 output_filename=carousel_folder_name,
@@ -415,15 +420,69 @@ class NanoBananaEngine:
 
         return concepts[:count]
 
+    def render_concepts_locally(self, concepts: list[FlyerConcept], dest_dir: Path) -> list[Path]:
+        """Render concepts using the native edge-to-edge Pillow rendering engine at 1080x1350 (4:5)."""
+        from .edge_to_edge_renderer import (
+            render_promo_september_savings,
+            render_magazine_contractor,
+            render_magazine_excellence,
+            render_price_comparison,
+            render_warning_signs,
+            render_carousel_slides,
+        )
+
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        results: list[Path] = []
+
+        for concept in concepts:
+            if concept.is_carousel_folder:
+                carousel_folder = dest_dir / concept.output_filename
+                carousel_folder.mkdir(parents=True, exist_ok=True)
+                slides = render_carousel_slides(carousel_folder)
+                for sname, _ in slides:
+                    results.append(carousel_folder / sname)
+            elif concept.archetype == "september_savings_promo":
+                out = dest_dir / concept.output_filename
+                im = render_promo_september_savings(bg_photo=concept.background_photo)
+                im.save(out, quality=95)
+                results.append(out)
+            elif concept.archetype == "magazine_contractor":
+                out = dest_dir / concept.output_filename
+                im = render_magazine_contractor(bg_photo=concept.background_photo)
+                im.save(out, quality=95)
+                results.append(out)
+            elif concept.archetype == "magazine_excellence":
+                out = dest_dir / concept.output_filename
+                im = render_magazine_excellence(bg_photo=concept.background_photo)
+                im.save(out, quality=95)
+                results.append(out)
+            elif concept.archetype == "price_comparison":
+                out = dest_dir / concept.output_filename
+                im = render_price_comparison(bg_photo=concept.background_photo)
+                im.save(out, quality=95)
+                results.append(out)
+            elif concept.archetype == "warning_signs":
+                out = dest_dir / concept.output_filename
+                im = render_warning_signs(bg_photo=concept.background_photo)
+                im.save(out, quality=95)
+                results.append(out)
+
+        return results
+
     def execute_with_genai_api(self, concept: FlyerConcept, dest_dir: Path) -> list[Path]:
-        """Call Google GenAI Imagen 3 API if API key is present."""
+        """Call Google GenAI Imagen 3 API if API key is present, scaling edge-to-edge to 1080x1350."""
         api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
         if not api_key:
             return []
 
         try:
+            import io
+            from PIL import Image
             from google import genai
             client = genai.Client(api_key=api_key)
+
+            # Map 4:5 to Imagen 3 supported aspect ratio (3:4 is closest supported by Imagen 3)
+            api_aspect = "3:4" if concept.aspect_ratio in {"4:5", "3:4"} else concept.aspect_ratio
 
             if concept.is_carousel_folder:
                 folder = dest_dir / concept.output_filename
@@ -435,14 +494,21 @@ class NanoBananaEngine:
                         prompt=slide.prompt,
                         config=dict(
                             number_of_images=1,
-                            aspect_ratio="9:16",
+                            aspect_ratio=api_aspect,
                             output_mime_type="image/jpeg",
                         ),
                     )
                     if res.generated_images:
                         out = folder / slide.output_filename
-                        with open(out, "wb") as f:
-                            f.write(res.generated_images[0].image.image_bytes)
+                        img = Image.open(io.BytesIO(res.generated_images[0].image.image_bytes))
+                        # Scale and crop to exact 1080x1350 full bleed (zero blurry sides)
+                        target_w, target_h = slide.width, slide.height
+                        ratio = max(target_w / img.width, target_h / img.height)
+                        scaled = img.resize((int(img.width * ratio), int(img.height * ratio)), Image.Resampling.LANCZOS)
+                        x_off = (scaled.width - target_w) // 2
+                        y_off = (scaled.height - target_h) // 2
+                        final_img = scaled.crop((x_off, y_off, x_off + target_w, y_off + target_h))
+                        final_img.save(out, quality=95)
                         results.append(out)
                 return results
             else:
@@ -451,14 +517,21 @@ class NanoBananaEngine:
                     prompt=concept.prompt,
                     config=dict(
                         number_of_images=1,
-                        aspect_ratio="9:16",
+                        aspect_ratio=api_aspect,
                         output_mime_type="image/jpeg",
                     ),
                 )
                 if res.generated_images:
                     out = dest_dir / concept.output_filename
-                    with open(out, "wb") as f:
-                        f.write(res.generated_images[0].image.image_bytes)
+                    img = Image.open(io.BytesIO(res.generated_images[0].image.image_bytes))
+                    # Scale and crop to exact 1080x1350 full bleed (zero blurry sides)
+                    target_w, target_h = concept.width, concept.height
+                    ratio = max(target_w / img.width, target_h / img.height)
+                    scaled = img.resize((int(img.width * ratio), int(img.height * ratio)), Image.Resampling.LANCZOS)
+                    x_off = (scaled.width - target_w) // 2
+                    y_off = (scaled.height - target_h) // 2
+                    final_img = scaled.crop((x_off, y_off, x_off + target_w, y_off + target_h))
+                    final_img.save(out, quality=95)
                     return [out]
         except Exception as e:
             print(f"GenAI API generation note: {e}", file=sys.stderr)
@@ -476,21 +549,25 @@ def run_daily_generation(count: int = 5, when: date | None = None) -> list[Path]
     print(f"Target Google Drive Folder: {dest_dir}")
 
     results: list[Path] = []
-    for idx, concept in enumerate(concepts, start=1):
-        print(f"[{idx}/{len(concepts)}] Concept: {concept.name}")
-        out_paths = engine.execute_with_genai_api(concept, dest_dir)
-        if out_paths:
-            for p in out_paths:
-                print(f"   -> Saved directly to Drive: {p.name}")
-                results.append(p)
-        else:
-            if concept.is_carousel_folder:
-                print(f"   -> Carousel folder with {len(concept.carousel_slides)} slides formulated.")
-            else:
-                print(f"   -> Prompt ready: {concept.prompt[:80]}...")
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    if api_key:
+        for idx, concept in enumerate(concepts, start=1):
+            print(f"[{idx}/{len(concepts)}] Concept: {concept.name}")
+            out_paths = engine.execute_with_genai_api(concept, dest_dir)
+            if out_paths:
+                for p in out_paths:
+                    print(f"   -> Saved directly to Drive: {p.name}")
+                    results.append(p)
+
+    if not results:
+        print("Executing native edge-to-edge 4:5 local rendering engine...")
+        results = engine.render_concepts_locally(concepts, dest_dir)
+        for p in results:
+            print(f"   -> Rendered edge-to-edge to Drive: {p.name}")
 
     return results
 
 
 if __name__ == "__main__":
     run_daily_generation()
+

@@ -45,6 +45,14 @@ RULES: tuple[Rule, ...] = (
         "before_after_pair_confirmed",
         "some flyers with the old images of the home doesn't make sense in context",
     ),
+    Rule(
+        "no_unapproved_materials",
+        "in the carousel do not use ABC pro guard use industry standard like GAF or green ZIP",
+    ),
+    Rule(
+        "no_before_photo_without_comparison",
+        "never use the before images of the addresses of homes within the Projects folder unless making a before and after flyer",
+    ),
 )
 
 #: Names the business no longer trades under. Anything matching these must not
@@ -130,6 +138,32 @@ def check(
                 "the photograph is a 'before' shot but the copy describes completed work",
             )
         )
+
+    # ---- never use before photos for standard single-photo flyers
+    photo_id_lower = (spec.image.asset_id or "").lower()
+    if (asset_stage == "before" or "before" in photo_id_lower) and not is_comparison:
+        issues.append(
+            _issue(
+                "no_before_photo_without_comparison",
+                Severity.ERROR,
+                "using a 'before' photograph on a non-comparison layout is prohibited",
+                spec.image.asset_id or "",
+            )
+        )
+
+    # ---- material standards: industry standard only (GAF, ZIP System), strictly ban ABC Pro Guard
+    unapproved_materials = ("abc pro guard", "pro guard")
+    for unapproved in unapproved_materials:
+        if unapproved in lowered:
+            issues.append(
+                _issue(
+                    "no_unapproved_materials",
+                    Severity.ERROR,
+                    f"copy references unapproved material {unapproved!r}; strictly use industry standard like GAF or green ZIP System",
+                    blob,
+                )
+            )
+            break
 
     # ---- the trade this business is actually in
     trades = {s.lower() for s in client.services}

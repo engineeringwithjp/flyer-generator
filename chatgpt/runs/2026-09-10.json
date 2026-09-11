@@ -1,0 +1,92 @@
+{
+  "batch_date": "2026-09-10",
+  "timezone": "America/New_York",
+  "uploaded_on": "2026-09-11",
+  "verified_at": "2026-09-11T12:02:46.783632+00:00",
+  "verification_method": "Refreshed authenticated Google Drive folder in Chrome and read all five filenames from its listing",
+  "generated_posts": 5,
+  "uploaded_posts": 5,
+  "confirmed_posts": 5,
+  "destination": "Client Flyers / 2026-09-10 / ChatGPT",
+  "output_root_id": "12Ho15EiJumnZkSAPm0I1Zd9Vwe6CuLiT",
+  "folder_url": "https://drive.google.com/drive/folders/1Uz1ykF5nUfVWO-0MiveKwt4BO8CF6On3",
+  "schedule_active": false,
+  "posts": [
+    {
+      "filename": "1 - The Roofline Edit - Totowa.jpg",
+      "generator": "ChatGPT native image generation",
+      "reference": "reference_flyer18.jpeg",
+      "photo_stage": "after",
+      "source_photo": "Projects/32 Columbus Ave, Totowa/After/Images/76A867EC-9EAB-4A22-AAFB-9AE4F8A4DD0D.png",
+      "sha256": "d9edcd5dc14d2e6d7b983fc0a40071a9cfe112153f35bdd8b4c0ddf6132e5222",
+      "bytes": 918102,
+      "dimensions": [
+        1080,
+        1350
+      ],
+      "september_savings": false,
+      "drive_list_confirmed": true
+    },
+    {
+      "filename": "2 - Shingles Are Only the Surface.jpg",
+      "generator": "ChatGPT native image generation",
+      "reference": "carousel-flyers/carousel1/carousel_flyer1.png",
+      "photo_stage": "completed",
+      "source_photo": "Projects/Completed/27 Phelps Ave, Cresskill/Images/D20BA4D1-6AC9-49CB-972E-B8FB811105E9.png",
+      "sha256": "7cd8b17dd8ff8f4241685ab96de1db4ac316e3870ca473c230e065fe26a99954",
+      "bytes": 880173,
+      "dimensions": [
+        1080,
+        1350
+      ],
+      "september_savings": false,
+      "drive_list_confirmed": true
+    },
+    {
+      "filename": "3 - Before You Compare Roof Quotes.jpg",
+      "generator": "ChatGPT native image generation",
+      "reference": "reference_flyer6.png",
+      "photo_stage": "completed",
+      "source_photo": "Projects/Completed/77 Doty Rd /DJI_0014.JPG",
+      "sha256": "ff0617b4478ed1309f79c9de2d47e05306a91d388f67a8b9fd564de63e1bbe23",
+      "bytes": 850894,
+      "dimensions": [
+        1080,
+        1350
+      ],
+      "september_savings": false,
+      "drive_list_confirmed": true
+    },
+    {
+      "filename": "4 - A Roof Replacement in Progress.jpg",
+      "generator": "ChatGPT native image generation",
+      "reference": "reference_flyer16.jpg",
+      "photo_stage": "during",
+      "source_photo": "Projects/Completed/Forest Pl, Rochelle Park/Images/DJI_0005.JPG",
+      "sha256": "d94cae3dcaea77aa6838d9c3e8c4ae86ab56fda2212ff0c44ba0056df3f4d1f3",
+      "bytes": 879300,
+      "dimensions": [
+        1080,
+        1350
+      ],
+      "september_savings": false,
+      "drive_list_confirmed": true
+    },
+    {
+      "filename": "5 - September Savings - Replacement Projects.jpg",
+      "generator": "ChatGPT native image generation",
+      "reference": "reference_flyer6.png",
+      "photo_stage": "after",
+      "source_photo": "Projects/60 Stone Ave, Elmwood Park/After/Images/1F922986-5121-4F81-8197-C5B3EB9C5A34.png",
+      "sha256": "f293bba0d0c2484992e792a98a77dade8d4c05041bd4e4518a99e37036c776a7",
+      "bytes": 764909,
+      "dimensions": [
+        1080,
+        1350
+      ],
+      "september_savings": true,
+      "drive_list_confirmed": true
+    }
+  ],
+  "temporary_copies_removed": true
+}

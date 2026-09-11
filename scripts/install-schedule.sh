@@ -19,6 +19,11 @@ AT="10:00"
 while [ $# -gt 0 ]; do
   case "$1" in
     --at) AT="$2"; shift 2 ;;
+    --wake)
+      echo "Configuring macOS hardware wake for 09:59 AM daily..."
+      sudo pmset repeat wakeorpoweron MTWRFSU 09:59:00 || true
+      shift
+      ;;
     --uninstall)
       launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null || true
       rm -f "$PLIST"
@@ -62,3 +67,4 @@ launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null || true
 launchctl bootstrap "gui/$(id -u)" "$PLIST" 2>/dev/null || launchctl load "$PLIST"
 
 echo "Installed $LABEL: runs every day at $AT."
+echo "Note: To wake this Mac from hardware sleep at 09:59 AM, run: ./scripts/install-schedule.sh --wake"

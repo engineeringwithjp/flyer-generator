@@ -130,6 +130,14 @@ class NanoBananaEngine:
                     if any(f.lower().endswith(ext) for ext in valid_extensions):
                         projects[project_name].append(root_path / f)
 
+        # Fallback safety net: If Google Drive CloudStorage is unreachable or returned few photos on sleep-wake
+        if not projects or sum(len(v) for v in projects.values()) < 5:
+            local_approved = Path("clients/all-elite/assets/approved")
+            if local_approved.exists():
+                for f in local_approved.iterdir():
+                    if f.suffix.lower() in valid_extensions and "before" not in f.name.lower() and "bergenfield" not in f.name.lower():
+                        projects["local_approved"].append(f)
+
         return projects
 
     def pick_diverse_photos(self, count: int = 5) -> list[Path]:
@@ -776,6 +784,19 @@ class NanoBananaEngine:
             return Image.new("RGBA", (max_w, max_h), (0, 0, 0, 0))
 
         def load_and_scale_bg(photo: Path | None, width: int = 1080, height: int = 1350) -> Image.Image:
+            # Fallback to local approved photo if photo is None or missing
+            if not photo or not photo.exists():
+                local_dir = Path("clients/all-elite/assets/approved")
+                if local_dir.exists():
+                    approved = [
+                        f for f in local_dir.iterdir()
+                        if f.suffix.lower() in {".jpg", ".jpeg", ".png"}
+                        and "before" not in f.name.lower()
+                        and "bergenfield" not in f.name.lower()
+                    ]
+                    if approved:
+                        photo = random.choice(approved)
+
             if photo and photo.exists():
                 try:
                     img = Image.open(photo).convert("RGBA")
@@ -784,11 +805,13 @@ class NanoBananaEngine:
                     x_off = (scaled.width - width) // 2
                     y_off = (scaled.height - height) // 2
                     return scaled.crop((x_off, y_off, x_off + width, y_off + height))
-                except Exception:
-                    pass
-            # Default elegant gradient background
-            bg = Image.new("RGBA", (width, height), (26, 32, 40))
+                except Exception as e:
+                    print(f"Warning loading photo {photo}: {e}", file=sys.stderr)
+
+            # Final fallback: guaranteed non-black default
+            bg = Image.new("RGBA", (width, height), (35, 45, 55))
             return bg
+
 
         for concept in concepts:
             if concept.is_carousel_folder:
@@ -945,7 +968,7 @@ class NanoBananaEngine:
         return []
 
 
-def run_daily_generation(count: int = 5, when: date | None = None) -> list[Path]:
+def run_daily_generation(count: int = 5, when: date | None = None, force: bool = False) -> list[Path]:
     """Execute the daily flyer generation workflow and write directly to Google Drive."""
     engine = NanoBananaEngine()
     dest_dir = engine.get_destination_folder(when)
@@ -954,8 +977,8 @@ def run_daily_generation(count: int = 5, when: date | None = None) -> list[Path]
     print(f"--- Running Nano Banana Pro Daily Generation ({len(concepts)} concepts) ---")
     print(f"Target Google Drive Folder: {dest_dir}")
 
-    existing_files = [p for p in dest_dir.glob("*.jpg") if p.is_file()]
-    if len(existing_files) >= count:
+    existing_files = [p for p in dest_dir.glob("*.jpg") if p.is_file() and p.stat().st_size > 300_000]
+    if len(existing_files) >= count and not force:
         print(f"Target folder {dest_dir.name} already contains {len(existing_files)} verified flyers. Preserving existing high-resolution artwork.")
         return existing_files
 

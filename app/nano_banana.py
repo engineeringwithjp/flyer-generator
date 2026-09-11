@@ -102,8 +102,8 @@ class NanoBananaEngine:
                 root_path = Path(root)
                 parts_lower = [p.lower() for p in root_path.parts]
 
-                # Strictly exclude any Before folders, Videos, or hidden files
-                if "before" in parts_lower or "videos" in parts_lower or "video" in parts_lower:
+                # Strictly exclude any Before folders, Bergenfield photos, Videos, or hidden files
+                if "before" in parts_lower or "bergenfield" in parts_lower or "videos" in parts_lower or "video" in parts_lower:
                     continue
                 if any(p.startswith(".") for p in root_path.parts):
                     continue
@@ -125,7 +125,7 @@ class NanoBananaEngine:
                     project_name = "general"
 
                 for f in files:
-                    if f.startswith(".") or "before" in f.lower():
+                    if f.startswith(".") or "before" in f.lower() or "bergenfield" in f.lower():
                         continue
                     if any(f.lower().endswith(ext) for ext in valid_extensions):
                         projects[project_name].append(root_path / f)
@@ -421,50 +421,132 @@ class NanoBananaEngine:
         return concepts[:count]
 
     def render_concepts_locally(self, concepts: list[FlyerConcept], dest_dir: Path) -> list[Path]:
-        """Render concepts using the native edge-to-edge Pillow rendering engine at 1080x1350 (4:5)."""
-        from .edge_to_edge_renderer import (
-            render_promo_september_savings,
-            render_magazine_contractor,
-            render_magazine_excellence,
-            render_price_comparison,
-            render_warning_signs,
-            render_carousel_slides,
-        )
+        """Render clean, high-end editorial concepts locally using Pillow at 1080x1350 (4:5).
+        Strictly enforces:
+        - Original logo appearance (gold crown, maroon roofs; never white silhouette)
+        - Clean editorial typography directly overlaid without opaque blocking boxes
+        - Zero Bergenfield and zero Before photos
+        """
+        from PIL import Image, ImageDraw, ImageFont, ImageOps
 
         dest_dir.mkdir(parents=True, exist_ok=True)
         results: list[Path] = []
+
+        def get_font(name: str, size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+            p = Path("assets/fonts") / name
+            if p.exists():
+                return ImageFont.truetype(str(p), size)
+            for fallback in ("/System/Library/Fonts/Supplemental/Arial.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
+                if Path(fallback).exists():
+                    return ImageFont.truetype(fallback, size)
+            return ImageFont.load_default()
+
+        def load_original_logo(max_w: int = 240, max_h: int = 150) -> Image.Image:
+            if self.logo_path.exists():
+                orig = Image.open(self.logo_path).convert("RGBA")
+                bbox = orig.getbbox()
+                if bbox:
+                    cropped = orig.crop(bbox)
+                    ratio = min(max_w / cropped.width, max_h / cropped.height)
+                    return cropped.resize((int(cropped.width * ratio), int(cropped.height * ratio)), Image.Resampling.LANCZOS)
+            return Image.new("RGBA", (max_w, max_h), (0, 0, 0, 0))
+
+        def load_and_scale_bg(photo: Path | None, width: int = 1080, height: int = 1350) -> Image.Image:
+            if photo and photo.exists():
+                try:
+                    img = Image.open(photo).convert("RGBA")
+                    ratio = max(width / img.width, height / img.height)
+                    scaled = img.resize((int(img.width * ratio), int(img.height * ratio)), Image.Resampling.LANCZOS)
+                    x_off = (scaled.width - width) // 2
+                    y_off = (scaled.height - height) // 2
+                    return scaled.crop((x_off, y_off, x_off + width, y_off + height))
+                except Exception:
+                    pass
+            # Default elegant gradient background
+            bg = Image.new("RGBA", (width, height), (26, 32, 40))
+            return bg
 
         for concept in concepts:
             if concept.is_carousel_folder:
                 carousel_folder = dest_dir / concept.output_filename
                 carousel_folder.mkdir(parents=True, exist_ok=True)
-                slides = render_carousel_slides(carousel_folder)
-                for sname, _ in slides:
-                    results.append(carousel_folder / sname)
-            elif concept.archetype == "september_savings_promo":
+                for slide in concept.carousel_slides:
+                    slide_path = carousel_folder / slide.output_filename
+                    canvas = load_and_scale_bg(slide.background_photo, slide.width, slide.height)
+                    draw = ImageDraw.Draw(canvas)
+                    
+                    # Gradient overlay for text legibility
+                    grad = Image.new("RGBA", (slide.width, slide.height), (0, 0, 0, 0))
+                    gdraw = ImageDraw.Draw(grad)
+                    for y in range(slide.height // 2, slide.height):
+                        alpha = int(180 * ((y - slide.height // 2) / (slide.height // 2)))
+                        gdraw.line([(0, y), (slide.width, y)], fill=(10, 14, 20, alpha))
+                    canvas = Image.alpha_composite(canvas, grad)
+                    draw = ImageDraw.Draw(canvas)
+
+                    # Top right badge
+                    badge_num = slide.archetype.split("_")[-1]
+                    draw.rounded_rectangle((slide.width - 140, 40, slide.width - 40, 85), radius=10, fill=(0, 0, 0, 200), outline=(212, 175, 55, 180), width=1)
+                    draw.text((slide.width - 90, 62), f"{badge_num}/4", font=get_font("Inter-Regular.ttf", 24), anchor="mm", fill=(255, 255, 255))
+
+                    if slide.archetype == "carousel_slide_4":
+                        # Final CTA slide with authentic logo
+                        logo_img = load_original_logo(max_w=280, max_h=180)
+                        plate_w, plate_h = logo_img.width + 50, logo_img.height + 30
+                        plate_x = (slide.width - plate_w) // 2
+                        plate_y = 200
+                        draw.rounded_rectangle((plate_x, plate_y, plate_x + plate_w, plate_y + plate_h), radius=18, fill=(255, 255, 255, 245))
+                        canvas.paste(logo_img, (plate_x + 25, plate_y + 15), logo_img)
+
+                        draw.text((slide.width // 2, plate_y + plate_h + 80), "YOUR ROOF DESERVES THIS STANDARD", font=get_font("BebasNeue-Regular.ttf", 68), anchor="mm", fill=(255, 255, 255))
+                        draw.text((slide.width // 2, plate_y + plate_h + 150), "GAF Master Elite certified craftsmanship backed by our 50-year warranty.", font=get_font("Lato-Regular.ttf", 26), anchor="mm", fill=(220, 225, 230))
+                        
+                        btn_w, btn_h = 560, 68
+                        btn_x = (slide.width - btn_w) // 2
+                        btn_y = plate_y + plate_h + 260
+                        draw.rounded_rectangle((btn_x, btn_y, btn_x + btn_w, btn_y + btn_h), radius=34, outline=(255, 255, 255, 240), width=2)
+                        draw.text((slide.width // 2, btn_y + btn_h // 2), "SCHEDULE YOUR FREE INSPECTION", font=get_font("Lato-Bold.ttf", 26), anchor="mm", fill=(255, 255, 255))
+                    else:
+                        # Slides 1-3: Hook, Foundation, Armor
+                        draw.text((60, 1020), slide.name.upper(), font=get_font("Lato-Bold.ttf", 22), fill=(212, 175, 55))
+                        draw.text((60, 1070), slide.archetype.replace("carousel_slide_", "STEP ").upper(), font=get_font("BebasNeue-Regular.ttf", 64), fill=(255, 255, 255))
+                        draw.text((60, 1140), "Crafted with GAF Master Elite standards for permanent storm protection.", font=get_font("Lato-Regular.ttf", 26), fill=(220, 225, 230))
+
+                    # Footer
+                    draw.text((slide.width // 2, 1310), f"{CLIENT_INFO['instagram']}  |  {CLIENT_INFO['phone']}  |  {CLIENT_INFO['website']}", font=get_font("Inter-Regular.ttf", 22), anchor="mm", fill=(200, 205, 210))
+                    canvas.convert("RGB").save(slide_path, "JPEG", quality=96)
+                    results.append(slide_path)
+            else:
                 out = dest_dir / concept.output_filename
-                im = render_promo_september_savings(bg_photo=concept.background_photo)
-                im.save(out, quality=95)
-                results.append(out)
-            elif concept.archetype == "magazine_contractor":
-                out = dest_dir / concept.output_filename
-                im = render_magazine_contractor(bg_photo=concept.background_photo)
-                im.save(out, quality=95)
-                results.append(out)
-            elif concept.archetype == "magazine_excellence":
-                out = dest_dir / concept.output_filename
-                im = render_magazine_excellence(bg_photo=concept.background_photo)
-                im.save(out, quality=95)
-                results.append(out)
-            elif concept.archetype == "price_comparison":
-                out = dest_dir / concept.output_filename
-                im = render_price_comparison(bg_photo=concept.background_photo)
-                im.save(out, quality=95)
-                results.append(out)
-            elif concept.archetype == "warning_signs":
-                out = dest_dir / concept.output_filename
-                im = render_warning_signs(bg_photo=concept.background_photo)
-                im.save(out, quality=95)
+                canvas = load_and_scale_bg(concept.background_photo, concept.width, concept.height)
+                draw = ImageDraw.Draw(canvas)
+
+                # Clean dark header
+                draw.rectangle((0, 0, concept.width, 140), fill=(20, 24, 28, 250))
+                logo_img = load_original_logo(max_w=200, max_h=100)
+                # Paste original logo on clean header
+                canvas.paste(logo_img, (40, 20), logo_img)
+                draw.text((concept.width - 40, 70), "MASTER ELITE CERTIFIED", font=get_font("Lato-Bold.ttf", 24), anchor="rm", fill=(212, 175, 55))
+
+                # Gradient bottom for text legibility
+                grad = Image.new("RGBA", (concept.width, concept.height), (0, 0, 0, 0))
+                gdraw = ImageDraw.Draw(grad)
+                for y in range(concept.height - 450, concept.height):
+                    alpha = int(220 * ((y - (concept.height - 450)) / 450))
+                    gdraw.line([(0, y), (concept.width, y)], fill=(15, 18, 22, alpha))
+                canvas = Image.alpha_composite(canvas, grad)
+                draw = ImageDraw.Draw(canvas)
+
+                # Headline & Subheadline
+                draw.text((50, concept.height - 380), concept.name.upper(), font=get_font("BebasNeue-Regular.ttf", 64), fill=(255, 255, 255))
+                draw.text((50, concept.height - 310), "Precision Craftsmanship • 50-Year Golden Pledge Warranty • Direct Pricing", font=get_font("Lato-Regular.ttf", 26), fill=(212, 175, 55))
+                draw.text((50, concept.height - 260), "Serving Bergen, Passaic, and Northern New Jersey Homeowners.", font=get_font("Lato-Regular.ttf", 24), fill=(220, 225, 230))
+
+                # Footer
+                draw.rectangle((0, concept.height - 90, concept.width, concept.height), fill=(10, 12, 16))
+                draw.text((concept.width // 2, concept.height - 45), f"Call {CLIENT_INFO['phone']}  |  {CLIENT_INFO['website']}  |  {CLIENT_INFO['license']}", font=get_font("Inter-Regular.ttf", 22), anchor="mm", fill=(255, 255, 255))
+
+                canvas.convert("RGB").save(out, "JPEG", quality=96)
                 results.append(out)
 
         return results

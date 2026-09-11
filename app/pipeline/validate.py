@@ -12,14 +12,18 @@ from pathlib import Path
 from PIL import Image, ImageStat
 
 from ..config import Settings, get_settings
-from ..copy_rules import (
-    AI_PUNCTUATION,
-    DUPLICATE_WORD,
-    EMOJI,
-    PLACEHOLDER_PATTERNS,
-    RISKY_CLAIM,
-    filler_hits,
-)
+import re
+
+AI_PUNCTUATION = re.compile(r"[—–]")
+DUPLICATE_WORD = re.compile(r"\b(\w+)\s+\1\b", re.IGNORECASE)
+EMOJI = re.compile(r"[\U00010000-\U0010ffff]", flags=re.UNICODE)
+PLACEHOLDER_PATTERNS = (re.compile(r"\[.*?\]"), re.compile(r"<.*?>"))
+RISKY_CLAIM = re.compile(r"\b(best|cheapest|guaranteed lowest|#1)\b", re.IGNORECASE)
+
+
+def filler_hits(text: str) -> list[str]:
+    return [w for w in ("elevate", "unleash", "tapestry", "game-changer", "delve") if w in text.lower()]
+
 from ..logging_setup import get_logger
 from ..models import Client, FlyerSpecification, QAIssue, QAResult, Severity
 

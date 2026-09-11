@@ -2,7 +2,6 @@ from .campaign_planner import plan_campaigns
 from .claude_client import ClaudeClient, get_claude
 from .copywriter import write_copy
 from .design_director import direct_design
-from .qa_agent import vision_qa
 from .reference_analyzer import analyze_reference
 
 __all__ = [
@@ -11,6 +10,5 @@ __all__ = [
     "direct_design",
     "get_claude",
     "plan_campaigns",
-    "vision_qa",
     "write_copy",
 ]

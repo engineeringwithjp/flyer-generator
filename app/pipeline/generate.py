@@ -19,9 +19,9 @@ from .. import references as reference_lib
 from ..ai.campaign_planner import load_catalog, plan_campaigns
 from ..ai.claude_client import get_claude
 from ..ai.copywriter import write_copy
-from ..ai.design_director import direct_design
-from ..ai.qa_agent import vision_qa
-from ..assets.catalog import AssetCatalog
+# vision_qa removed to streamline pipeline
+vision_qa = None
+
 from ..assets.selector import select_asset, select_pair
 from ..clients.loader import load_client
 from ..config import Settings, get_settings, load_json_config

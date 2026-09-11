@@ -10,9 +10,19 @@ from __future__ import annotations
 import hashlib
 import re
 
-from ..copy_rules import AI_FILLER as BANNED_PHRASES
-from ..copy_rules import clip_words as _clip_words
-from ..copy_rules import strip_ai_punctuation as _strip_ai_punctuation
+BANNED_PHRASES = ("elevate", "unleash", "tapestry", "game-changer", "delve")
+
+
+def _clip_words(text: str, max_chars: int) -> str:
+    if len(text) <= max_chars:
+        return text
+    clipped = text[:max_chars].rsplit(" ", 1)[0].rstrip(".,;:- ")
+    return clipped or text[:max_chars]
+
+
+def _strip_ai_punctuation(text: str) -> str:
+    return text.replace("—", " - ").replace("–", " - ")
+
 from ..logging_setup import get_logger
 from ..models import Campaign, Client, FlyerCopy, PlannedFlyer
 from .claude_client import ClaudeClient, compact_json, get_claude

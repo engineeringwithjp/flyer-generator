@@ -3,9 +3,22 @@ name: Record flyer feedback
 # Comment "approve <flyer_id>" or "reject <flyer_id> reason, reason" on a
 # flyer-review issue and the verdict is written into the generation history,
 # which reweights the references that produced it.
+# AUTOMATION OFF - 2026-09-28, at the account owner's request ("no automation,
+# it's driving up usage costs"). Every automatic trigger below is commented out;
+# `workflow_dispatch` is left so the job can still be run by hand from the
+# Actions tab. The workflows are ALSO disabled at the repository level
+# (`gh workflow disable`), so re-adding a trigger here is not enough on its own
+# to start anything - you would have to run `gh workflow enable <file>` too.
+#
+# To bring one back: uncomment its trigger, then `gh workflow enable <file>`.
 on:
-  issue_comment:
-    types: [created]
+  # Manual only. A workflow whose `on:` block is empty is an *invalid* workflow
+  # file, and GitHub rejects those silently - it lists them by filename and
+  # discards every trigger. Keeping one real trigger here avoids leaving a
+  # broken file behind.
+  workflow_dispatch:
+#   issue_comment:
+#     types: [created]
 
 permissions:
   contents: write

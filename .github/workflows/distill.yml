@@ -2,11 +2,19 @@ name: Distil historical prompts
 
 # Prompt-to-Skill. Reads design-system/historical-prompts/ and proposes design
 # rules. It never applies anything: the output is a pull request to review.
+# AUTOMATION OFF - 2026-09-28, at the account owner's request ("no automation,
+# it's driving up usage costs"). Every automatic trigger below is commented out;
+# `workflow_dispatch` is left so the job can still be run by hand from the
+# Actions tab. The workflows are ALSO disabled at the repository level
+# (`gh workflow disable`), so re-adding a trigger here is not enough on its own
+# to start anything - you would have to run `gh workflow enable <file>` too.
+#
+# To bring one back: uncomment its trigger, then `gh workflow enable <file>`.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths: ["design-system/historical-prompts/**"]
+#   push:
+#     branches: [main]
+#     paths: ["design-system/historical-prompts/**"]
 
 permissions:
   contents: write

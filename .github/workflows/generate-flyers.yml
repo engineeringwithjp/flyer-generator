@@ -2,22 +2,30 @@ name: Generate flyers
 
 # The daily production run. The same pipeline serves the schedule and the
 # manual button - there is deliberately only one implementation.
+# AUTOMATION OFF - 2026-09-28, at the account owner's request ("no automation,
+# it's driving up usage costs"). Every automatic trigger below is commented out;
+# `workflow_dispatch` is left so the job can still be run by hand from the
+# Actions tab. The workflows are ALSO disabled at the repository level
+# (`gh workflow disable`), so re-adding a trigger here is not enough on its own
+# to start anything - you would have to run `gh workflow enable <file>` too.
+#
+# To bring one back: uncomment its trigger, then `gh workflow enable <file>`.
 on:
-  schedule:
-    # GitHub Actions cron is UTC only, so 10:07 America/New_York is two
-    # different UTC times across the year. Both fire; `flyer schedule-check`
-    # decides which one is really 10:07 locally and the other exits in seconds.
-    - cron: "7 14 * * 1-5"   # 10:07 EDT (Mar-Nov)
-    - cron: "7 15 * * 1-5"   # 10:07 EST (Nov-Mar)
+#   schedule:
+#     # GitHub Actions cron is UTC only, so 10:07 America/New_York is two
+#     # different UTC times across the year. Both fire; `flyer schedule-check`
+#     # decides which one is really 10:07 locally and the other exits in seconds.
+#     - cron: "7 14 * * 1-5"   # 10:07 EDT (Mar-Nov)
+#     - cron: "7 15 * * 1-5"   # 10:07 EST (Nov-Mar)
 
-    # TO RUN EVERY FEW HOURS INSTEAD: comment out the two lines above,
-    # uncomment the line below, and set these repository variables:
-    #   SCHEDULE_MODE=interval
-    #   SCHEDULE_INTERVAL_HOURS=3
-    #   SCHEDULE_WINDOW=08:00-20:00
-    # The hourly trigger is deliberate: it is the only DST-proof way to hit
-    # arbitrary local slots. Runs outside a slot exit in about 20 seconds.
-    # - cron: "7 * * * *"
+#     # TO RUN EVERY FEW HOURS INSTEAD: comment out the two lines above,
+#     # uncomment the line below, and set these repository variables:
+#     #   SCHEDULE_MODE=interval
+#     #   SCHEDULE_INTERVAL_HOURS=3
+#     #   SCHEDULE_WINDOW=08:00-20:00
+#     # The hourly trigger is deliberate: it is the only DST-proof way to hit
+#     # arbitrary local slots. Runs outside a slot exit in about 20 seconds.
+#     # - cron: "7 * * * *"
 
   workflow_dispatch:
     inputs:

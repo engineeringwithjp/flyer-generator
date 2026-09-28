@@ -12,6 +12,23 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 REPO="$(pwd)"
 
+# AUTOMATION IS OFF by the account owner's decision (2026-09-28: "no automation,
+# it's driving up usage costs"). This script is kept because it is also the
+# uninstaller, but installing now takes an explicit flag so nobody turns the
+# daily job back on without meaning to.
+if [ "${1:-}" != "--uninstall" ] && [ "${1:-}" != "--status" ]; then
+  case " $* " in
+    *" --yes-enable-automation "*) ;;
+    *)
+      echo "Automation is intentionally disabled for this project." >&2
+      echo "To re-enable the daily job anyway:" >&2
+      echo "  ./scripts/install-schedule.sh --yes-enable-automation [--at HH:MM]" >&2
+      echo "To confirm nothing is scheduled:  ./scripts/install-schedule.sh --status" >&2
+      exit 1
+      ;;
+  esac
+fi
+
 LABEL="com.nedatechnologies.flyer-generator"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 AT="10:00"
@@ -23,6 +40,16 @@ while [ $# -gt 0 ]; do
       echo "Configuring macOS hardware wake for 09:59 AM daily..."
       sudo pmset repeat wakeorpoweron MTWRFSU 09:59:00 || true
       shift
+      ;;
+    --yes-enable-automation) shift ;;
+    --status)
+      if launchctl list 2>/dev/null | grep -q "$LABEL"; then
+        echo "A daily flyer job IS loaded ($LABEL)."
+      else
+        echo "No flyer job is scheduled on this Mac."
+      fi
+      [ -f "$PLIST" ] && echo "plist present: $PLIST" || echo "no plist on disk"
+      exit 0
       ;;
     --uninstall)
       launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null || true
